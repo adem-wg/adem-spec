@@ -30,6 +30,29 @@ author:
     organization: ETH Zürich
     email: basin@inf.ethz.ch
 
+normative:
+  ADEM-DNS:
+    title: "Serving an Authenticated Digital EMblem over DNS"
+    author:
+    - fullname: Felix E. Linker
+    - fullname: Dennis Jackson
+    - fullname: David Basin
+    target: ./draft-linker-adem-wg-adem-dns.html
+  ADEM-TLS:
+    title: "Serving an Authenticated Digital EMblem over TLS"
+    author:
+    - fullname: Felix E. Linker
+    - fullname: Dennis Jackson
+    - fullname: David Basin
+    target: ./draft-linker-adem-wg-adem-tls.html
+  ADEM-UDP:
+    title: "Serving an Authenticated Digital EMblem over UDP"
+    author:
+    - fullname: Felix E. Linker
+    - fullname: Dennis Jackson
+    - fullname: David Basin
+    target: ./draft-linker-adem-wg-adem-udp.html
+
 --- abstract
 
 Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
@@ -209,8 +232,9 @@ The claim value of "emb" MUST be a JSON {{!RFC7159}} object with the following O
       purpose = "protective" | "indicative"
 
 * "dst" (distribution) is an array of `distirbution-method` strings as defined below.
+These correspond to the distribution methods as specified in {{ADEM-DNS}}, {{ADEM-TLS}}, and {{ADEM-UDP}} respectively.
 
-      distribution-method = "dns" | "tls" | "icmp"
+      distribution-method = "dns" | "tls" | "udp"
 
 * "ext" (external endorsements) maps to a Boolean.
 `true` indicates that the PP's central website identified by "iss" serves endorsements that will not be transmitted alongside this emblem.
@@ -287,60 +311,7 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 * The endorsement's "emb.sub" claim is undefined or for each EI within the emblem's "emb.sub" claim, there is some EI in the endorsement's "emb.sub" claim which resolves to that EI.
 * The endorsement's "emb.wnd" claim is undefined or the emblem's "emb.iat" claim value plus the endorsement's "emb.wnd" claim value lies in the future.
 
-# Distribution
-
-To come into effect, digital emblems must be first distributed to verifiers.
-ADEM implements active distribution, i.e., verifiers do not need to ask for emblems but are sent them proactively.
-ADEM distinguishes between the distribution of tokens and of public keys.
-
-## Token Distribution
-
-Tokens can be distributed via three interfaces:
-
-* TLS
-* DNS TXT records
-* ICMP
-
-### TLS Distribution
-
-Tokens can be distributed using the TLS protocol {{?RFC8446}} in a backwards-compatible manner.
-A TLS server MAY distribute tokens and accompanying endorsements via custom extension to the NewSessionTicket (NST) message.
-NST messages MUST have a lifetime of 0.
-Tokens sent using TLS MUST be encoded as a CWT.
-
-### DNS Distribution
-
-Tokens can be distributed using DNS {{?RFC1035}}, encoded as TXT records.
-There MUST be no more than one token encoded per record.
-The record values must be formatted as per {{!RFC1464}}, i.e., consisting of one key and one value.
-The key MUST be formatted as:
-
-~~~~
-key := type [ "-" suffix ] [ "-" num ]
-
-type := "adem-emb" | "adem-end"
-
-suffix := CHARACTER+ [ "-" suffix ]
-
-num := DIGIT+
-~~~~
-
-`type` must coincide with the token's "cty" claim.
-`suffix` MUST be used to distinguish tokens of the same `type`.
-`num` MUST be used if the tokens needs to be split up because it exceeds the space limitations of the respective DNS provider.
-The digits in `num` indicate the ordering of the tokens parts.
-
-The value of the TXT record MUST be the token, encoded as JWT in compact serialization.
-It MAY be split up into multiple parts.
-
-### ICMP Distribution
-
-Tokens can be distributed using ICMP {{?RFC0792}} within the data field of an echo message.
-If a token is sent using ICMP, it MUST be encoded as a CWT.
-If multiple tokens are sent, the sending application MUST distinguish them via different identifiers that are not 0.
-If tokens must be split up because of space constraints, the sending application MUST distinguish the order of the parts via sequence numbers starting at 0.
-
-## Public Key Distribution {#pk-distribution}
+# Public Key Distribution {#pk-distribution}
 
 Parties are expected to serve their root public keys via their OI.
 In this section, we specify the configuration of a PP's OI.
