@@ -38,6 +38,10 @@ normative:
     - fullname: Dennis Jackson
     - fullname: David Basin
     target: ./draft-linker-adem-wg-adem-core.html
+informative:
+  REG-PORT:
+    title: "Service Name and Transport Protocol Port Number Registry"
+    target: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
 
 --- abstract
 
@@ -62,24 +66,21 @@ when, and only when, they appear in all capitals, as shown here.
 
 # UDP Distribution
 
-Tokens can be distributed using UDP {{!RFC0768}}.
-Tokens in ADEM are encoded as JSON Web Signatures (JWS) {{!RFC7515}} by standard.
-{{ADEM-CORE}} additionally specifies the option to encode tokens as CBOR Web Token (CWT) {{!RFC8392}}.
-To transmit tokens over TLS, they MUST be encoded as CWT.
-The atomic unit of transmission in scope of this standard are tokens, i.e., emblems or endorsements encoded as CWT.
+Any digital, network-connected entity MAY distribute ADEM tokens using the UDP protocol.
+Any token distributed over UDP MUST be encoded as CBOR Web Token (CWT) {{!RFC8392}}.
 
-A protected entity MAY send tokens to any destination address on port $X whenever it wishes.
-We RECOMMEND to send an emblem to a destination address whenever a new connection to the protected entity is made.
+Whenever an entity distributes tokens using UDP, it MUST set the source and destination ports to 60.
+Any UDP packet containing an ADEM token, MUST contain exactly one token.
 
-To distribute tokens, a protected entity MUST send exactly one token per UDP datagram.
-The source and destination port MUST be set to $X.
-Whenever an entity distributes tokens, it SHOULD distribute the complete set of tokens required for verification, i.e., one emblem and a set of endorsements.
+ADEM-UDP enabled entities SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-linker-adem-wg-adem-core.html
+#section-6.1)) whenever a client attempts to connect to the respectively protected entity.
+ADEM-UDP enabled entities SHOULD at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
 
 # Security Considerations
 
 # IANA Considerations
 
-This document has no IANA actions.
+As per the IANA Port Number Registry [REG-PORT], port 60 is currently unassigned.
 
 --- back
 
