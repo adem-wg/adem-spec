@@ -63,11 +63,14 @@ This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to d
 
 # Introduction {#intro}
 
-Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
-They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
-This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute *digital emblems*, which mark entities as protected under IHL in an analogy to the physical emblems.
+International humanitarian law (IHL) recognises protected parties (PP) such as healthcare and aid organisations as deserving of special protection from attacks during armed conflicts.
+This has traditionally been accomplished by the marking of protected facilities and personnel with symbols such as the Red Cross, the Red Crescent and the Red Diamond.
 
-This document specifies how digital emblems can be created and verified.
+Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.
+
+This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute *digital emblems*, which mark entities as protected under IHL in an analogy to the physical emblems.
+We specify how digital emblems can be created and verified.
+
 Emblems can be accompanied by *endorsements* for authentication purposes, which are signed by *authorities*.
 We call both emblems and endorsements *tokens*.
 Emblems encode which entity is protected and resemble the statement:

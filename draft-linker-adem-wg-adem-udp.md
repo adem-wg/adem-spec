@@ -41,26 +41,16 @@ normative:
 
 --- abstract
 
-This document describes a mechanism using the User Datagram Protocol (UDP) for
-proving that an entity is protected under international humanitarian law.
+This document describes a mechanism using the User Datagram Protocol (UDP) to distribute *Authenticated Digital EMblem* (ADEM) tokens [ADEM-CORE].
+ADEM tokens encode that an entity is protected under international humanitarian law.
 
 --- middle
 
 # Introduction {#intro}
 
-International humanitarian law (IHL) recognises protected parties (PP) such as
-healthcare and aid organisations as deserving of special protection from attacks
-during armed conflicts. This has traditionally been accomplished by the marking
-of protected facilities and personnel with symbols such as the Red Cross, the
-Red Crescent and the Red Diamond.
-
-Due to the increasing use of digital infrastructure by protected parties and
-attacks on digital infrastructure during armed conflicts, a digital analogue of
-the Red Cross symbol is under consideration.
-
-This document describes a UDP-based distribution method for ADEM tokens, termed
-ADEM-UDP.
-The format and meaning of ADEM tokens is described in {{ADEM-CORE}}.
+The ADEM Core document {{ADEM-CORE}} specifies how a set of *tokens*, encoded as JSON Web Signatures (JWSs) {{?RFC7515}}, can constitute *signs of protection*.
+Such signs of protection indicate that a digital entity is protected under international humanitarian law (IHL).
+This document describes a UDP-based distribution method for ADEM tokens, termed ADEM-UDP.
 
 # Conventions and Definitions
 
@@ -69,8 +59,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
 when, and only when, they appear in all capitals, as shown here.
 
-Data formats and TLS notation come from {{!RFC8446}},
-[Section 3](https://datatracker.ietf.org/doc/html/rfc8446#section-3).
 
 # UDP Distribution
 

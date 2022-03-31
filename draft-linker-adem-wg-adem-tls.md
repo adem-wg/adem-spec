@@ -41,30 +41,21 @@ normative:
 
 --- abstract
 
-This document describes a mechanism in Transport Layer Security (TLS) for
-proving a server is protected under international humanitarian law.
+This document describes a mechanism in Transport Layer Security (TLS) to distribute *Authenticated Digital EMblem* (ADEM) tokens [ADEM-CORE].
+ADEM tokens encode that an entity is protected under international humanitarian law.
 
 --- middle
 
 # Introduction {#intro}
 
-International humanitarian law (IHL) recognises protected parties (PP) such as
-healthcare and aid organisations as deserving of special protection from attacks
-during armed conflicts. This has traditionally been accomplished by the marking
-of protected facilities and personnel with symbols such as the Red Cross, the
-Red Crescent and the Red Diamond.
-
-Due to the increasing use of digital infrastructure by protected parties and
-attacks on digital infrastructure during armed conflicts, a digital analogue of
-the Red Cross symbol is under consideration.
-
-This document presents an extension to TLS which allows for TLS Servers to
-indicate to clients that they are protected under IHL, in a backwards compatible
+The ADEM Core document {{ADEM-CORE}} specifies how a set of *tokens*, encoded as JSON Web Signatures (JWSs) {{?RFC7515}}, can constitute *signs of protection*.
+Such signs of protection indicate that a digital entity is protected under international humanitarian law (IHL).
+This document describes a UDP-based distribution method for ADEM tokens, termed ADEM-UDP.
+This document presents an extension to TLS which allows for TLS servers to distribute ADEM tokens in a backwards compatible
 fashion.
 
-DISCLAIMER: This draft is work-in-progress and has not yet seen significant (or
-really any) security analysis. It should not be used as a basis for building
-production systems.
+DISCLAIMER: This draft is work-in-progress and has not yet seen any security analysis.
+It should not be used as a basis for building production systems.
 
 # Conventions and Definitions
 
