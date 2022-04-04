@@ -482,6 +482,9 @@ A defined "iss" claim is understood to be different to an undefined "iss" claim.
 If there is a token signed by the trusted input public key, return `SIGNED-TRUSTED`.
 Otherwise, return `SIGNED-UNTRUSTED`.
 
+Distribution methods MAY indicate an order of tokens to guide clients assembling the chain of endorsements in step 3.
+Whenever such an order is specified, clients MAY immediately reject a set of tokens as invalid if the indicated order does not yield a valid chain of endorsements.
+
 ## Organizational Emblem Verification Procedure {#org-emblems}
 
 Context:
@@ -522,6 +525,16 @@ Algorithm:
 If in the set of remaining endorsements, there is an endorsement with a verification key equal to the trusted input public key, return `ENDORSED-TRUSTED`.
 Otherwise, return `ENDORSED-UNTRUSTED`.
 In both the latter cases, also return the set of all "iss" claims of the remaining endorsements.
+
+# Security Considerations
+
+## Token Order
+
+As specified in {{signed-emblems}}, clients MAY reject sets of tokens as invalid if the order of tokens as indicated by the sending client does not yield a valid chain of endorsements.
+This allows an adversary to force rejection of a set of tokens by altering, e.g., sequence numbers on non-integrity protected channels such as UDP.
+
+However, this does not constitute a new attack.
+Such adversaries could flip a bit in the emblem's signature, rendering the set of tokens invalid, too.
 
 # IANA Considerations
 
