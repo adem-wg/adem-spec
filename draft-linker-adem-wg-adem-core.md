@@ -155,7 +155,6 @@ These are examples of EIs:
 * `https://*.example.com:443`
 * `ftp://[2606:2800:220:1:248:1893:25c8:1946]:21`
 * `ssh://93.184.216.34:22`
-* `file:///folder/`
 
 EIs identify a protocol, address, and port combination.
 There are three types of addresses.
@@ -166,7 +165,6 @@ IPv6 addresses (`IPv6`), and IPv4 addresses (`IPv4`) MUST be formatted following
 More specifically, we highlight that IPv4 addresses can be formatted using the CIDR prefix notation, e.g., `127.0.0.1/16`.
 IPv6 addresses MUST NOT be multicast or link-local unicast addresses.
 `scheme` MUST be either a URI scheme as specified in {{!RFC3896}}, [Section 3.1](https://datatracker.ietf.org/doc/html/rfc3986#section-3.1), or the single-character wildcard `"*"`.
-`scheme` MUST NOT be `"file"` and the wildcard `"*"` is understood to not match the `"file"`.
 
 #### Semantics
 
@@ -189,7 +187,7 @@ If it is an IPv6 or IPv4 address prefix, it contains all addresses matching that
 If it is a domain name, it contains any IPv4 or IPv6 address this domain name can be resolved to.
 If it is a domain name starting with the wildcard prefix `"*"`, it contains any IPv4 or IPv6 address this domain name or any of its subdomains can be resolved to.
 
-Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme but `"file"` if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
+Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
 
 ### Organization Identifiers
 
