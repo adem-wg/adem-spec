@@ -379,8 +379,11 @@ Given an input public key and an emblem with a set of endorsements, a verificati
 5. If the previous procedure resulted in `INVALID` return `INVALID` and the empty set of OIs.
 6. If all tokens include the same "iss" claim, return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the empty set of OIs.
 7. Run the *endorsed emblem verification procedure* ({{endorsed-emblems}}; results in a set of OIs and one of `ENDORSED-TRUSTED`, `ENDORSED-UNTRUSTED`, `INVALID`).
-8. If the previous procedure resulted in `INVALID` return `INVALID` and the empty set of OIs.
-9. Return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the set of OIs returned by the endorsed emblem verification procedure.
+8. Return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the set of OIs returned by the endorsed emblem verification procedure.
+
+Note that the endorsed emblem verification procedure resulting in `INVALID` is handled implicitly in step 8.
+As the procedure did not terminte in step 5, organizational verification must have been successful.
+Hence, `INVALID` cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.
 
 If the emblem includes the "ext" claim with the value `true`, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
 However, there may be cases in which verifiers do not deem it safe to perform extra queries to OIs.
