@@ -138,14 +138,14 @@ However, to limit their scope, we do not follow the specification of URIs and in
 #### Syntax
 
 Entity identifiers comprise two main parts: a *scheme* and a *location*.
-They follow the syntax (`scheme`, `domain-name`, `IPv6`, `IPv4` defined below):
+They follow the syntax (`scheme`, `domain-name`, `IPv6` defined below):
 
 ~~~~
 entity-identifier = scheme "://" location
 
 location = address [ ":" port ]
 
-address = domain-name | "[" IPv6 "]" | IPv4
+address = domain-name | "[" IPv6 "]"
 
 port = DIGIT+
 ~~~~
@@ -154,16 +154,16 @@ These are examples of EIs:
 
 * `https://*.example.com:443`
 * `ftp://[2606:2800:220:1:248:1893:25c8:1946]:21`
-* `ssh://93.184.216.34:22`
+* `ssh://[::FFFF:93.184.216.34]:22`
 
 EIs identify a protocol, address, and port combination.
-There are three types of addresses.
-Domain names, IPv6 addresses, and IPv4 addresses.
+There are two types of addresses.
+Domain names and IPv6 addresses.
+Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. {{!RFC4291}}, [Section 2.5.5.2](https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2)).
 Domain names (`domain-name`) MUST be formatted as usual and specified in {{!RFC1035}}.
 
-IPv6 addresses (`IPv6`), and IPv4 addresses (`IPv4`) MUST be formatted following {{!RFC4291}}, or {{!RFC4632}} respectively.
-More specifically, we highlight that IPv4 addresses can be formatted using the CIDR prefix notation, e.g., `127.0.0.1/16`.
-IPv6 addresses MUST NOT be multicast or link-local unicast addresses.
+IPv6 addresses (`IPv6`) MUST be formatted following {{!RFC4291}}.
+IPv6 addresses MUST be global unicast or link-local unicast addresses.
 `scheme` MUST be either a URI scheme as specified in {{!RFC3896}}, [Section 3.1](https://datatracker.ietf.org/doc/html/rfc3986#section-3.1), or the single-character wildcard `"*"`.
 
 #### Semantics
@@ -182,10 +182,10 @@ Depending on the concrete EI, e.g., its wildcards, it may point to multiple enti
 For example: `*://example.com` (amongst other entities) points at network facing processes hosted under any IP that `example.com` resolves to, on any port, using any protocol.
 
 To resolve an EI, it is first interpreted as an implicit or explicit set of addresses.
-If `address` is an IPv6 or IPv4 address, the set contains this address only.
-If it is an IPv6 or IPv4 address prefix, it contains all addresses matching that prefix.
-If it is a domain name, it contains any IPv4 or IPv6 address this domain name can be resolved to.
-If it is a domain name starting with the wildcard prefix `"*"`, it contains any IPv4 or IPv6 address this domain name or any of its subdomains can be resolved to.
+If `address` is an IP address, the set contains this address only.
+If it is an IP address prefix, it contains all addresses matching that prefix.
+If it is a domain name, it contains any IP address this domain name can be resolved to.
+If it is a domain name starting with the wildcard prefix `"*"`, it contains any IP address this domain name or any of its subdomains can be resolved to.
 
 Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
 
