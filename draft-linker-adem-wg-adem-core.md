@@ -160,7 +160,7 @@ EIs identify a protocol, address, and port combination.
 There are two types of addresses.
 Domain names and IPv6 addresses.
 Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. {{!RFC4291}}, [Section 2.5.5.2](https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2)).
-Domain names (`domain-name`) MUST be formatted as usual and specified in {{!RFC1035}}.
+Domain names (`domain-name`) MUST be formatted as usual and specified in {{!RFC1035}} with the exception that the leftmost label MAY be the single-character wildcard `"*"`.
 
 IPv6 addresses (`IPv6`) MUST be formatted following {{!RFC4291}}.
 IPv6 addresses MUST be global unicast or link-local unicast addresses.
@@ -188,6 +188,23 @@ If it is a domain name, it contains any IP address this domain name can be resol
 If it is a domain name starting with the wildcard prefix `"*"`, it contains any IP address this domain name or any of its subdomains can be resolved to.
 
 Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
+
+#### Order
+
+EIs may not only be used for identification but also for constraint purposes.
+For example, an endorsement may constrain emblems to only signal protection for a specific IP range.
+In this section, we define an order on EIs so that one can verify if an identifying EI complies with a constraining EI.
+
+We define an EI A to be *more general* than an EI B, if all of the following conditions apply:
+
+* A's `scheme` part is `"*"` or equal to B's `scheme`.
+* A's `port` part is undefined or equal to B's `port` part.
+* If A's `location` part encodes a domain name and does not contain the wildcard `"*"`, B's `location` part encodes a domain name, too, and A's location is equal to B's location.
+* If A's `location` part encodes a domain name and contains the wildcard `"*"`, B's `location` part encodes a domain name, too, and B's location is a subdomain of A's location excluding the wildcard `"*"`.
+In this regard, any domain is considered a subdomain of itself.
+* If A's `location` part encodes an IP address, B's `location` part encodes an IP address, too, and A's location is a prefix of B's location.
+
+Note that EIs encoding a domain name are incomparable to EIs encoding IP addresses, i.e., neither can be more general than the other.
 
 ### Organization Identifiers
 
@@ -309,7 +326,9 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 
 * The endorsement's "emb.prp" claim is undefined or a superset of the emblem's "emb.prp" claim.
 * The endorsement's "emb.dst" claim is undefined or a superset of the emblem's "emb.dst" claim.
-* The endorsement's "emb.sub" claim is undefined or for each EI within the emblem's "emb.sub" claim, there is some EI in the endorsement's "emb.sub" claim which resolves to that EI.
+* The endorsement's "emb.sub" claim is undefined or for each EI within the emblem's "emb.sub" claim, one of the following conditions holds:
+  * There exists an EI within the endorsement's "emb.sub" claim which is more general than the emblem's "emb.sub" claim.
+  * There is no EI within the endorsement's "emb.sub" claims with the same location type (domain name or IPv6 address) as the emblem.
 * The endorsement's "emb.wnd" claim is undefined or the emblem's "emb.iat" claim value plus the endorsement's "emb.wnd" claim value lies in the future.
 
 # Public Key Distribution {#pk-distribution}
