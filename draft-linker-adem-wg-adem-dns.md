@@ -61,28 +61,64 @@ when, and only when, they appear in all capitals, as shown here.
 
 # DNS Distribution
 
-Tokens can be distributed using DNS {{!RFC1035}}, encoded as TXT records.
-There MUST be no more than one token encoded per record.
-The record values must be formatted as per {{!RFC1464}}, i.e., consisting of one key and one value.
-The key MUST be formatted as:
+Given a set of tokens containing exactly one emblem and zero or more endorsements, a *sender* can distribute this set via DNS {{?RFC1035}}, encoded as TXT records {{!RFC1464}}, as follows.
+
+For each such set, the sender MAY choose a unique *identifier* string.
+If the sender distributes mulitple sets of tokens for a given domain, a sender SHOULD choose such a string.
+
+Each token MUST be given a *sequence number* (non-negative integer).
+The emblem's sequence number MUST be `0`.
+Beyond that, the order of sequence numbers must coincide with the order of endorsements.
+More precisely, if an endorsement *A* endorses a token *B*, *A*'s sequence number MUST be strictly greater than *B*'s sequence number.
+There MAY be jumps within the sequence numbers.
+
+Tokens are encoded in TXT records following {{!RFC1464}}.
+Consequently, each record includes a key and a value.
+The value encodes the token in JWT compact serialization.
+A token MAY encoded within multiple TXT records should space restrictions from the DNS provider require that.
+If a token is encoded in multiple parts, each such part is given a unique *part number* (non-negative integer).
+Part numbers must be chosen order-preserving.
+More precisely, if all parts of a token are concatened in the order indicated by the part number (starting with the smallest part number), the resulting string MUST be equal to the original token.
+
+Each record's key MUST be formatted as:
 
 ~~~~
-key := type [ "-" suffix ] [ "-" num ]
+key := type [ "-" identifier ] sequence-number [ part-number ]
 
 type := "adem-emb" | "adem-end"
 
-suffix := CHARACTER+ [ "-" suffix ]
+identifier := CHARACTER-NO-HYPEN+
 
-num := DIGIT+
+sequence-number := "-s" DIGIT+
+
+part-number := "-p" DIGIT+
 ~~~~
 
-`type` must coincide with the token's "cty" claim.
-`suffix` MUST be used to distinguish tokens of the same `type`.
-`num` MUST be used if the tokens needs to be split up because it exceeds the space limitations of the respective DNS provider.
-The digits in `num` indicate the ordering of the tokens parts.
+`CHARACTER-NO-HYPEN` is any prinitable ASCII character as specified in {{!RFC0020}} with the exception of `"-"`.
+`DIGIT` is the range of ASCII characters `"0"` to `"9"`.
+`type` MUST coincide with the token's "cty" claim.
+`sequence-number`
+If present, `identifier` MUST coincide with the string identifying the token's set.
+`sequence-number` MUST coincide with the token's sequence number.
+`part-number` MUST coincide with the respective part number.
+The combinatino of `identifier` and the IDs `-s...` and `-p...` MUST be unique per domain name.
 
-The value of the TXT record MUST be the token, encoded as JWT in compact serialization.
-It MAY be split up into multiple parts.
+Senders MUST ensure that only TXT records encoding an ADEM token start with one of the values encoded in `type`.
+
+# DNS Querying
+
+To effectively query a DNS record for emblems, verifiers need to distinguish different sets of tokens.
+In this section, we detail how to extract all a domain name's associated sets of tokens.
+
+First, a verifier MUST perform a general TXT record query for the domain name of question.
+
+Second, for each record starting with one of the values of `type`, the verifier parses the record according to {{!RFC1464}} and the specification of `key`.
+Records for which parsing fails MUST be ignored.
+
+Third, for each emblem identified in the previous step, the verifier assembles a set of tokens.
+Any token which either bears the same identifier as the emblem, or bears no identifier MUST be considered as belonging to that emblem's set of tokens.
+
+Finally, for each of these sets, the verifier can proceed to verify them as specified in {{ADEM-CORE}}.
 
 # Security Considerations
 
