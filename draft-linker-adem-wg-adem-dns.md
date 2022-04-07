@@ -64,7 +64,7 @@ when, and only when, they appear in all capitals, as shown here.
 Given a set of tokens containing exactly one emblem and zero or more endorsements, a *sender* can distribute this set via DNS {{?RFC1035}}, encoded as TXT records {{!RFC1464}}, as follows.
 
 For each such set, the sender MAY choose a unique *identifier* string.
-If the sender distributes mulitple sets of tokens for a given domain, a sender SHOULD choose such a string.
+If the sender distributes multiple sets of tokens for a given domain, a sender SHOULD choose such a string.
 
 Each token MUST be given a *sequence number* (non-negative integer).
 The emblem's sequence number MUST be `0`.
@@ -75,10 +75,10 @@ There MAY be jumps within the sequence numbers.
 Tokens are encoded in TXT records following {{!RFC1464}}.
 Consequently, each record includes a key and a value.
 The value encodes the token in JWT compact serialization.
-A token MAY encoded within multiple TXT records should space restrictions from the DNS provider require that.
+A token MAY be encoded as multiple TXT records should space restrictions from the DNS provider require that.
 If a token is encoded in multiple parts, each such part is given a unique *part number* (non-negative integer).
 Part numbers must be chosen order-preserving.
-More precisely, if all parts of a token are concatened in the order indicated by the part number (starting with the smallest part number), the resulting string MUST be equal to the original token.
+More precisely, if all parts of a token are concatenated in the order indicated by the part number (starting with the smallest part number), the resulting string MUST be equal to the original token.
 
 Each record's key MUST be formatted as:
 
@@ -94,14 +94,13 @@ sequence-number := "-s" DIGIT+
 part-number := "-p" DIGIT+
 ~~~~
 
-`CHARACTER-NO-HYPEN` is any prinitable ASCII character as specified in {{!RFC0020}} with the exception of `"-"`.
+`CHARACTER-NO-HYPEN` is any printable ASCII character as specified in {{!RFC0020}} except for `"-"`.
 `DIGIT` is the range of ASCII characters `"0"` to `"9"`.
 `type` MUST coincide with the token's "cty" claim.
-`sequence-number`
 If present, `identifier` MUST coincide with the string identifying the token's set.
 `sequence-number` MUST coincide with the token's sequence number.
 `part-number` MUST coincide with the respective part number.
-The combinatino of `identifier` and the IDs `-s...` and `-p...` MUST be unique per domain name.
+The combination of `identifier` and the IDs `-s...` and `-p...` MUST be unique per domain name.
 
 Senders MUST ensure that only TXT records encoding an ADEM token start with one of the values encoded in `type`.
 
@@ -112,7 +111,7 @@ In this section, we detail how to extract all a domain name's associated sets of
 
 First, a verifier MUST perform a general TXT record query for the domain name of question.
 
-Second, for each record starting with one of the values of `type`, the verifier parses the record according to {{!RFC1464}} and the specification of `key`.
+Second, for each record, starting with one of the values of `type`, the verifier parses the record according to {{!RFC1464}} and the specification of `key`.
 Records for which parsing fails MUST be ignored.
 
 Third, for each emblem identified in the previous step, the verifier assembles a set of tokens.

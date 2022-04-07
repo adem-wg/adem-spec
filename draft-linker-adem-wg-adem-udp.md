@@ -85,7 +85,7 @@ Beyond that, the order of sequence numbers must coincide with the order of endor
 More precisely, if an endorsement *A* endorses a token *B*, *A*'s sequence number MUST be strictly smaller than *B*'s sequence number.
 Note that therefore, any independent endorsement's sequence number must be zero.
 
-The specific encoding of the number of independent endorsements and sequence numbers was chosen to facilitate verification.
+The encoding of the number of independent endorsements and sequence numbers was chosen to facilitate verification.
 Using these fields, verifiers can know if they received all endorsements associated to an emblem.
 
 ADEM-UDP enabled entities SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-linker-adem-wg-adem-core.html
