@@ -55,9 +55,8 @@ normative:
 
 --- abstract
 
-Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
-They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
-This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute digital emblems, which mark entities as protected under IHL in an analogy to the physical emblems.
+Protected Parties (PPs) offering humanitarian services during armed conflicts are granted special protection under international humanitarian law (IHL) and are permitted to advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
+This document specifies a scheme for the generation and distribution of digital emblems, dubbed *An Authenticated Digital EMblem* (ADEM), providing a digital counterpart to the red cross, red crescent and red crystal. 
 
 --- middle
 
@@ -68,15 +67,17 @@ This has traditionally been accomplished by the marking of protected facilities 
 
 Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.
 
-This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute *digital emblems*, which mark entities as protected under IHL in an analogy to the physical emblems.
-We specify how digital emblems can be created and verified.
+This document presents the ADEM (*An Authenticated Digital EMblem*) scheme which speciies how *digital emblems* maybe created, distributed and verified. The scheme is intended to satisfy the existing norms and requirments of established internatonal humanitarian law around protective emblems. 
 
-Emblems can be accompanied by *endorsements* for authentication purposes, which are signed by *authorities*.
-We call both emblems and endorsements *tokens*.
-Emblems encode which entity is protected and resemble the statement:
+Given the complex topography of digital devices and networks, unauthenticated digital emblems may be prone to abuse by non-protected parties and conseqently become ineffective. ADEM allows for the issuing party of an emblem to be authenticated and optionally for the status of the issuing party to be endorsed by *authorities*. 
+
+We consider a *protected party* who operates digital infrastruture consisting of various *entities* (servers, workstations, virtual machines, etc). The *protected party* issues *emblems* which indicate protected entities and arranges for the emblem to be distributed by the entity. 
+
+Emblems encode which entity is protected and represent the statement:
 
 > I, entity *X* and holder of public key *K*, am associated to PP *P* and protected under international humanitarian law.
 
+Emblems can be accompanied by *endorsements* for authentication purposes, which are signed by *authorities*. We call both emblems and endorsements *tokens*.
 Endorsements resemble the statement:
 
 > I, organization *O* and the holder of public key *K1*, attest that the holder of public key *K2* is associated to PP *P*, and that *P* is entitled to issue emblems for their infrastructure.
@@ -85,7 +86,9 @@ Note that *O* in this statement need not be a PP but could be any party.
 In most settings, we expect nation states and supranational organizations to take the role of authorities.
 
 Emblems will be investigated by *verifiers*.
-We expect verifiers to be military units in the usual case, and hence, be associated to nation states.
+We expect verifiers to be military units in the typical case, and hence, be associated to nation states.
+
+Note that ADEM only specifies the technical processes for the generation, distribution and verification of emblems. It is left for protected parties to decide how best to deploy digital emblems and for verifiers to decide the appropriate threshold for determining the validity of an emblem. 
 
 # Conventions and Definitions
 
@@ -98,18 +101,19 @@ when, and only when, they appear in all capitals, as shown here.
 
 <!-- TODO: this is only an informal listing of terminology that should be explained at a later point. -->
 
-**Token** A token is either an emblem or an endorsement and encoded as a JWS.
+**Token** A token is either an emblem or an endorsement.
 
 **Emblem** An emblem is a sign of protection under IHL.
 
-**Endorsement** An endorsement associates a public key with an identity, and hence, resembles the idea of a certificate.
-Beyond that, though, endorsements always encode the attestation of a party's right to issue emblems.
+**Endorsement** An endorsement associates a public key with an identity and optionally constraints on the circumstances in which the endorsement is valid. 
 
-**Entity** An entity is a distinguishable computational unit, such as a computer, an OS, a process, etc.
+**Entity** An entity is a distinguishable computational unit, such as a computer, an OS, a process, etc. 
+
+TODO(djackson) - Should we define entity a bit more narrowly in the beginning? A finite enum?  
 
 **Protected Party** A protected party is an organization entitled to issue claims of protection for their digital infrastructure.
 
-**Authority** An authority is an organization that is trusted by some to attest a party's status as protected.
+**Authority** An authority is an organization that attests a party's status as protected.
 This trust may stem from law.
 For example, nation states or NGOs can take the role of authorities.
 
@@ -130,10 +134,15 @@ Consequently, this section also specifies the semantics of identifiers.
 ### Entity Identifiers
 
 Entities that can be technically marked as protected are processes, or data in non-volatile storage.
+
+TODO(djackson) - ??? 
+
 In the following, we describe how such entities are identified.
 Entities are identified by *entity identifiers* (EIs).
 Entity identifiers closely resemble Uniform Resource Identifiers (URIs) as specified in {{!RFC3986}}.
 However, to limit their scope, we do not follow the specification of URIs and instead define our own syntax.
+
+//TODO(djackson) - In what ways do we diverge? Aren't we aiming for a strict subset? 
 
 #### Syntax
 
@@ -168,6 +177,8 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.
 
 #### Semantics
 
+//TODO(djackson) - My gut feeling would be to walk this back and focus purely on networks in the beginning. Better to solve one thing well than two things poorly? Just protect networks and their communications? 
+
 Several kinds of entities can be covered by entity identifiers:
 
 * Network facing processes, e.g., webservers
@@ -185,6 +196,9 @@ To resolve an EI, it is first interpreted as an implicit or explicit set of addr
 If `address` is an IP address, the set contains this address only.
 If it is an IP address prefix, it contains all addresses matching that prefix.
 If it is a domain name, it contains any IP address this domain name can be resolved to.
+
+TODO(djackson) - I'm not sure about "any address this domain can resolve to" - AFAIK DNS Servers can and will respond with a rotating list of IP addresses for a domain name. I.e. you get a single A record each time, but it changes every 5 minutes.
+
 If it is a domain name starting with the wildcard prefix `"*"`, it contains any IP address this domain name or any of its subdomains can be resolved to.
 
 Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
@@ -349,6 +363,10 @@ The certificate authenticating that website MUST be valid for the OI and all the
 * For each root public key with kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
 Beyond these subdomains, `adem-configuration.<OI>` MUST NOT have further subdomains.
 
+TODO(djackson) - Why have you gone with subdomains over a folder in /.well-known/? 
+               - Oh wait - for the certificate transparency benefit? 
+               - My thinking was that the subdomain would not actually need to correspond to a website, just be included on the certificate. 
+
 All these subdomains MUST be served using HTTPS only, however, they MAY not be live at all.
 All such subdomains SHOULD serve the party's endorsements and root public keys.
 Whenever such subdomains serve content, they MUST comply with the following.
@@ -357,6 +375,8 @@ The subdomain `adem-configuration.` MUST serve a JSON array of all root public k
 Each subdomain relating to a kid MUST serve the respectively identified key in JSON encoding.
 
 Serving of public keys is optional to allow parties to cope with outages.
+
+TODO(djackson) - I don't think you need language like this. The requirements just specify intent. The verification procedures can mention that things may be unreachable due to an outage. 
 
 # Signs of Protection
 
@@ -370,6 +390,8 @@ These root keys MAY be endorsed by other parties.
 If this is the case, such endorsements MUST be served alongside the root keys at the PP's OI.
 All of a PP's keys, endorsed by third parties MUST be served under their OI.
 PPs MAY use their root keys to sign further, internal endorsements, i.e., endorse keys of their own to either issue emblems or further endorsements.
+
+TODO(djackson) - Is it better to define a HTTPS method of distribution? Why special case the root keys? 
 
 ## Verification
 
@@ -386,6 +408,8 @@ The order of these values encodes the *strength* of the verification result.
 6. `ORGANIZATIONAL-TRUSTED`
 7. `ENDORSED-UNTRUSTED`
 8. `ENDORSED-TRUSTED`
+
+TODO(Djackson) - Doesn't the verification algorithm also need a list of all acceptable pulic keys? 
 
 Given an input public key and an emblem with a set of endorsements, a verification algorithm takes the following steps:
 
@@ -421,6 +445,8 @@ Some verifiers may have pre-existing trust relationships with some authorities, 
 Other verifiers might be fine with fetching public keys authenticated only by the web PKI.
 
 ## Protection
+
+TODO(djackson) - In my mind, an emblem would only be considered in the context of a particular entity. Verification would be checking that the entity (singular) was covered by the emblem. I don't have a strong argument for why that would be desirable though, just simpler. 
 
 Any entity whose address is resolved within context of a valid emblem must be considered to be marked as protected under IHL.
 In certain contexts, this might apply to a wide range of entities.
