@@ -184,7 +184,7 @@ Several kinds of entities can be covered by entity identifiers:
 * Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop
 * Networks
 
-EIs can *cover* any of these entities, but they can only *point* to network-connected processes or static data.
+EIs can *cover* any of these entities, but they can only *point* to network-connected processes.
 To decide which entities EIs point to, one must *resolve* an EI.
 One EI need not necessarily only point to a single entity.
 Depending on the concrete EI, e.g., its wildcards, it may point to multiple entities.
