@@ -137,13 +137,11 @@ However, to limit their scope, we do not follow the specification of URIs and in
 
 #### Syntax
 
-Entity identifiers comprise two main parts: a *scheme* and a *location*.
-They follow the syntax (`scheme`, `domain-name`, `IPv6` defined below):
+Entity identifiers point to an address and optionally port combination.
+They follow the syntax (`domain-name`, `IPv6` defined below):
 
 ~~~~
-entity-identifier = scheme "://" location
-
-location = address [ ":" port ]
+entity-identifier = address [ ":" port ]
 
 address = domain-name | "[" IPv6 "]"
 
@@ -152,11 +150,11 @@ port = DIGIT+
 
 These are examples of EIs:
 
-* `https://*.example.com:443`
-* `ftp://[2606:2800:220:1:248:1893:25c8:1946]:21`
-* `ssh://[::FFFF:93.184.216.34]:22`
+* `*.example.com:443`
+* `[2606:2800:220:1:248:1893:25c8:1946]:21`
+* `[::FFFF:93.184.216.34]:22`
 
-EIs identify a protocol, address, and port combination.
+EIs identify an address, and port combination.
 There are two types of addresses.
 Domain names and IPv6 addresses.
 Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. {{!RFC4291}}, [Section 2.5.5.2](https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2)).
@@ -164,7 +162,6 @@ Domain names (`domain-name`) MUST be formatted as usual and specified in {{!RFC1
 
 IPv6 addresses (`IPv6`) MUST be formatted following {{!RFC4291}}.
 IPv6 addresses MUST be global unicast or link-local unicast addresses.
-`scheme` MUST be either a URI scheme as specified in {{!RFC3896}}, [Section 3.1](https://datatracker.ietf.org/doc/html/rfc3986#section-3.1), or the single-character wildcard `"*"`.
 
 #### Semantics
 
@@ -179,7 +176,7 @@ EIs can *cover* any of these entities, but they can only *point* to network-conn
 To decide which entities EIs point to, one must *resolve* an EI.
 One EI need not necessarily only point to a single entity.
 Depending on the concrete EI, e.g., its wildcards, it may point to multiple entities.
-For example: `*://example.com` (amongst other entities) points at network facing processes hosted under any IP that `example.com` resolves to, on any port, using any protocol.
+For example: `example.com` (amongst other entities) points at network facing processes hosted under any IP that `example.com` resolves to, on any port.
 
 To resolve an EI, it is first interpreted as an implicit or explicit set of addresses.
 If `address` is an IP address, the set contains this address only.
@@ -187,7 +184,7 @@ If it is an IP address prefix, it contains all addresses matching that prefix.
 If it is a domain name, it contains any IP address this domain name can be resolved to.
 If it is a domain name starting with the wildcard prefix `"*"`, it contains any IP address this domain name or any of its subdomains can be resolved to.
 
-Any process reachable under any of the addresses pointed towards by `address` running the scheme `scheme` (or any scheme if `scheme` is `"*"`) on the port specified (or any port, if unspecified) is pointed by the respective EI.
+Any process reachable under any of the addresses pointed towards by `address` and on the port specified (or any port, if unspecified) is pointed by the respective EI.
 
 #### Order
 
@@ -197,12 +194,11 @@ In this section, we define an order on EIs so that one can verify if an identify
 
 We define an EI A to be *more general* than an EI B, if all of the following conditions apply:
 
-* A's `scheme` part is `"*"` or equal to B's `scheme`.
 * A's `port` part is undefined or equal to B's `port` part.
-* If A's `location` part encodes a domain name and does not contain the wildcard `"*"`, B's `location` part encodes a domain name, too, and A's location is equal to B's location.
-* If A's `location` part encodes a domain name and contains the wildcard `"*"`, B's `location` part encodes a domain name, too, and B's location is a subdomain of A's location excluding the wildcard `"*"`.
+* If A encodes a domain name and does not contain the wildcard `"*"`, B encodes a domain name, too, and A is equal to B.
+* If A encodes a domain name and contains the wildcard `"*"`, B encodes a domain name, too, and B is a subdomain of A excluding the wildcard `"*"`.
 In this regard, any domain is considered a subdomain of itself.
-* If A's `location` part encodes an IP address, B's `location` part encodes an IP address, too, and A's location is a prefix of B's location.
+* If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.
 
 Note that EIs encoding a domain name are incomparable to EIs encoding IP addresses, i.e., neither can be more general than the other.
 
@@ -282,7 +278,7 @@ Payload:
   },
   "iat": 1636397533,
   "iss": "https://example.com",
-  "ent": ["*://[2001:0db8:582:ae33::29]"]
+  "ent": ["[2001:0db8:582:ae33::29]"]
 }
 ~~~~
 
@@ -328,7 +324,7 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 * The endorsement's "emb.dst" claim is undefined or a superset of the emblem's "emb.dst" claim.
 * The endorsement's "emb.sub" claim is undefined or for each EI within the emblem's "emb.sub" claim, one of the following conditions holds:
   * There exists an EI within the endorsement's "emb.sub" claim which is more general than the emblem's "emb.sub" claim.
-  * There is no EI within the endorsement's "emb.sub" claims with the same location type (domain name or IPv6 address) as the emblem.
+  * There is no EI within the endorsement's "emb.sub" claims with the same EI type (domain name or IPv6 address) as the emblem.
 * The endorsement's "emb.wnd" claim is undefined or the emblem's "emb.iat" claim value plus the endorsement's "emb.wnd" claim value lies in the future.
 
 # Public Key Distribution {#pk-distribution}
