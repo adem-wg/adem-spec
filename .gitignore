@@ -14,3 +14,4 @@ draft-linker-cfct-adem-core.xml
 lib
 report.xml
 venv/
+/.vscode
