@@ -352,6 +352,7 @@ In this section, we specify the configuration of a PP's OI.
 
 Root public keys are all public keys which are only endorsed by third parties and never endorsed by the organization itself.
 A party MAY have multiple root public keys.
+These root keys MAY be endorsed by other parties.
 
 Any root public key MUST be encoded as JWK as per {{!RFC7517}} and {{!RFC7518}}.
 Root public keys MUST include the "kid" parameter and this parameter MUST be computed by the hashing algorithm as specified in {{jwk-hashing}}.
@@ -384,14 +385,6 @@ A sign of protection is an emblem, accompanied by one or more endorsements.
 Whenever a token includes OIs (in "iss" or "sub" claims), these OIs must be configured accordingly.
 An OI serves to identify a PP or authority in the real world.
 Hence, parties MUST configure the website hosted under their OI to provide sufficient identifying information.
-
-Furthermore, parties MUST serve their root keys encoded in HTTPS headers with their website.
-These root keys MAY be endorsed by other parties.
-If this is the case, such endorsements MUST be served alongside the root keys at the PP's OI.
-All of a PP's keys, endorsed by third parties MUST be served under their OI.
-PPs MAY use their root keys to sign further, internal endorsements, i.e., endorse keys of their own to either issue emblems or further endorsements.
-
-TODO(djackson) - Is it better to define a HTTPS method of distribution? Why special case the root keys? 
 
 ## Verification
 
