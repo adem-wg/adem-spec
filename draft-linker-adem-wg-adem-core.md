@@ -133,9 +133,7 @@ Consequently, this section also specifies the semantics of identifiers.
 
 ### Entity Identifiers
 
-Entities that can be technically marked as protected are processes, or data in non-volatile storage.
-
-TODO(djackson) - ??? 
+Entities that can be technically marked as protected are processes.
 
 In the following, we describe how such entities are identified.
 Entities are identified by *entity identifiers* (EIs).
