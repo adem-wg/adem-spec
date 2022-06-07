@@ -1,0 +1,947 @@
+
+
+
+
+ADEM Working Group                                          F. E. Linker
+Internet-Draft                                                ETH Zürich
+Intended status: Standards Track                              D. Jackson
+Expires: 27 October 2022                                            None
+                                                                D. Basin
+                                                              ETH Zürich
+                                                           25 April 2022
+
+
+          An Authenticated Digital EMblem - Core Specification
+                     draft-linker-adem-wg-adem-core
+
+Abstract
+
+   Protected Parties (PPs) offering humanitarian services during armed
+   conflicts are granted special protection under international
+   humanitarian law (IHL) and are permitted to advertise their protected
+   status by the well-known emblems of the red cross, red crescent, and
+   the red crystal.  This document specifies a scheme for the generation
+   and distribution of digital emblems, dubbed _An Authenticated Digital
+   EMblem_ (ADEM), providing a digital counterpart to the red cross, red
+   crescent and red crystal.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-linker-adem-wg-adem/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/adem-wg/adem-spec.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 27 October 2022.
+
+Copyright Notice
+
+   Copyright (c) 2022 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Terminology
+   4.  Tokens
+     4.1.  Identifiers and their Semantics
+       4.1.1.  Entity Identifiers
+       4.1.2.  Organization Identifiers
+     4.2.  Token Encoding
+       4.2.1.  Emblems
+       4.2.2.  Endorsements
+   5.  Public Key Distribution
+   6.  Signs of Protection
+     6.1.  Verification
+       6.1.1.  Comments on Trust Policies
+     6.2.  Protection
+   7.  Security Considerations
+     7.1.  No Endorsements without "iss"
+   8.  Algorithms
+     8.1.  JWK Hashing
+     8.2.  Signed Emblem Verification Procedure
+     8.3.  Organizational Emblem Verification Procedure
+     8.4.  Endorsed Emblem Verification Procedure
+   9.  Security Considerations
+     9.1.  Token Order
+   10. IANA Considerations
+   11. Normative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   International humanitarian law (IHL) recognises protected parties
+   (PP) such as healthcare and aid organisations as deserving of special
+   protection from attacks during armed conflicts.  This has
+   traditionally been accomplished by the marking of protected
+   facilities and personnel with symbols such as the Red Cross, the Red
+   Crescent and the Red Diamond.
+
+   Due to the increasing use of digital infrastructure by protected
+   parties and attacks on digital infrastructure during armed conflicts,
+   a digital analogue of the Red Cross symbol is under consideration.
+
+   This document presents the ADEM (_An Authenticated Digital EMblem_)
+   scheme which speciies how _digital emblems_ maybe created,
+   distributed and verified.  The scheme is intended to satisfy the
+   existing norms and requirments of established internatonal
+   humanitarian law around protective emblems.
+
+   Given the complex topography of digital devices and networks,
+   unauthenticated digital emblems may be prone to abuse by non-
+   protected parties and conseqently become ineffective.  ADEM allows
+   for the issuing party of an emblem to be authenticated and optionally
+   for the status of the issuing party to be endorsed by _authorities_.
+
+   We consider a _protected party_ who operates digital infrastruture
+   consisting of various _entities_ (servers, workstations, virtual
+   machines, etc).  The _protected party_ issues _emblems_ which
+   indicate protected entities and arranges for the emblem to be
+   distributed by the entity.
+
+   Emblems encode which entity is protected and represent the statement:
+
+      I, entity _X_ and holder of public key _K_, am associated to PP
+      _P_ and protected under international humanitarian law.
+
+   Emblems can be accompanied by _endorsements_ for authentication
+   purposes, which are signed by _authorities_. We call both emblems and
+   endorsements _tokens_. Endorsements resemble the statement:
+
+      I, organization _O_ and the holder of public key _K1_, attest that
+      the holder of public key _K2_ is associated to PP _P_, and that
+      _P_ is entitled to issue emblems for their infrastructure.
+
+   Note that _O_ in this statement need not be a PP but could be any
+   party.  In most settings, we expect nation states and supranational
+   organizations to take the role of authorities.
+
+   Emblems will be investigated by _verifiers_. We expect verifiers to
+   be military units in the typical case, and hence, be associated to
+   nation states.
+
+   Note that ADEM only specifies the technical processes for the
+   generation, distribution and verification of emblems.  It is left for
+   protected parties to decide how best to deploy digital emblems and
+   for verifiers to decide the appropriate threshold for determining the
+   validity of an emblem.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Terminology
+
+   *Token* A token is either an emblem or an endorsement.
+
+   *Emblem* An emblem is a sign of protection under IHL.
+
+   *Endorsement* An endorsement associates a public key with an identity
+   and optionally constraints on the circumstances in which the
+   endorsement is valid.
+
+   *Entity* An entity is a distinguishable computational unit, such as a
+   computer, an OS, a process, etc.
+
+   TODO(djackson) - Should we define entity a bit more narrowly in the
+   beginning?  A finite enum?
+
+   *Protected Party* A protected party is an organization entitled to
+   issue claims of protection for their digital infrastructure.
+
+   *Authority* An authority is an organization that attests a party's
+   status as protected.  This trust may stem from law.  For example,
+   nation states or NGOs can take the role of authorities.
+
+   *Verifier* A verifier is an agent interested in observing and
+   verifying digital emblems.
+
+   Beyond these terms, we use the terms "claim" and "header parameter"
+   as references to the JWT specification [RFC7519].
+
+4.  Tokens
+
+4.1.  Identifiers and their Semantics
+
+   Emblems are issued for entities by protected parties and are backed
+   by authorities.  Both protected parties and authorities are
+   _organizations_. This section specifies how entities and
+   organizations are identified.  Sometimes, entity identifiers refer to
+   set of entities.  Consequently, this section also specifies the
+   semantics of identifiers.
+
+4.1.1.  Entity Identifiers
+
+   Entities that can be technically marked as protected are processes.
+
+   In the following, we describe how such entities are identified.
+   Entities are identified by _entity identifiers_ (EIs).  Entity
+   identifiers closely resemble Uniform Resource Identifiers (URIs) as
+   specified in [RFC3986].  However, to limit their scope, we do not
+   follow the specification of URIs and instead define our own syntax.
+
+   //TODO(djackson) - In what ways do we diverge?  Aren't we aiming for
+   a strict subset?
+
+4.1.1.1.  Syntax
+
+   Entity identifiers comprise two main parts: a _scheme_ and a
+   _location_. They follow the syntax (scheme, domain-name, IPv6 defined
+   below):
+
+   entity-identifier = scheme "://" location
+
+   location = address [ ":" port ]
+
+   address = domain-name | "[" IPv6 "]"
+
+   port = DIGIT+
+
+   These are examples of EIs:
+
+   *  https://*.example.com:443
+
+   *  ftp://[2606:2800:220:1:248:1893:25c8:1946]:21
+
+   *  ssh://[::FFFF:93.184.216.34]:22
+
+   EIs identify a protocol, address, and port combination.  There are
+   two types of addresses.  Domain names and IPv6 addresses.  Note that
+   IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6
+   Addresses" (cf.  [RFC4291], Section 2.5.5.2 (https://www.rfc-
+   editor.org/rfc/rfc4291.html#section-2.5.5.2)).  Domain names (domain-
+   name) MUST be formatted as usual and specified in [RFC1035] with the
+   exception that the leftmost label MAY be the single-character
+   wildcard "*".
+
+   IPv6 addresses (IPv6) MUST be formatted following [RFC4291].  IPv6
+   addresses MUST be global unicast or link-local unicast addresses.
+   scheme MUST be either a URI scheme as specified in [RFC3896],
+   Section 3.1 (https://datatracker.ietf.org/doc/html/rfc3986#section-
+   3.1), or the single-character wildcard "*".
+
+4.1.1.2.  Semantics
+
+   //TODO(djackson) - My gut feeling would be to walk this back and
+   focus purely on networks in the beginning.  Better to solve one thing
+   well than two things poorly?  Just protect networks and their
+   communications?
+
+   Several kinds of entities can be covered by entity identifiers:
+
+   *  Network facing processes, e.g., webservers
+
+   *  Local computation, e.g., arbitrary processes
+
+   *  Computational devices both in the virtual sense, e.g., a virtual
+      machine, and in the physical sense, e.g., a laptop
+
+   *  Networks
+
+   EIs can _cover_ any of these entities, but they can only _point_ to
+   network-connected processes or static data.  To decide which entities
+   EIs point to, one must _resolve_ an EI.  One EI need not necessarily
+   only point to a single entity.  Depending on the concrete EI, e.g.,
+   its wildcards, it may point to multiple entities.  For example:
+   *://example.com (amongst other entities) points at network facing
+   processes hosted under any IP that example.com resolves to, on any
+   port, using any protocol.
+
+   To resolve an EI, it is first interpreted as an implicit or explicit
+   set of addresses.  If address is an IP address, the set contains this
+   address only.  If it is an IP address prefix, it contains all
+   addresses matching that prefix.  If it is a domain name, it contains
+   any IP address this domain name can be resolved to.
+
+   TODO(djackson) - I'm not sure about "any address this domain can
+   resolve to" - AFAIK DNS Servers can and will respond with a rotating
+   list of IP addresses for a domain name.  I.e. you get a single A
+   record each time, but it changes every 5 minutes.
+
+   If it is a domain name starting with the wildcard prefix "*", it
+   contains any IP address this domain name or any of its subdomains can
+   be resolved to.
+
+   Any process reachable under any of the addresses pointed towards by
+   address running the scheme scheme (or any scheme if scheme is "*") on
+   the port specified (or any port, if unspecified) is pointed by the
+   respective EI.
+
+4.1.1.3.  Order
+
+   EIs may not only be used for identification but also for constraint
+   purposes.  For example, an endorsement may constrain emblems to only
+   signal protection for a specific IP range.  In this section, we
+   define an order on EIs so that one can verify if an identifying EI
+   complies with a constraining EI.
+
+   We define an EI A to be _more general_ than an EI B, if all of the
+   following conditions apply:
+
+   *  A's scheme part is "*" or equal to B's scheme.
+
+   *  A's port part is undefined or equal to B's port part.
+
+   *  If A's location part encodes a domain name and does not contain
+      the wildcard "*", B's location part encodes a domain name, too,
+      and A's location is equal to B's location.
+
+   *  If A's location part encodes a domain name and contains the
+      wildcard "*", B's location part encodes a domain name, too, and
+      B's location is a subdomain of A's location excluding the wildcard
+      "*".  In this regard, any domain is considered a subdomain of
+      itself.
+
+   *  If A's location part encodes an IP address, B's location part
+      encodes an IP address, too, and A's location is a prefix of B's
+      location.
+
+   Note that EIs encoding a domain name are incomparable to EIs encoding
+   IP addresses, i.e., neither can be more general than the other.
+
+4.1.2.  Organization Identifiers
+
+   Emblems can be associated to an organization.  Organizations are
+   identified by URIs, bearing the scheme "https" and a domain name.  We
+   call URIs identifying organizations _organization identifiers_ (OIs).
+
+   More precisely, an OI has the syntax:
+
+   organization-identifier = "https://" domain-name
+
+   Domain names must be formatted as usual, specified in [RFC1035].  For
+   example, https://example.com is a valid OI.
+
+4.2.  Token Encoding
+
+   Tokens MUST be encoded as a JWS [RFC7515] or as an unsecured JWT as
+   defined in [RFC7519], Section 6
+   (https://datatracker.ietf.org/doc/html/rfc7519#section-6), encoded
+   either in compact serialization or as signed CBOR Web Token (CWT)
+   [RFC8392].  Tokens encoded as JWS MUST only use JWS protected headers
+   and MUST include the "jwk" or the "kid" header parameter.  Any token
+   MUST include the "cty" (content type) header parameter.
+
+4.2.1.  Emblems
+
+   An emblem is encoded either as JWS or as an unsecured JWT which
+   signals protection of precisely one digital entity.  It is
+   distinguished by the "cty" header parameter value which MUST be
+   "adem-emb".  Its payload includes the following JWT claims following
+   [RFC7519], Section 4.1 (https://datatracker.ietf.org/doc/html/
+   rfc7519#section-4.1):
+
+   *  "iss" (RECOMMENDED) encodes the organization signaling protection
+      and MUST be an OI.
+
+   *  "iat" (REQUIRED)
+
+   The payload MAY include the JWT claims "nbf" and "exp".  All other
+   registered JWT claims MUST NOT be included.
+
+   Furthermore, emblems MUST include the private claims "ent", "ver",
+   and "emb".  The claim value of "ent" (entity) MUST be an array of EIs
+   encoding the marked entity's identifiers that is marked to be
+   protected.  Multiple EIs may be desirable, e.g., to include both an
+   entity's IPv4 and IPv6 address.  The claim value of "ver" (version)
+   MUST be a string of value "v1".  The claim value of "emb" MUST be a
+   JSON [RFC7159] object with the following OPTIONAL key-value mappings.
+
+   *  "prp" (purpose) is an array of purpose strings as defined below.
+
+      purpose = "protective" | "indicative"
+
+   *  "dst" (distribution) is an array of distirbution-method strings as
+      defined below.  These correspond to the distribution methods as
+      specified in [ADEM-DNS], [ADEM-TLS], and [ADEM-UDP] respectively.
+
+      distribution-method = "dns" | "tls" | "udp"
+
+   *  "ext" (external endorsements) maps to a Boolean. true indicates
+      that the PP's central website identified by "iss" serves
+      endorsements that will not be transmitted alongside this emblem.
+
+4.2.1.1.  Example
+
+   For example, an emblem might comprise the following header and
+   payload.
+
+   Header:
+
+   {
+     "alg": "ES512",
+     "kid": "4WICC9pZ5zh6m3sfNYwwLilHzNazbFoJU6Qe5ds_8pY",
+     "cty": "adem-emb"
+   }
+
+   Payload:
+
+   {
+     "emb": {
+       "dst": ["icmp"],
+       "ext": false,
+       "prp": ["protective"]
+     },
+     "iat": 1636397533,
+     "iss": "https://example.com",
+     "ent": ["*://[2001:0db8:582:ae33::29]"]
+   }
+
+4.2.2.  Endorsements
+
+   Endorsements are encoded as JWSs.  Endorsements attest two
+   statements: that a public key is affiliated with an organization,
+   pointed to by OIs, and that this organization is eligible to issue
+   emblems for their entities.  They are distinguished by the "cty"
+   header parameter value which MUST be "adem-end".  An endorsement's
+   payload includes the following JWT claims:
+
+   *  "iss" is only RECOMMENDED, but if included MUST be an OI.
+
+   *  "sub" is RECOMMENDED, but if included MUST be an OI encoding the
+      public keyholder's identity as an OI.
+
+   *  "exp" (REQUIRED)
+
+   *  "nbf" (REQUIRED)
+
+   Furthermore, endorsements MUST include the private claims "key",
+   "end", and "ver" and is RECOMMENDED to include the private claim
+   "emb".  The values of these claims are specified as follows:
+
+   *  "key" (REQUIRED); a JWK as defined in [RFC7517], encoding the
+      endorsed public key.  The JWK MUST bear the "alg" claim.
+
+   *  "end" (REQUIRED); a boolean indicating if the endorsed key may be
+      used for further endorsements (true) or signing emblems only
+      (false).
+
+   *  "ver" (REQUIRED); a string of value "v1".
+
+   *  If present, "emb" MUST be a JSON.  It follows a similar structure
+      to the emblem's "emb" claim.  An endorsement's "emb" (RECOMMENDED)
+      claim encodes constraints on emblems by supporting the following
+      key-value mapping (all of which are OPTIONAL):
+
+      -  "prp" (purpose constraint) is encoded as "prp" specified for
+         emblems in Section 4.2.1.  It encodes the permitted uses of
+         emblems endorsed by this endorsement.
+
+      -  "dst" (distribution constraint) is encoded as "dst" specified
+         for emblems in Section 4.2.1.  It encodes the permitted
+         distribution methods of emblems endorsed by this endorsement.
+
+      -  "ent" (entity constraint) is an array of EIs.  It encodes
+         permitted EIs of entities.  Note that for an emblem to comply
+         with this constraint, an EI must not strictly equal an EI in
+         the constraints.  It suffices to be a subset of all entities
+         identified by EIs in the subject constraint, i.e., the
+         constraints need to be more general than the EI of question.
+
+      -  "wnd" (signing window) is a non-negative integer encoding
+         seconds.  Emblems should only be considered valid for "wnd"-
+         many seconds after "iat" of the emblem.
+
+   We say that an endorsement _endorses_ a token if its "key" claim
+   equals the token's verification key, and its "sub" claim equals the
+   token's "iss" claim.  We note that the latter includes the
+   possibility of both "sub" and "iss" being undefined.
+
+   We say that an emblem is _valid_ with respect to an endorsement if
+   all the following conditions apply:
+
+   *  The endorsement's "emb.prp" claim is undefined or a superset of
+      the emblem's "emb.prp" claim.
+
+   *  The endorsement's "emb.dst" claim is undefined or a superset of
+      the emblem's "emb.dst" claim.
+
+   *  The endorsement's "emb.sub" claim is undefined or for each EI
+      within the emblem's "emb.sub" claim, one of the following
+      conditions holds:
+
+      -  There exists an EI within the endorsement's "emb.sub" claim
+         which is more general than the emblem's "emb.sub" claim.
+
+      -  There is no EI within the endorsement's "emb.sub" claims with
+         the same location type (domain name or IPv6 address) as the
+         emblem.
+
+   *  The endorsement's "emb.wnd" claim is undefined or the emblem's
+      "emb.iat" claim value plus the endorsement's "emb.wnd" claim value
+      lies in the future.
+
+5.  Public Key Distribution
+
+   Parties are expected to serve their root public keys via their OI.
+   In this section, we specify the configuration of a PP's OI.
+
+   Root public keys are all public keys which are only endorsed by third
+   parties and never endorsed by the organization itself.  A party MAY
+   have multiple root public keys.  These root keys MAY be endorsed by
+   other parties.
+
+   Any root public key MUST be encoded as JWK as per [RFC7517] and
+   [RFC7518].  Root public keys MUST include the "kid" parameter and
+   this parameter MUST be computed by the hashing algorithm as specified
+   in Section 8.1.
+
+   A PP's OI MUST point to an HTTPS enabled website.  The certificate
+   authenticating that website MUST be valid for the OI and all the
+   following subdomains (<OI> is understood to be a placeholder for the
+   party's OI):
+
+   *  adem-configuration.<OI>
+
+   *  For each root public key with kid <KID> (to be understood as a
+      placeholder): <KID>.adem-configuration.<OI> Beyond these
+      subdomains, adem-configuration.<OI> MUST NOT have further
+      subdomains.
+
+   TODO(djackson) - Why have you gone with subdomains over a folder in
+   /.well-known/?  - Oh wait - for the certificate transparency benefit?
+   - My thinking was that the subdomain would not actually need to
+   correspond to a website, just be included on the certificate.
+
+   All these subdomains MUST be served using HTTPS only, however, they
+   MAY not be live at all.  All such subdomains SHOULD serve the party's
+   endorsements and root public keys.  Whenever such subdomains serve
+   content, they MUST comply with the following.  They MUST serve the
+   content type application/json and MUST be served using HTTPS only.
+   The subdomain adem-configuration.  MUST serve a JSON array of all
+   root public keys and respective endorsements in JSON encoding.  Each
+   subdomain relating to a kid MUST serve the respectively identified
+   key in JSON encoding.
+
+   Serving of public keys is optional to allow parties to cope with
+   outages.
+
+   TODO(djackson) - I don't think you need language like this.  The
+   requirements just specify intent.  The verification procedures can
+   mention that things may be unreachable due to an outage.
+
+6.  Signs of Protection
+
+   A sign of protection is an emblem, accompanied by one or more
+   endorsements.  Whenever a token includes OIs (in "iss" or "sub"
+   claims), these OIs must be configured accordingly.  An OI serves to
+   identify a PP or authority in the real world.  Hence, parties MUST
+   configure the website hosted under their OI to provide sufficient
+   identifying information.
+
+6.1.  Verification
+
+   Whenever a verifier receives an emblem, they MAY check if it is
+   valid.  The validity of an emblem is defined with respect to a public
+   key.  A validity checking algorithm MUST returns the following
+   values.  The order of these values encodes the _strength_ of the
+   verification result.
+
+   1.  UNSIGNED
+
+   2.  INVALID
+
+   3.  SIGNED-UNTRUSTED
+
+   4.  SIGNED-TRUSTED
+
+   5.  ORGANIZATIONAL-UNTRUSTED
+
+   6.  ORGANIZATIONAL-TRUSTED
+
+   7.  ENDORSED-UNTRUSTED
+
+   8.  ENDORSED-TRUSTED
+
+   TODO(Djackson) - Doesn't the verification algorithm also need a list
+   of all acceptable pulic keys?
+
+   Given an input public key and an emblem with a set of endorsements, a
+   verification algorithm takes the following steps:
+
+   1.  If the emblem does not bear a signature, return UNSIGNED.
+
+   2.  Run the _signed emblem verification procedure_ (Section 8.2;
+       results in one of SIGNED-TRUSTED, SIGNED-UNTRUSTED, or INVALID).
+
+   3.  If previous procedure resulted in INVALID or the emblem does not
+       include the "iss" claim, return the last verification procedure's
+       result and the emtpy set of OIs.
+
+   4.  Run the _organizational emblem verification procedure_
+       (Section 8.3; results in one of ORGANIZATIONAL-TRUSTED,
+       ORGANIZATIONAL-UNTRUSTED, INVALID).
+
+   5.  If the previous procedure resulted in INVALID return INVALID and
+       the empty set of OIs.
+
+   6.  If all tokens include the same "iss" claim, return the strongest
+       return value matching *-TRUSTED, the strongest return value
+       matching *-UNTRUSTED provided that it is strictly stronger than
+       the strongest return value matching *-TRUSTED, and the empty set
+       of OIs.
+
+   7.  Run the _endorsed emblem verification procedure_ (Section 8.4;
+       results in a set of OIs and one of ENDORSED-TRUSTED, ENDORSED-
+       UNTRUSTED, INVALID).
+
+   8.  Return the strongest return value matching *-TRUSTED, the
+       strongest return value matching *-UNTRUSTED provided that it is
+       strictly stronger than the strongest return value matching
+       *-TRUSTED, and the set of OIs returned by the endorsed emblem
+       verification procedure.
+
+   Note that the endorsed emblem verification procedure resulting in
+   INVALID is handled implicitly in step 8.  As the procedure did not
+   terminte in step 5, organizational verification must have been
+   successful.  Hence, INVALID cannot be the strongest return value, and
+   an emblem not being accompanied by valid endorsements are downgraded
+   to organizational emblems.
+
+   If the emblem includes the "ext" claim with the value true,
+   verification procedures are RECOMMENDED to fetch external
+   endorsements from the emblem's OI prior to verification.  However,
+   there may be cases in which verifiers do not deem it safe to perform
+   extra queries to OIs.  In such cases, implementations MAY skip the
+   organizational emblem verification procedure.  Additionally, endorsed
+   emblem verification procedures MAY skip the checks of the
+   authorities' OIs correct configuration.
+
+   The set of OIs returned by the verification procedure encodes the OIs
+   of endorsing parties where verification passed.
+
+6.1.1.  Comments on Trust Policies
+
+   We strongly RECOMMEND against accepting emblems resulting in SIGNED-
+   UNTRUSTED.  In such cases, verifiers should aim to authenticate the
+   respective public keys via other, out-of-band methods.  This
+   effectively lifts the result to SIGNED-TRUSTED.  Signed emblems are
+   supported for cases of emergency where a PP is able to communicate
+   one or more public key, but might not be able to set up a signing
+   infrastructure linking their entities to a root key.
+
+   There is no definite guideline on how to choose which keys to trust,
+   i.e., which keys to pass as trusted public key to the verification
+   procedure.  Some verifiers may have pre-existing trust relationships
+   with some authorities, e.g., military units of a nation state could
+   use the public keys of their nation state or allies.  Other verifiers
+   might be fine with fetching public keys authenticated only by the web
+   PKI.
+
+6.2.  Protection
+
+   TODO(djackson) - In my mind, an emblem would only be considered in
+   the context of a particular entity.  Verification would be checking
+   that the entity (singular) was covered by the emblem.  I don't have a
+   strong argument for why that would be desirable though, just simpler.
+
+   Any entity whose address is resolved within context of a valid emblem
+   must be considered to be marked as protected under IHL.  In certain
+   contexts, this might apply to a wide range of entities.  For example,
+   a router could distribute emblems for its entire address space using
+   ICMP using an IP range.
+
+   Entities MUST only mark as protected what is exposed to potential
+   verifiers.  For example, consider a gateway-router also running an
+   intranet where not every node is internet-connected.  The router must
+   only distribute emblems for internet-connected nodes to verifiers not
+   within the intranet, but may distribute emblems for the non-internet
+   connected nodes within the intranet.  But at the same time, verifiers
+   must proceed with caution when changing their vantage point.  If
+   malware were to infect that router, it must check if entities now
+   exposed to it are protected, too.
+
+7.  Security Considerations
+
+7.1.  No Endorsements without "iss"
+
+   The procedures to verify organizational or endorsed emblems as
+   specified in Section 8.3 and Section 8.4 assume that the emblem's
+   "iss" claim is defined.  Practically speaking, this implies that
+   parties can only go beyond pure public key authentication (where
+   public keys need to be authenticated out-of-band) by stating an OI.
+
+   The constraints on well-configured OIs offers two beneficial security
+   properties:
+
+   *  Parties cannot equivocate their keys, i.e., they need to commit to
+      a consistent set of keys.
+
+   *  Parties cannot deny to have used certain root public keys.
+
+   These properties stem from parties needing to include a hash of their
+   key in a TLS certificate, and consequently, in certificate
+   transparency logs.
+
+8.  Algorithms
+
+8.1.  JWK Hashing
+
+   Context:
+
+   *  Input: A JWK as per [RFC7517] in arbitrary encoding.
+
+   *  Output: A cryptographically secure hash of the JWK
+
+   Algorithm:
+
+   1.  Parse the JWK as JSON object.
+
+   2.  Drop the "kid" parameter from the JWK.
+
+   3.  Compute a canonical representation of the remaining JWK as per
+       [RFC8785].
+
+   4.  Compute and return the SHA-256 hash of the canonical
+       representation as a hexadecimal digest in all lower-case.
+
+8.2.  Signed Emblem Verification Procedure
+
+   Context:
+
+   *  Input: An emblem, a set of endorsements, and a trusted public key.
+
+   *  Output: SIGNED-TRUSTED, SIGNED-UNTRUSTED, or INVALID.
+
+   Algorithm:
+
+   1.  Ignore all endorsements including an "iss" claim different to the
+       emblem's "iss" claim.  A defined "iss" claim is understood to be
+       different to an undefined "iss" claim.
+
+   2.  Verify every signature.
+
+   3.  Verify that all endorsements form a consecutive chain where there
+       is a unique root endorsement and the public key which verifies
+       the emblem is transitively endorsed by that root endorsement.
+
+   4.  Verify that no endorsement expired.
+
+   5.  Verify that all endorsements bear the claim "end=true" except for
+       the emblem signing key's endorsement.
+
+   6.  Verify that the emblem is valid with regard to every endorsement.
+
+   7.  If any of the aforementioned verification steps fail, return
+       INVALID.  If there is a token signed by the trusted input public
+       key, return SIGNED-TRUSTED.  Otherwise, return SIGNED-UNTRUSTED.
+
+   Distribution methods MAY indicate an order of tokens to guide clients
+   assembling the chain of endorsements in step 3.  Whenever such an
+   order is specified, clients MAY immediately reject a set of tokens as
+   invalid if the indicated order does not yield a valid chain of
+   endorsements.
+
+8.3.  Organizational Emblem Verification Procedure
+
+   Context:
+
+   *  Assumptions: Signed emblem verification has been performed and did
+      not return INVALID.  Every token as part of the input includes the
+      "iss" claim.
+
+   *  Input: An emblem, a set of endorsements, and a trusted public key.
+
+   *  Output: ORGANIZATIONAL-TRUSTED, ORGANIZATIONAL-UNTRUSTED, or
+      INVALID.
+
+   Algorithm:
+
+   1.  Ignore all endorsements including an "iss" claim different to the
+       emblem's "iss" claim.
+
+   2.  Verify that the top-most endorsement's "iss" claim value (its OI)
+       is configured correctly as specified in Section 5.
+
+   3.  If the aforementioned verification step fails, return INVALID.
+       If the top-most endorsing key is equal to the trusted input
+       public key, return ORGANIZATIONAL-TRUSTED.  Otherwise, return
+       ORGANIZATIONAL-UNTRUSTED.
+
+8.4.  Endorsed Emblem Verification Procedure
+
+   Context:
+
+   *  Assumptions: Organizational emblem verification has been performed
+      and did not return INVALID.  There are emblems as part of the
+      input including an "iss" claim different to the emblem's "iss"
+      claim.
+
+   *  Input: An emblem, a set of endorsements, and a trusted public key.
+
+   *  Output: ENDORSED-TRUSTED, ENDORSED-UNTRUSTED, or INVALID, and a
+      set of OIs.
+
+   Algorithm:
+
+   1.  Ignore all endorsements including an "iss" claim equal to the
+       emblem's "iss" claim.
+
+   2.  For every endorsement:
+
+       1.  Verify its signature.
+
+       2.  Verify that it endorses the top-most endorsing key with the
+           same "iss" claim as the emblem.
+
+       3.  Verify that it did not expire.
+
+       4.  Verify that it bears the claim "end=true".
+
+       5.  Verify that the emblem is valid with regard to this
+           endorsement.
+
+       6.  Implementations SHOULD verify that the endorsement's "iss"
+           claim value (its OI) is configured correctly as specified in
+           Section 5.
+
+       7.  Should any of the aforementioned verification steps fail,
+           ignore this endorsement.
+
+   3.  If there are no endorsements remaining after the last step,
+       return INVALID and the empty set of OIs.  If in the set of
+       remaining endorsements, there is an endorsement with a
+       verification key equal to the trusted input public key, return
+       ENDORSED-TRUSTED.  Otherwise, return ENDORSED-UNTRUSTED.  In both
+       the latter cases, also return the set of all "iss" claims of the
+       remaining endorsements.
+
+9.  Security Considerations
+
+9.1.  Token Order
+
+   As specified in Section 8.2, clients MAY reject sets of tokens as
+   invalid if the order of tokens as indicated by the sending client
+   does not yield a valid chain of endorsements.  This allows an
+   adversary to force rejection of a set of tokens by altering, e.g.,
+   sequence numbers on non-integrity protected channels such as UDP.
+
+   However, this does not constitute a new attack.  Such adversaries
+   could flip a bit in the emblem's signature, rendering the set of
+   tokens invalid, too.
+
+10.  IANA Considerations
+
+   This document has no IANA actions.
+
+11.  Normative References
+
+   [ADEM-DNS] Linker, F. E., Jackson, D., and D. Basin, "Serving an
+              Authenticated Digital EMblem over DNS", n.d., <./draft-
+              linker-adem-wg-adem-dns.html>.
+
+   [ADEM-TLS] Linker, F. E., Jackson, D., and D. Basin, "Serving an
+              Authenticated Digital EMblem over TLS", n.d., <./draft-
+              linker-adem-wg-adem-tls.html>.
+
+   [ADEM-UDP] Linker, F. E., Jackson, D., and D. Basin, "Serving an
+              Authenticated Digital EMblem over UDP", n.d., <./draft-
+              linker-adem-wg-adem-udp.html>.
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3896]  Nicklass, O., Ed., "Definitions of Managed Objects for the
+              DS3/E3 Interface Type", RFC 3896, DOI 10.17487/RFC3896,
+              September 2004, <https://www.rfc-editor.org/info/rfc3896>.
+
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/info/rfc3986>.
+
+   [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
+              Architecture", RFC 4291, DOI 10.17487/RFC4291, February
+              2006, <https://www.rfc-editor.org/info/rfc4291>.
+
+   [RFC7159]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", RFC 7159, DOI 10.17487/RFC7159, March
+              2014, <https://www.rfc-editor.org/info/rfc7159>.
+
+   [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
+              Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
+              2015, <https://www.rfc-editor.org/info/rfc7515>.
+
+   [RFC7517]  Jones, M., "JSON Web Key (JWK)", RFC 7517,
+              DOI 10.17487/RFC7517, May 2015,
+              <https://www.rfc-editor.org/info/rfc7517>.
+
+   [RFC7518]  Jones, M., "JSON Web Algorithms (JWA)", RFC 7518,
+              DOI 10.17487/RFC7518, May 2015,
+              <https://www.rfc-editor.org/info/rfc7518>.
+
+   [RFC7519]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
+              (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
+              <https://www.rfc-editor.org/info/rfc7519>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
+              "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
+              May 2018, <https://www.rfc-editor.org/info/rfc8392>.
+
+   [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
+              Canonicalization Scheme (JCS)", RFC 8785,
+              DOI 10.17487/RFC8785, June 2020,
+              <https://www.rfc-editor.org/info/rfc8785>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Authors' Addresses
+
+   Felix E. Linker
+   ETH Zürich
+   Email: flinker@inf.ethz.ch
+
+
+   Dennis Jackson
+   None
+   Email: ietf@dennis-jackson.uk
+
+
+   David Basin
+   ETH Zürich
+   Email: basin@inf.ethz.ch
