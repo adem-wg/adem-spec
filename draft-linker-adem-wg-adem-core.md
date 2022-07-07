@@ -124,8 +124,6 @@ Beyond these terms, we use the terms "claim" and "header parameter" as reference
 Emblems are issued for entities by protected parties and are backed by authorities.
 Both protected parties and authorities are *organizations*.
 This section specifies how entities and organizations are identified.
-Sometimes, entity identifiers refer to set of entities.
-Consequently, this section also specifies the semantics of identifiers.
 
 ### Entity Identifiers
 
@@ -299,7 +297,7 @@ The values of these claims are specified as follows:
 
 * "key" (REQUIRED); a JWK as defined in {{!RFC7517}}, encoding the endorsed public key.
 The JWK MUST bear the "alg" claim.
-* "end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (true) or signing emblems only (false).
+* "end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (`true`) or signing emblems only (`false`).
 * "ver" (REQUIRED); a string of value `"v1"`.
 * If present, "emb" MUST be a JSON.
 It follows a similar structure to the emblem's "emb" claim.
