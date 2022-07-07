@@ -63,7 +63,7 @@ This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to d
 
 # Introduction {#intro}
 
-International humanitarian law (IHL) recognises protected parties (PP) such as healthcare and aid organisations as deserving of special protection from attacks during armed conflicts.
+International humanitarian law (IHL) recognizes protected parties (PP) such as healthcare and aid organizations as deserving of special protection from attacks during armed conflicts.
 This has traditionally been accomplished by the marking of protected facilities and personnel with symbols such as the Red Cross, the Red Crescent and the Red Diamond.
 
 Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.
@@ -89,7 +89,7 @@ We expect verifiers to be military units in the usual case, and hence, be associ
 
 # Conventions and Definitions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
 document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
 when, and only when, they appear in all capitals, as shown here.
@@ -167,7 +167,7 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.
 
 Several kinds of entities can be covered by entity identifiers:
 
-* Network facing processes, e.g., webservers
+* Network facing processes, e.g., web servers
 * Local computation, e.g., arbitrary processes
 * Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop
 * Networks
@@ -395,7 +395,7 @@ Given an input public key and an emblem with a set of endorsements, a verificati
 8. Return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the set of OIs returned by the endorsed emblem verification procedure.
 
 Note that the endorsed emblem verification procedure resulting in `INVALID` is handled implicitly in step 8.
-As the procedure did not terminte in step 5, organizational verification must have been successful.
+As the procedure did not terminate in step 5, organizational verification must have been successful.
 Hence, `INVALID` cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.
 
 If the emblem includes the "ext" claim with the value `true`, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
@@ -438,7 +438,7 @@ Practically speaking, this implies that parties can only go beyond pure public k
 The constraints on well-configured OIs offers two beneficial security properties:
 
 * Parties cannot equivocate their keys, i.e., they need to commit to a consistent set of keys.
-* Parties cannot deny to have used certain root public keys.
+* Parties cannot deny having used certain root public keys.
 
 These properties stem from parties needing to include a hash of their key in a TLS certificate, and consequently, in certificate transparency logs.
 
