@@ -13,26 +13,26 @@
 They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
 This document specifies the scheme  An Authenticated Digital EMblem  (ADEM) to distribute digital emblems, which mark entities as protected under IHL in an analogy to the physical emblems. 
     " name="description">
-<meta content="xml2rfc 3.12.3" name="generator">
+<meta content="xml2rfc 3.13.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-linker-adem-wg-adem-core" name="ietf.draft">
+<meta content="draft-linker-adem-wg-adem-core-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.3
-    Python 3.9.7
+  xml2rfc 3.13.0
+    Python 3.10.4
     appdirs 1.4.4
-    ConfigArgParse 1.3
-    google-i18n-address 2.5.0
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.6.5
-    MarkupSafe 2.0.1
-    pycountry 20.7.3
-    pyflakes 2.3.1
-    PyYAML 5.4.1
-    requests 2.26.0
-    setuptools 52.0.0
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    pyflakes 2.4.0
+    PyYAML 6.0
+    requests 2.27.1
+    setuptools 59.4.0
     six 1.16.0
 -->
 <link href="draft-linker-adem-wg-adem-core.xml" rel="alternate" type="application/rfc+xml">
@@ -157,6 +157,14 @@ This document specifies the scheme  An Authenticated Digital EMblem  (ADEM) to d
   font-weight: 700;
   font-display: swap;
   src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -340,7 +348,7 @@ ol, ul {
   padding: 0;
   margin: 0 0 0.5em 2em;
 }
-ol ol, ul ul, ol ul, ul ol {
+:is(ol, ul) :is(ol, ul) {
   margin-left: 1em;
 }
 li {
@@ -355,8 +363,7 @@ ul.empty, .ulEmpty {
 ul.empty li, .ulEmpty li {
   margin-top: 0.5em;
 }
-ul.compact, .ulCompact,
-ol.compact, .olCompact {
+:is(ul, ol).compact, .ulCompact, .olCompact {
   line-height: 100%;
   margin: 0 0 0 2em;
 }
@@ -372,7 +379,7 @@ dl > dd {
   margin-bottom: .8em;
   min-height: 1.3em;
 }
-dl.compact > dd, .dlCompact > dd {
+:is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0em;
 }
 dl > dd > dl {
@@ -414,6 +421,9 @@ tt, code {
      remove leading to avoid altering the final height of lines */
   line-height: 0;
 }
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
 pre {
   border: 1px solid var(--line-color);
   font-size: 13.5px;
@@ -438,6 +448,19 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
   pre, svg {
     display: inline-block;
     overflow-x: auto;
@@ -453,7 +476,7 @@ figcaption, caption {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow, svg + .pilcrow {
+  :is(pre, svg) + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -502,17 +525,11 @@ th, td {
 th {
   background-color: var(--line-color);
 }
-tr:nth-child(2n) > td {
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
   background-color: var(--background-color);
 }
-tr:nth-child(2n+1) > td {
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n) > td {
-  background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n+1) > td {
-  background-color: var(--background-color);
 }
 table caption {
   margin: 0;
@@ -552,8 +569,9 @@ hr {
 }
 .bcp14 {
   font-variant: small-caps;
+  font-weight: 600;
+  font-size: 14.5px;
 }
-
 .role {
   font-variant: all-small-caps;
 }
@@ -792,7 +810,7 @@ hr.addr {
     margin: 0 0 0 4px;
     font-size: var(--small-font-size);
   }
-  #toc ul p, #toc ul li {
+  #toc ul :is(p, li) {
     margin: 2px 0;
     line-height: 22px;
   }
@@ -902,13 +920,13 @@ dl.dlNewline > dt {
 }
 
 /* Provide styling for table cell text alignment */
-table .text-left, table .text-left {
+table .text-left {
   text-align: left;
 }
-table .text-center, table .text-center {
+table .text-center {
   text-align: center;
 }
-table .text-right, table .text-right {
+table .text-right {
   text-align: right;
 }
 
@@ -975,12 +993,6 @@ address div.right {
   }
 
 }
-/* Tweak the bcp14 keyword presentation */
-.bcp14 {
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 0.9em;
-}
 
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
@@ -995,19 +1007,20 @@ address div.right {
   --pilcrow-strong: #666;
   scrollbar-color: #777 #333;
 }
-/* Trick: a prefix match works because only black and white are allowed */
-svg [stroke="black"], svg [stroke^="#000"] {
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
   stroke: var(--text-color);
 }
-svg [stroke="white"], svg [stroke^="#fff"] {
+svg :is([stroke="white"], [stroke^="#fff"]) {
   stroke: var(--background-color);
 }
-svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg [stroke="fill"], svg [fill^="#fff"] {
+svg :is([stroke="fill"], [fill^="#fff"]) {
   fill: var(--background-color);
-}
 }
 </style>
 
@@ -1017,11 +1030,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ADEM Core</td>
-<td class="right">April 2022</td>
+<td class="right">July 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Linker, et al.</td>
-<td class="center">Expires 9 October 2022</td>
+<td class="center">Expires 8 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1031,15 +1044,15 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">ADEM Working Group</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-linker-adem-wg-adem-core</dd>
+<dd class="internet-draft">draft-linker-adem-wg-adem-core-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-04-07" class="published">7 April 2022</time>
+<time datetime="2022-07-07" class="published">7 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-10-09">9 October 2022</time></dd>
+<dd class="expires"><time datetime="2023-01-08">8 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1070,7 +1083,7 @@ This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADE
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-linker-adem-wg-adem/">https://datatracker.ietf.org/doc/draft-linker-adem-wg-adem/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-linker-adem-wg-adem-core/">https://datatracker.ietf.org/doc/draft-linker-adem-wg-adem-core/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">Source for this draft and an issue tracker can be found at
         <span><a href="https://github.com/adem-wg/adem-spec">https://github.com/adem-wg/adem-spec</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1093,7 +1106,7 @@ This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADE
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1231,7 +1244,7 @@ This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADE
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">International humanitarian law (IHL) recognises protected parties (PP) such as healthcare and aid organisations as deserving of special protection from attacks during armed conflicts.
+<p id="section-1-1">International humanitarian law (IHL) recognizes protected parties (PP) such as healthcare and aid organizations as deserving of special protection from attacks during armed conflicts.
 This has traditionally been accomplished by the marking of protected facilities and personnel with symbols such as the Red Cross, the Red Crescent and the Red Diamond.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADEM) to distribute <em>digital emblems</em>, which mark entities as protected under IHL in an analogy to the physical emblems.
@@ -1261,7 +1274,7 @@ We expect verifiers to be military units in the usual case, and hence, be associ
       <h2 id="name-conventions-and-definitions">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+<p id="section-2-1">The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
 document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span>
 when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
@@ -1297,9 +1310,7 @@ For example, nation states or NGOs can take the role of authorities.<a href="#se
         </h3>
 <p id="section-4.1-1">Emblems are issued for entities by protected parties and are backed by authorities.
 Both protected parties and authorities are <em>organizations</em>.
-This section specifies how entities and organizations are identified.
-Sometimes, entity identifiers refer to set of entities.
-Consequently, this section also specifies the semantics of identifiers.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+This section specifies how entities and organizations are identified.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <div id="entity-identifiers">
 <section id="section-4.1.1">
           <h4 id="name-entity-identifiers">
@@ -1315,13 +1326,11 @@ However, to limit their scope, we do not follow the specification of URIs and in
             <h5 id="name-syntax">
 <a href="#section-4.1.1.1" class="section-number selfRef">4.1.1.1. </a><a href="#name-syntax" class="section-name selfRef">Syntax</a>
             </h5>
-<p id="section-4.1.1.1-1">Entity identifiers comprise two main parts: a <em>scheme</em> and a <em>location</em>.
-They follow the syntax (<code>scheme</code>, <code>domain-name</code>, <code>IPv6</code> defined below):<a href="#section-4.1.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.1-1">Entity identifiers point to an address and optionally port combination.
+They follow the syntax (<code>domain-name</code>, <code>IPv6</code> defined below):<a href="#section-4.1.1.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.1.1.1-2">
 <pre>
-entity-identifier = scheme "://" location
-
-location = address [ ":" port ]
+entity-identifier = address [ ":" port ]
 
 address = domain-name | "[" IPv6 "]"
 
@@ -1331,23 +1340,22 @@ port = DIGIT+
 <p id="section-4.1.1.1-3">These are examples of EIs:<a href="#section-4.1.1.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.1.1-4.1">
-                <code>https://*.example.com:443</code><a href="#section-4.1.1.1-4.1" class="pilcrow">¶</a>
+                <code>*.example.com:443</code><a href="#section-4.1.1.1-4.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-4.1.1.1-4.2">
-                <code>ftp://[2606:2800:220:1:248:1893:25c8:1946]:21</code><a href="#section-4.1.1.1-4.2" class="pilcrow">¶</a>
+                <code>[2606:2800:220:1:248:1893:25c8:1946]:21</code><a href="#section-4.1.1.1-4.2" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-4.1.1.1-4.3">
-                <code>ssh://[::FFFF:93.184.216.34]:22</code><a href="#section-4.1.1.1-4.3" class="pilcrow">¶</a>
+                <code>[::FFFF:93.184.216.34]:22</code><a href="#section-4.1.1.1-4.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-4.1.1.1-5">EIs identify a protocol, address, and port combination.
+<p id="section-4.1.1.1-5">EIs identify an address, and port combination.
 There are two types of addresses.
 Domain names and IPv6 addresses.
 Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. <span>[<a href="#RFC4291" class="xref">RFC4291</a>]</span>, <a href="https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2">Section 2.5.5.2</a>).
 Domain names (<code>domain-name</code>) MUST be formatted as usual and specified in <span>[<a href="#RFC1035" class="xref">RFC1035</a>]</span> with the exception that the leftmost label MAY be the single-character wildcard <code>"*"</code>.<a href="#section-4.1.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.1-6">IPv6 addresses (<code>IPv6</code>) MUST be formatted following <span>[<a href="#RFC4291" class="xref">RFC4291</a>]</span>.
-IPv6 addresses MUST be global unicast or link-local unicast addresses.
-<code>scheme</code> MUST be either a URI scheme as specified in <span>[<a href="#RFC3896" class="xref">RFC3896</a>]</span>, <a href="https://datatracker.ietf.org/doc/html/rfc3986#section-3.1">Section 3.1</a>, or the single-character wildcard <code>"*"</code>.<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
+IPv6 addresses MUST be global unicast or link-local unicast addresses.<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="semantics">
@@ -1357,7 +1365,7 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.
             </h5>
 <p id="section-4.1.1.2-1">Several kinds of entities can be covered by entity identifiers:<a href="#section-4.1.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.2-2.1">Network facing processes, e.g., webservers<a href="#section-4.1.1.2-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.1.1.2-2.1">Network facing processes, e.g., web servers<a href="#section-4.1.1.2-2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-4.1.1.2-2.2">Local computation, e.g., arbitrary processes<a href="#section-4.1.1.2-2.2" class="pilcrow">¶</a>
 </li>
@@ -1370,13 +1378,13 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.
 To decide which entities EIs point to, one must <em>resolve</em> an EI.
 One EI need not necessarily only point to a single entity.
 Depending on the concrete EI, e.g., its wildcards, it may point to multiple entities.
-For example: <code>*://example.com</code> (amongst other entities) points at network facing processes hosted under any IP that <code>example.com</code> resolves to, on any port, using any protocol.<a href="#section-4.1.1.2-3" class="pilcrow">¶</a></p>
+For example: <code>example.com</code> (amongst other entities) points at network facing processes hosted under any IP that <code>example.com</code> resolves to, on any port.<a href="#section-4.1.1.2-3" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.2-4">To resolve an EI, it is first interpreted as an implicit or explicit set of addresses.
 If <code>address</code> is an IP address, the set contains this address only.
 If it is an IP address prefix, it contains all addresses matching that prefix.
 If it is a domain name, it contains any IP address this domain name can be resolved to.
 If it is a domain name starting with the wildcard prefix <code>"*"</code>, it contains any IP address this domain name or any of its subdomains can be resolved to.<a href="#section-4.1.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.2-5">Any process reachable under any of the addresses pointed towards by <code>address</code> running the scheme <code>scheme</code> (or any scheme if <code>scheme</code> is <code>"*"</code>) on the port specified (or any port, if unspecified) is pointed by the respective EI.<a href="#section-4.1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-5">Any process reachable under any of the addresses pointed towards by <code>address</code> and on the port specified (or any port, if unspecified) is pointed by the respective EI.<a href="#section-4.1.1.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="order">
@@ -1389,16 +1397,14 @@ For example, an endorsement may constrain emblems to only signal protection for 
 In this section, we define an order on EIs so that one can verify if an identifying EI complies with a constraining EI.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.3-2">We define an EI A to be <em>more general</em> than an EI B, if all of the following conditions apply:<a href="#section-4.1.1.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.3-3.1">A's <code>scheme</code> part is <code>"*"</code> or equal to B's <code>scheme</code>.<a href="#section-4.1.1.3-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.1.1.3-3.1">A's <code>port</code> part is undefined or equal to B's <code>port</code> part.<a href="#section-4.1.1.3-3.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.2">A's <code>port</code> part is undefined or equal to B's <code>port</code> part.<a href="#section-4.1.1.3-3.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.2">If A encodes a domain name and does not contain the wildcard <code>"*"</code>, B encodes a domain name, too, and A is equal to B.<a href="#section-4.1.1.3-3.2" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.3">If A's <code>location</code> part encodes a domain name and does not contain the wildcard <code>"*"</code>, B's <code>location</code> part encodes a domain name, too, and A's location is equal to B's location.<a href="#section-4.1.1.3-3.3" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.3">If A encodes a domain name and contains the wildcard <code>"*"</code>, B encodes a domain name, too, and B is a subdomain of A excluding the wildcard <code>"*"</code>.
+In this regard, any domain is considered a subdomain of itself.<a href="#section-4.1.1.3-3.3" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.4">If A's <code>location</code> part encodes a domain name and contains the wildcard <code>"*"</code>, B's <code>location</code> part encodes a domain name, too, and B's location is a subdomain of A's location excluding the wildcard <code>"*"</code>.
-In this regard, any domain is considered a subdomain of itself.<a href="#section-4.1.1.3-3.4" class="pilcrow">¶</a>
-</li>
-              <li class="normal" id="section-4.1.1.3-3.5">If A's <code>location</code> part encodes an IP address, B's <code>location</code> part encodes an IP address, too, and A's location is a prefix of B's location.<a href="#section-4.1.1.3-3.5" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.4">If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.<a href="#section-4.1.1.3-3.4" class="pilcrow">¶</a>
 </li>
             </ul>
 <p id="section-4.1.1.3-4">Note that EIs encoding a domain name are incomparable to EIs encoding IP addresses, i.e., neither can be more general than the other.<a href="#section-4.1.1.3-4" class="pilcrow">¶</a></p>
@@ -1504,7 +1510,7 @@ distribution-method = "dns" | "tls" | "udp"
   },
   "iat": 1636397533,
   "iss": "https://example.com",
-  "ent": ["*://[2001:0db8:582:ae33::29]"]
+  "ent": ["[2001:0db8:582:ae33::29]"]
 }
 </pre><a href="#section-4.2.1.1-5" class="pilcrow">¶</a>
 </div>
@@ -1537,7 +1543,7 @@ The values of these claims are specified as follows:<a href="#section-4.2.2-3" c
 <li class="normal" id="section-4.2.2-4.1">"key" (REQUIRED); a JWK as defined in <span>[<a href="#RFC7517" class="xref">RFC7517</a>]</span>, encoding the endorsed public key.
 The JWK MUST bear the "alg" claim.<a href="#section-4.2.2-4.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-4.2.2-4.2">"end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (true) or signing emblems only (false).<a href="#section-4.2.2-4.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-4.2.2-4.2">"end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (<code>true</code>) or signing emblems only (<code>false</code>).<a href="#section-4.2.2-4.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-4.2.2-4.3">"ver" (REQUIRED); a string of value <code>"v1"</code>.<a href="#section-4.2.2-4.3" class="pilcrow">¶</a>
 </li>
@@ -1576,7 +1582,7 @@ We note that the latter includes the possibility of both "sub" and "iss" being u
 <ul class="normal">
 <li class="normal" id="section-4.2.2-7.3.2.1">There exists an EI within the endorsement's "emb.sub" claim which is more general than the emblem's "emb.sub" claim.<a href="#section-4.2.2-7.3.2.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-4.2.2-7.3.2.2">There is no EI within the endorsement's "emb.sub" claims with the same location type (domain name or IPv6 address) as the emblem.<a href="#section-4.2.2-7.3.2.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-4.2.2-7.3.2.2">There is no EI within the endorsement's "emb.sub" claims with the same EI type (domain name or IPv6 address) as the emblem.<a href="#section-4.2.2-7.3.2.2" class="pilcrow">¶</a>
 </li>
               </ul>
 </li>
@@ -1688,7 +1694,7 @@ The order of these values encodes the <em>strength</em> of the verification resu
 </li>
         </ol>
 <p id="section-6.1-5">Note that the endorsed emblem verification procedure resulting in <code>INVALID</code> is handled implicitly in step 8.
-As the procedure did not terminte in step 5, organizational verification must have been successful.
+As the procedure did not terminate in step 5, organizational verification must have been successful.
 Hence, <code>INVALID</code> cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1-6">If the emblem includes the "ext" claim with the value <code>true</code>, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
 However, there may be cases in which verifiers do not deem it safe to perform extra queries to OIs.
@@ -1744,7 +1750,7 @@ Practically speaking, this implies that parties can only go beyond pure public k
 <ul class="normal">
 <li class="normal" id="section-7.1-3.1">Parties cannot equivocate their keys, i.e., they need to commit to a consistent set of keys.<a href="#section-7.1-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-7.1-3.2">Parties cannot deny to have used certain root public keys.<a href="#section-7.1-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-7.1-3.2">Parties cannot deny having used certain root public keys.<a href="#section-7.1-3.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-7.1-4">These properties stem from parties needing to include a hash of their key in a TLS certificate, and consequently, in certificate transparency logs.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
@@ -1943,10 +1949,6 @@ Such adversaries could flip a bit in the emblem's signature, rendering the set o
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC3896">[RFC3896]</dt>
-      <dd>
-<span class="refAuthor">Nicklass, O., Ed.</span>, <span class="refTitle">"Definitions of Managed Objects for the DS3/E3 Interface Type"</span>, <span class="seriesInfo">RFC 3896</span>, <span class="seriesInfo">DOI 10.17487/RFC3896</span>, <time datetime="2004-09" class="refDate">September 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3896">https://www.rfc-editor.org/info/rfc3896</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3986">[RFC3986]</dt>
       <dd>
