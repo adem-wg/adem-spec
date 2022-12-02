@@ -105,6 +105,8 @@ when, and only when, they appear in all capitals, as shown here.
 **Endorsement** An endorsement associates a public key with an identity, and hence, resembles the idea of a certificate.
 Beyond that, though, endorsements always encode the attestation of a party's right to issue emblems.
 
+**Root Key**
+
 **Entity** An entity is a distinguishable computational unit, such as a computer, an OS, a process, etc.
 
 **Protected Party** A protected party is an organization entitled to issue claims of protection for their digital infrastructure.
@@ -297,6 +299,9 @@ The values of these claims are specified as follows:
 
 * "key" (REQUIRED); a JWK as defined in {{!RFC7517}}, encoding the endorsed public key.
 The JWK MUST bear the "alg" claim.
+* "log" (OPTIONAL); an array of base64 encoded strings.
+If this endorsement was signed by a root key, this claim MUST be present and every string in this array MUST encode a Certificate Transparency Log ID as per {{!RFC9162}}, [Sec. 4.4](https://www.rfc-editor.org/rfc/rfc9162.html#name-log-id).
+Each CT Log provided MUST have logged a certificate that binds this root key to the party's OI as specified in [](#pk-distribution).
 * "end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (`true`) or signing emblems only (`false`).
 * "ver" (REQUIRED); a string of value `"v1"`.
 * If present, "emb" MUST be a JSON.
