@@ -348,7 +348,8 @@ The certificate authenticating that website MUST be valid for the OI and all the
 * For each root public key with kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
 Beyond these subdomains, `adem-configuration.<OI>` MUST NOT have further subdomains.
 
-All these subdomains MUST be served using HTTPS only, however, they MAY not be live at all.
+All these subdomains MUST be served using HTTPS only, and they MUST have a DNS A or AAAA record configured, however, the respective IP address MAY not route to a live server.
+Organizations can decide which root keys should be considered active by configuring A and AAAA records.
 All such subdomains SHOULD serve the party's endorsements and root public keys.
 Whenever such subdomains serve content, they MUST comply with the following.
 They MUST serve the content type `application/json` and MUST be served using HTTPS only.
