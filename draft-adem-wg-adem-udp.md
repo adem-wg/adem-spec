@@ -1,7 +1,7 @@
 ---
 title: "Serving an Authenticated Digital EMblem over UDP"
 abbrev: "ADEM over UDP"
-docname: draft-linker-adem-wg-adem-udp-latest
+docname: draft-adem-wg-adem-udp-latest
 category: std
 
 ipr: trust200902
@@ -37,7 +37,7 @@ normative:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-core.html
+    target: ./draft-adem-wg-adem-core.html
 informative:
   REG-PORT:
     title: "Service Name and Transport Protocol Port Number Registry"
@@ -88,7 +88,7 @@ Note that therefore, any independent endorsement's sequence number must be zero.
 The encoding of the number of independent endorsements and sequence numbers was chosen to facilitate verification.
 Using these fields, verifiers can know if they received all endorsements associated to an emblem.
 
-ADEM-UDP enabled entities SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-linker-adem-wg-adem-core.html
+ADEM-UDP enabled entities SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-adem-wg-adem-core.html
 #section-6.1)) whenever a client attempts to connect to the respectively protected entity.
 ADEM-UDP enabled entities SHOULD at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
 

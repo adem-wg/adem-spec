@@ -1,7 +1,7 @@
 ---
 title: "An Authenticated Digital EMblem - Core Specification"
 abbrev: "ADEM Core"
-docname: draft-linker-adem-wg-adem-core-latest
+docname: draft-adem-wg-adem-core-latest
 category: std
 
 ipr: trust200902
@@ -37,21 +37,21 @@ normative:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-dns.html
+    target: ./draft-adem-wg-adem-dns.html
   ADEM-TLS:
     title: "Serving an Authenticated Digital EMblem over TLS"
     author:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-tls.html
+    target: ./draft-adem-wg-adem-tls.html
   ADEM-UDP:
     title: "Serving an Authenticated Digital EMblem over UDP"
     author:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-udp.html
+    target: ./draft-adem-wg-adem-udp.html
 
 --- abstract
 

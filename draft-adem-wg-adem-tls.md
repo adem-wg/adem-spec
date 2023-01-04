@@ -1,7 +1,7 @@
 ---
 title: "Serving an Authenticated Digital EMblem over TLS"
 abbrev: "ADEM over TLS"
-docname: draft-linker-adem-wg-adem-tls-latest
+docname: draft-adem-wg-adem-tls-latest
 category: std
 
 ipr: trust200902
@@ -37,7 +37,7 @@ normative:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-core.html
+    target: ./draft-adem-wg-adem-core.html
 
 --- abstract
 

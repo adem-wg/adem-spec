@@ -1,7 +1,7 @@
 ---
 title: "Serving an Authenticated Digital EMblem over DNS"
 abbrev: "ADEM over DNS"
-docname: draft-linker-adem-wg-adem-dns-latest
+docname: draft-adem-wg-adem-dns-latest
 category: std
 
 ipr: trust200902
@@ -37,7 +37,7 @@ normative:
     - fullname: Felix E. Linker
     - fullname: Dennis Jackson
     - fullname: David Basin
-    target: ./draft-linker-adem-wg-adem-core.html
+    target: ./draft-adem-wg-adem-core.html
 
 --- abstract
 
