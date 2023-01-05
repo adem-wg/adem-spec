@@ -285,7 +285,9 @@ Payload:
     "ext": false,
     "prp": ["protective"]
   },
-  "iat": 1636397533,
+  "iat": 1672916137,
+  "nbf": 1672916137,
+  "exp": 1675590932,
   "iss": "https://example.com",
   "ent": ["[2001:0db8:582:ae33::29]"]
 }
