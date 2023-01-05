@@ -105,7 +105,8 @@ when, and only when, they appear in all capitals, as shown here.
 **Endorsement** An endorsement associates a public key with an identity, and hence, resembles the idea of a certificate.
 Beyond that, though, endorsements always encode the attestation of a party's right to issue emblems.
 
-**Root Key**
+**Root Key** Organizations control root keys, which identify them cryptographically.
+Any key of an organization that is endorsed by other parties is a root key.
 
 **Entity** An entity is a distinguishable computational unit, such as a computer, an OS, a process, etc.
 
@@ -114,6 +115,8 @@ Beyond that, though, endorsements always encode the attestation of a party's rig
 **Authority** An authority is an organization that is trusted by some to attest a party's status as protected.
 This trust may stem from law.
 For example, nation states or NGOs can take the role of authorities.
+
+**Organization** A protected party or autority.
 
 **Verifier** A verifier is an agent interested in observing and verifying digital emblems.
 
@@ -220,38 +223,43 @@ For example, `https://example.com` is a valid OI.
 ## Token Encoding
 
 Tokens MUST be encoded as a JWS {{!RFC7515}} or as an unsecured JWT as defined in {{!RFC7519}}, [Section 6](https://datatracker.ietf.org/doc/html/rfc7519#section-6), encoded either in compact serialization or as signed CBOR Web Token (CWT) {{!RFC8392}}.
-Tokens encoded as JWS MUST only use JWS protected headers and MUST include the "jwk" or the "kid" header parameter.
-Any token MUST include the "cty" (content type) header parameter.
+Tokens encoded as JWS MUST only use JWS protected headers and MUST include the `jwk` or the `kid` header parameter.
+Any token MUST include the `cty` (content type) header parameter.
 
 ### Emblems {#emblems}
 
 An emblem is encoded either as JWS or as an unsecured JWT which signals protection of digital entities.
-It is distinguished by the "cty" header parameter value which MUST be "adem-emb".
-Its payload includes the following JWT claims following {{!RFC7519}}, [Section 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1):
-
-* "iss" (RECOMMENDED) encodes the organization signaling protection and MUST be an OI.
-* "iat" (REQUIRED)
-
-The payload MAY include the JWT claims "nbf" and "exp".
+It is distinguished by the `cty` header parameter value which MUST be `"adem-emb"`.
+Its payload includes the JWT claims defined in the table below, following {{!RFC7519}}, [Section 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1).
 All other registered JWT claims MUST NOT be included.
 
-Furthermore, emblems MUST include the private claims "ent", "ver", and "emb".
-The claim value of "ent" (entity) MUST be an array of EIs encoding the marked entity's identifiers that is marked to be protected.
-Multiple EIs may be desirable, e.g., to include both an entity's IPv4 and IPv6 address.
-The claim value of "ver" (version) MUST be a string of value `"v1"`.
-The claim value of "emb" MUST be a JSON {{!RFC7159}} object with the following OPTIONAL key-value mappings.
+| Claim | Status | Semantics | Encoding |
+| ----- | ------ | --------- | -------- |
+| `ver` | REQUIRED | Version string | `"v1"` |
+| `iat` | REQUIRED | As per {{!RFC7519}} | |
+| `nbf` | REQUIRED | As per {{!RFC7519}} | |
+| `exp` | REQUIRED | As per {{!RFC7519}} | |
+| `iss` | RECOMMENDED | Organization signaling protection | OI |
+| `ent` | REQUIRED | EIs marked a protected | Array of EIs |
+| `emb` | REQUIRED | Emblem details | JSON object (as follows) |
 
-* "prp" (purpose) is an array of `purpose` strings as defined below.
+Multiple EIs within `ent` may be desirable, e.g., to include both an entity's IPv4 and IPv6 address.
+The claim value of `emb` MUST be a JSON {{!RFC7159}} object with the following key-value mappings.
+
+| Claim | Status | Semantics | Encoding |
+| ----- | ------ | --------- | -------- |
+| `prp` | OPTIONAL | Emblem purposes | Array of `purpose` (as follows) |
+| `dst` | OPTIONAL | Permitted distribution channels | Array of `distribution-method` (as follows) |
+| `ext` | OPTIONAL | External endorsements available | Boolean
 
       purpose = "protective" | "indicative"
 
-* "dst" (distribution) is an array of `distirbution-method` strings as defined below.
-These correspond to the distribution methods as specified in {{ADEM-DNS}}, {{ADEM-TLS}}, and {{ADEM-UDP}} respectively.
-
       distribution-method = "dns" | "tls" | "udp"
 
-* "ext" (external endorsements) maps to a Boolean.
-`true` indicates that the PP's central website identified by "iss" serves endorsements that will not be transmitted alongside this emblem.
+When `ext` is set to `true`, this indicates that the PP's central website identified by `iss` serves endorsements that will not be transmitted alongside this emblem.
+
+The distribution channels defined above correspond to the distribution methods as specified in {{ADEM-DNS}}, {{ADEM-TLS}}, and {{ADEM-UDP}} respectively.
+
 
 #### Example
 
@@ -286,49 +294,54 @@ Payload:
 
 Endorsements are encoded as JWSs.
 Endorsements attest two statements: that a public key is affiliated with an organization, pointed to by OIs, and that this organization is eligible to issue emblems for their entities.
-They are distinguished by the "cty" header parameter value which MUST be "adem-end".
-An endorsement's payload includes the following JWT claims:
+They are distinguished by the `cty` header parameter value which MUST be `"adem-end"`.
+An endorsement's payload includes the JWT claims defined in the table below.
+All otger registered JWT claims MUST NOT be included.
 
-* "iss" is only RECOMMENDED, but if included MUST be an OI.
-* "sub" is RECOMMENDED, but if included MUST be an OI encoding the public keyholder's identity as an OI.
-* "exp" (REQUIRED)
-* "nbf" (REQUIRED)
+| Claim | Status | Semantics | Encoding |
+| ----- | ------ | --------- | -------- |
+| `ver` | REQUIRED | Version string | `"v1"` |
+| `iat` | REQUIRED | As per {{!RFC7519}} | |
+| `nbf` | REQUIRED | As per {{!RFC7519}} | |
+| `exp` | REQUIRED | As per {{!RFC7519}} | |
+| `iss` | RECOMMENDED | Endorsing organization | OI |
+| `sub` | RECOMMENDED | Endorsed organization | OI |
+| `key` | REQUIRED | Endorsed organization's key | JWK as per {{!RFC7517}} (must include `alg`) |
+| `log` | OPTIONAL | Root key CT logs | Array (as follows) |
+| `end` | REQUIRED | Endorsed key can endorse further | Boolean |
+| `emb` | REQUIRED | Emblem constraints | JSON object (as follows) |
 
-Furthermore, endorsements MUST include the private claims "key", "end", and "ver" and is RECOMMENDED to include the private claim "emb".
-The values of these claims are specified as follows:
+If an endorsement was signed by a root key, it MUST include `log`.
+`log` maps to an array of JSON objects with the following claims.
+The semantics of these fields are defined in {{!RFC6962}} for `v1` and {{!RFC9162}} for `v2`.
 
-* "key" (REQUIRED); a JWK as defined in {{!RFC7517}}, encoding the endorsed public key.
-The JWK MUST bear the "alg" claim.
-* "log" (OPTIONAL); an array of base64 encoded strings.
-If this endorsement was signed by a root key, this claim MUST be present and every string in this array MUST encode a Certificate Transparency Log ID as per {{!RFC9162}}, [Sec. 4.4](https://www.rfc-editor.org/rfc/rfc9162.html#name-log-id).
-Each CT Log provided MUST have logged a certificate that binds this root key to the party's OI as specified in [](#pk-distribution).
-* "end" (REQUIRED); a boolean indicating if the endorsed key may be used for further endorsements (`true`) or signing emblems only (`false`).
-* "ver" (REQUIRED); a string of value `"v1"`.
-* If present, "emb" MUST be a JSON.
-It follows a similar structure to the emblem's "emb" claim.
-An endorsement's "emb" (RECOMMENDED) claim encodes constraints on emblems by supporting the following key-value mapping (all of which are OPTIONAL):
-  * "prp" (purpose constraint) is encoded as "prp" specified for emblems in {{emblems}}.
-  It encodes the permitted uses of emblems endorsed by this endorsement.
-  * "dst" (distribution constraint) is encoded as "dst" specified for emblems in {{emblems}}.
-  It encodes the permitted distribution methods of emblems endorsed by this endorsement.
-  * "ent" (entity constraint) is an array of EIs.
-  It encodes permitted EIs of entities.
-  Note that for an emblem to comply with this constraint, an EI must not strictly equal an EI in the constraints.
-  It suffices to be a subset of all entities identified by EIs in the subject constraint, i.e., the constraints need to be more general than the EI of question.
-  * "wnd" (signing window) is a non-negative integer encoding seconds.
-  Emblems should only be considered valid for "wnd"-many seconds after "iat" of the emblem.
+| Claim | Status | Semantics | Encoding |
+| ----- | ------ | --------- | -------- |
+| `ver` | REQUIRED | CT log version | `"v1"` or `"v2"` |
+| `id`  | REQUIRED | The CT log's ID | Base64-encoded string |
+| `hash` | REQUIRED | The binding certificate's leaf hash in the log | Base64-encoded string |
 
-We say that an endorsement *endorses* a token if its "key" claim equals the token's verification key, and its "sub" claim equals the token's "iss" claim.
-We note that the latter includes the possibility of both "sub" and "iss" being undefined.
+`emb` resembles the emblem's `emb` claim and includes the following claims.
+
+| Claim | Status | Semantics | Encoding |
+| ----- | ------ | --------- | -------- |
+| `prp` | OPTIONAL | Purpose constraint | Array of `purpose` |
+| `dst` | OPTIONAL | Distribution method constraint | Array of `distribution-method` |
+| `ent` | OPTIONAL | Entity constraint | Array of EIs |
+| `wnd` | OPTIONAL | Maximum emblem lifetime | Integer |
+
+We say that an endorsement *endorses* a token if its `key` claim equals the token's verification key, and its `sub` claim equals the token's `iss` claim.
+We note that the latter includes the possibility of both `sub` and `iss` being undefined.
 
 We say that an emblem is *valid* with respect to an endorsement if all the following conditions apply:
 
-* The endorsement's "emb.prp" claim is undefined or a superset of the emblem's "emb.prp" claim.
-* The endorsement's "emb.dst" claim is undefined or a superset of the emblem's "emb.dst" claim.
-* The endorsement's "emb.sub" claim is undefined or for each EI within the emblem's "emb.sub" claim, one of the following conditions holds:
-  * There exists an EI within the endorsement's "emb.sub" claim which is more general than the emblem's "emb.sub" claim.
-  * There is no EI within the endorsement's "emb.sub" claims with the same EI type (domain name or IPv6 address) as the emblem.
-* The endorsement's "emb.wnd" claim is undefined or the emblem's "emb.iat" claim value plus the endorsement's "emb.wnd" claim value lies in the future.
+* The endorsement's `emb.prp` claim is undefined or a superset of the emblem's `emb.prp` claim.
+* The endorsement's `emb.dst` claim is undefined or a superset of the emblem's `emb.dst` claim.
+* The endorsement's `emb.ent` claim is undefined or for each EI within the emblem's `emb.ent` claim, one of the following conditions holds:
+  * There exists an EI within the endorsement's `emb.ent` claim which is more general than the emblem's `emb.ent` claim.
+  <!-- TODO: This is worrysome... -->
+  * There is no EI within the endorsement's `emb.ent` claims with the same EI type (domain name or IPv6 address) as the emblem.
+* The endorsement's `emb.wnd` claim is undefined or the emblem's `emb.iat` claim value plus the endorsement's `emb.wnd` claim value lies in the future.
 
 # Public Key Distribution {#pk-distribution}
 
@@ -339,7 +352,7 @@ Root public keys are all public keys which are only endorsed by third parties an
 A party MAY have multiple root public keys.
 
 Any root public key MUST be encoded as JWK as per {{!RFC7517}} and {{!RFC7518}}.
-Root public keys MUST include the "kid" parameter and this parameter MUST be computed by the hashing algorithm as specified in {{jwk-hashing}}.
+Root public keys MUST include the `kid` parameter and this parameter MUST be computed by the hashing algorithm as specified in {{jwk-hashing}}.
 
 A PP's OI MUST point to an HTTPS enabled website.
 The certificate authenticating that website MUST be valid for the OI and all the following subdomains (`<OI>` is understood to be a placeholder for the party's OI):
@@ -348,11 +361,11 @@ The certificate authenticating that website MUST be valid for the OI and all the
 * For each root public key with kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
 Beyond these subdomains, `adem-configuration.<OI>` MUST NOT have further subdomains.
 
-All these subdomains MUST be served using HTTPS only, and they MUST have a DNS A or AAAA record configured, however, the respective IP address MAY not route to a live server.
+All these subdomains MUST be served using HTTPS, and they MUST have a DNS A or AAAA record configured, however, the respective IP address MAY not route to a live server.
 Organizations can decide which root keys should be considered active by configuring A and AAAA records.
 All such subdomains SHOULD serve the party's endorsements and root public keys.
 Whenever such subdomains serve content, they MUST comply with the following.
-They MUST serve the content type `application/json` and MUST be served using HTTPS only.
+They MUST serve the content type `application/json` and MUST be served using HTTPS.
 The subdomain `adem-configuration.` MUST serve a JSON array of all root public keys and respective endorsements in JSON encoding.
 Each subdomain relating to a kid MUST serve the respectively identified key in JSON encoding.
 
@@ -361,7 +374,7 @@ Serving of public keys is optional to allow parties to cope with outages.
 # Signs of Protection
 
 A sign of protection is an emblem, accompanied by one or more endorsements.
-Whenever a token includes OIs (in "iss" or "sub" claims), these OIs must be configured accordingly.
+Whenever a token includes OIs (in `iss` or `sub` claims), these OIs must be configured accordingly.
 An OI serves to identify a PP or authority in the real world.
 Hence, parties MUST configure the website hosted under their OI to provide sufficient identifying information.
 
@@ -391,10 +404,10 @@ Given an input public key and an emblem with a set of endorsements, a verificati
 
 1. If the emblem does not bear a signature, return `UNSIGNED`.
 2. Run the *signed emblem verification procedure* ({{signed-emblems}}; results in one of `SIGNED-TRUSTED`, `SIGNED-UNTRUSTED`, or `INVALID`).
-3. If previous procedure resulted in `INVALID` or the emblem does not include the "iss" claim, return the last verification procedure's result and the emtpy set of OIs.
+3. If previous procedure resulted in `INVALID` or the emblem does not include the `iss` claim, return the last verification procedure's result and the emtpy set of OIs.
 4. Run the *organizational emblem verification procedure* ({{org-emblems}}; results in one of `ORGANIZATIONAL-TRUSTED`, `ORGANIZATIONAL-UNTRUSTED`, `INVALID`).
 5. If the previous procedure resulted in `INVALID` return `INVALID` and the empty set of OIs.
-6. If all tokens include the same "iss" claim, return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the empty set of OIs.
+6. If all tokens include the same `iss` claim, return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the empty set of OIs.
 7. Run the *endorsed emblem verification procedure* ({{endorsed-emblems}}; results in a set of OIs and one of `ENDORSED-TRUSTED`, `ENDORSED-UNTRUSTED`, `INVALID`).
 8. Return the strongest return value matching `*-TRUSTED`, the strongest return value matching `*-UNTRUSTED` provided that it is strictly stronger than the strongest return value matching `*-TRUSTED`, and the set of OIs returned by the endorsed emblem verification procedure.
 
@@ -402,7 +415,7 @@ Note that the endorsed emblem verification procedure resulting in `INVALID` is h
 As the procedure did not terminate in step 5, organizational verification must have been successful.
 Hence, `INVALID` cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.
 
-If the emblem includes the "ext" claim with the value `true`, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
+If the emblem includes the `ext` claim with the value `true`, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
 However, there may be cases in which verifiers do not deem it safe to perform extra queries to OIs.
 In such cases, implementations MAY skip the organizational emblem verification procedure.
 Additionally, endorsed emblem verification procedures MAY skip the checks of the authorities' OIs correct configuration.
@@ -434,9 +447,9 @@ If malware were to infect that router, it must check if entities now exposed to 
 
 # Security Considerations
 
-## No Endorsements without "iss"
+## No Endorsements without `iss`
 
-The procedures to verify organizational or endorsed emblems as specified in {{org-emblems}} and {{endorsed-emblems}} assume that the emblem's "iss" claim is defined.
+The procedures to verify organizational or endorsed emblems as specified in {{org-emblems}} and {{endorsed-emblems}} assume that the emblem's `iss` claim is defined.
 Practically speaking, this implies that parties can only go beyond pure public key authentication (where public keys need to be authenticated out-of-band) by stating an OI.
 
 The constraints on well-configured OIs offers two beneficial security properties:
@@ -458,7 +471,7 @@ Context:
 Algorithm:
 
 1. Parse the JWK as JSON object.
-2. Drop the "kid" parameter from the JWK.
+2. Drop the `kid` parameter from the JWK.
 3. Compute a canonical representation of the remaining JWK as per {{!RFC8785}}.
 4. Compute and return the SHA-256 hash of the canonical representation as a hexadecimal digest in all lower-case.
 
@@ -471,12 +484,12 @@ Context:
 
 Algorithm:
 
-1. Ignore all endorsements including an "iss" claim different to the emblem's "iss" claim.
-A defined "iss" claim is understood to be different to an undefined "iss" claim.
+1. Ignore all endorsements including an `iss` claim different to the emblem's `iss` claim.
+A defined `iss` claim is understood to be different to an undefined `iss` claim.
 2. Verify every signature.
 3. Verify that all endorsements form a consecutive chain where there is a unique root endorsement and the public key which verifies the emblem is transitively endorsed by that root endorsement.
 4. Verify that no endorsement expired.
-5. Verify that all endorsements bear the claim "end=true" except for the emblem signing key's endorsement.
+5. Verify that all endorsements bear the claim `end=true` except for the emblem signing key's endorsement.
 6. Verify that the emblem is valid with regard to every endorsement.
 7. If any of the aforementioned verification steps fail, return `INVALID`.
 If there is a token signed by the trusted input public key, return `SIGNED-TRUSTED`.
@@ -490,14 +503,14 @@ Whenever such an order is specified, clients MAY immediately reject a set of tok
 Context:
 
 * Assumptions: Signed emblem verification has been performed and did not return `INVALID`.
-Every token as part of the input includes the "iss" claim.
+Every token as part of the input includes the `iss` claim.
 * Input: An emblem, a set of endorsements, and a trusted public key.
 * Output: `ORGANIZATIONAL-TRUSTED`, `ORGANIZATIONAL-UNTRUSTED`, or `INVALID`.
 
 Algorithm:
 
-1. Ignore all endorsements including an "iss" claim different to the emblem's "iss" claim.
-2. Verify that the top-most endorsement's "iss" claim value (its OI) is configured correctly as specified in {{pk-distribution}}.
+1. Ignore all endorsements including an `iss` claim different to the emblem's `iss` claim.
+2. Verify that the top-most endorsement's `iss` claim value (its OI) is configured correctly as specified in {{pk-distribution}}.
 3. If the aforementioned verification step fails, return `INVALID`.
 If the top-most endorsing key is equal to the trusted input public key, return `ORGANIZATIONAL-TRUSTED`. Otherwise, return `ORGANIZATIONAL-UNTRUSTED`.
 
@@ -506,25 +519,25 @@ If the top-most endorsing key is equal to the trusted input public key, return `
 Context:
 
 * Assumptions: Organizational emblem verification has been performed and did not return `INVALID`.
-There are emblems as part of the input including an "iss" claim different to the emblem's "iss" claim.
+There are emblems as part of the input including an `iss` claim different to the emblem's `iss` claim.
 * Input: An emblem, a set of endorsements, and a trusted public key.
 * Output: `ENDORSED-TRUSTED`, `ENDORSED-UNTRUSTED`, or `INVALID`, and a set of OIs.
 
 Algorithm:
 
-1. Ignore all endorsements including an "iss" claim equal to the emblem's "iss" claim.
+1. Ignore all endorsements including an `iss` claim equal to the emblem's `iss` claim.
 2. For every endorsement:
    1. Verify its signature.
-   2. Verify that it endorses the top-most endorsing key with the same "iss" claim as the emblem.
+   2. Verify that it endorses the top-most endorsing key with the same `iss` claim as the emblem.
    3. Verify that it did not expire.
-   4. Verify that it bears the claim "end=true".
+   4. Verify that it bears the claim `end=true`.
    5. Verify that the emblem is valid with regard to this endorsement.
-   6. Implementations SHOULD verify that the endorsement's "iss" claim value (its OI) is configured correctly as specified in {{pk-distribution}}.
+   6. Implementations SHOULD verify that the endorsement's `iss` claim value (its OI) is configured correctly as specified in {{pk-distribution}}.
    7. Should any of the aforementioned verification steps fail, ignore this endorsement.
 3. If there are no endorsements remaining after the last step, return `INVALID` and the empty set of OIs.
 If in the set of remaining endorsements, there is an endorsement with a verification key equal to the trusted input public key, return `ENDORSED-TRUSTED`.
 Otherwise, return `ENDORSED-UNTRUSTED`.
-In both the latter cases, also return the set of all "iss" claims of the remaining endorsements.
+In both the latter cases, also return the set of all `iss` claims of the remaining endorsements.
 
 # Security Considerations
 
