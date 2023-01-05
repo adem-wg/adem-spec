@@ -162,6 +162,7 @@ There are two types of addresses.
 Domain names and IPv6 addresses.
 Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. {{!RFC4291}}, [Section 2.5.5.2](https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2)).
 Domain names (`domain-name`) MUST be formatted as usual and specified in {{!RFC1035}} with the exception that the leftmost label MAY be the single-character wildcard `"*"`.
+In particular, `"*"` itself is a valid domain name.
 
 IPv6 addresses (`IPv6`) MUST be formatted following {{!RFC4291}}.
 IPv6 addresses MUST be global unicast or link-local unicast addresses.
@@ -337,10 +338,7 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 
 * The endorsement's `emb.prp` claim is undefined or a superset of the emblem's `emb.prp` claim.
 * The endorsement's `emb.dst` claim is undefined or a superset of the emblem's `emb.dst` claim.
-* The endorsement's `emb.ent` claim is undefined or for each EI within the emblem's `emb.ent` claim, one of the following conditions holds:
-  * There exists an EI within the endorsement's `emb.ent` claim which is more general than the emblem's `emb.ent` claim.
-  <!-- TODO: This is worrysome... -->
-  * There is no EI within the endorsement's `emb.ent` claims with the same EI type (domain name or IPv6 address) as the emblem.
+* The endorsement's `emb.ent` claim is undefined or for each EI within the emblem's `emb.ent` claim, there exists an EI within the endorsement's `emb.ent` claim which is more general than the emblem's `emb.ent` claim.
 * The endorsement's `emb.wnd` claim is undefined or the emblem's `emb.iat` claim value plus the endorsement's `emb.wnd` claim value lies in the future.
 
 # Public Key Distribution {#pk-distribution}
