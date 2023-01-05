@@ -355,7 +355,7 @@ Any root public key MUST be encoded as JWK as per {{!RFC7517}} and {{!RFC7518}}.
 Root public keys MUST include the `kid` parameter and this parameter MUST be computed by the hashing algorithm as specified in {{jwk-hashing}}.
 
 A PP's OI MUST point to an HTTPS enabled website.
-The certificate authenticating that website MUST be valid for the OI and all the following subdomains (`<OI>` is understood to be a placeholder for the party's OI):
+The certificate authenticating that website MUST be valid w.r.t. to {{!RFC5280}}, MUST provide CRL distribution points as per {{!RFC5280}}, [Sec. 4.2.1.13](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13), and MUST be valid for the OI and all the following subdomains (`<OI>` is understood to be a placeholder for the party's OI):
 
 * `adem-configuration.<OI>`
 * For each root public key with kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
