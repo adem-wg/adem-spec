@@ -57,7 +57,7 @@ normative:
 
 Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
 They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
-This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute digital emblems, which mark entities as protected under IHL in an analogy to the physical emblems.
+This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute digital emblems, which mark assets as protected under IHL in an analogy to the physical emblems.
 
 --- middle
 
@@ -68,14 +68,14 @@ This has traditionally been accomplished by the marking of protected facilities 
 
 Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.
 
-This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute *digital emblems*, which mark entities as protected under IHL in an analogy to the physical emblems.
+This document specifies the scheme *An Authenticated Digital EMblem* (ADEM) to distribute *digital emblems*, which mark assets as protected under IHL in an analogy to the physical emblems.
 We specify how digital emblems can be created and verified.
 
 Emblems can be accompanied by *endorsements* for authentication purposes, which are signed by *authorities*.
 We call both emblems and endorsements *tokens*.
-Emblems encode which entity is protected and resemble the statement:
+Emblems encode which asset is protected and resemble the statement:
 
-> I, entity *X* and holder of public key *K*, am associated to PP *P* and protected under international humanitarian law.
+> I, asset *X* and holder of public key *K*, am associated to PP *P* and protected under international humanitarian law.
 
 Endorsements resemble the statement:
 
@@ -108,7 +108,7 @@ Beyond that, though, endorsements always encode the attestation of a party's rig
 **Root Key** Organizations control root keys, which identify them cryptographically.
 Any key of an organization that is endorsed by other parties is a root key.
 
-**Entity** An entity is a distinguishable computational unit, such as a computer, an OS, a process, etc.
+**Asset** An asset is a distinguishable computational unit, such as a computer, an OS, a process, etc.
 
 **Protected Party** A protected party is an organization entitled to issue claims of protection for their digital infrastructure.
 
@@ -126,38 +126,38 @@ Beyond these terms, we use the terms "claim" and "header parameter" as reference
 
 ## Identifiers and their Semantics
 
-Emblems are issued for entities by protected parties and are backed by authorities.
+Emblems are issued for assets by protected parties and are backed by authorities.
 Both protected parties and authorities are *organizations*.
-This section specifies how entities and organizations are identified.
+This section specifies how assets and organizations are identified.
 
-### Entity Identifiers
+### Asset Identifiers
 
-Entities that can be technically marked as protected are processes, or data in non-volatile storage.
-In the following, we describe how such entities are identified.
-Entities are identified by *entity identifiers* (EIs).
-Entity identifiers closely resemble Uniform Resource Identifiers (URIs) as specified in {{!RFC3986}}.
+Assets that can be technically marked as protected are processes.
+In the following, we describe how such assets are identified.
+Assets are identified by *asset identifiers* (AIs).
+Asset identifiers closely resemble Uniform Resource Identifiers (URIs) as specified in {{!RFC3986}}.
 However, to limit their scope, we do not follow the specification of URIs and instead define our own syntax.
 
 #### Syntax
 
-Entity identifiers point to an address and optionally port combination.
+Asset identifiers point to an address and optionally port combination.
 They follow the syntax (`domain-name`, `IPv6` defined below):
 
 ~~~~
-entity-identifier = address [ ":" port ]
+asset-identifier = address [ ":" port ]
 
 address = domain-name | "[" IPv6 "]"
 
 port = DIGIT+
 ~~~~
 
-These are examples of EIs:
+These are examples of AIs:
 
 * `*.example.com:443`
 * `[2606:2800:220:1:248:1893:25c8:1946]:21`
 * `[::FFFF:93.184.216.34]:22`
 
-EIs identify an address, and port combination.
+AIs identify an address, and port combination.
 There are two types of addresses.
 Domain names and IPv6 addresses.
 Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. {{!RFC4291}}, [Section 2.5.5.2](https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2)).
@@ -169,34 +169,34 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.
 
 #### Semantics
 
-Several kinds of entities can be covered by entity identifiers:
+Several kinds of assets can be covered by asset identifiers:
 
 * Network facing processes, e.g., web servers
 * Local computation, e.g., arbitrary processes
 * Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop
 * Networks
 
-EIs can *cover* any of these entities, but they can only *point* to network-connected processes or static data.
-To decide which entities EIs point to, one must *resolve* an EI.
-One EI need not necessarily only point to a single entity.
-Depending on the concrete EI, e.g., its wildcards, it may point to multiple entities.
-For example: `example.com` (amongst other entities) points at network facing processes hosted under any IP that `example.com` resolves to, on any port.
+AIs can *cover* any of these assets, but they can only *point* to network-connected processes or static data.
+To decide which assets AIs point to, one must *resolve* an AI.
+One AI need not necessarily only point to a single asset.
+Depending on the concrete AI, e.g., its wildcards, it may point to multiple assets.
+For example: `example.com` (amongst other assets) points at network facing processes hosted under any IP that `example.com` resolves to, on any port.
 
-To resolve an EI, it is first interpreted as an implicit or explicit set of addresses.
+To resolve an AI, it is first interpreted as an implicit or explicit set of addresses.
 If `address` is an IP address, the set contains this address only.
 If it is an IP address prefix, it contains all addresses matching that prefix.
 If it is a domain name, it contains any IP address this domain name can be resolved to.
 If it is a domain name starting with the wildcard prefix `"*"`, it contains any IP address this domain name or any of its subdomains can be resolved to.
 
-Any process reachable under any of the addresses pointed towards by `address` and on the port specified (or any port, if unspecified) is pointed by the respective EI.
+Any process reachable under any of the addresses pointed towards by `address` and on the port specified (or any port, if unspecified) is pointed by the respective AI.
 
 #### Order
 
-EIs may not only be used for identification but also for constraint purposes.
+AIs may not only be used for identification but also for constraint purposes.
 For example, an endorsement may constrain emblems to only signal protection for a specific IP range.
-In this section, we define an order on EIs so that one can verify if an identifying EI complies with a constraining EI.
+In this section, we define an order on AIs so that one can verify if an identifying AI complies with a constraining AI.
 
-We define an EI A to be *more general* than an EI B, if all of the following conditions apply:
+We define an AI A to be *more general* than an AI B, if all of the following conditions apply:
 
 * A's `port` part is undefined or equal to B's `port` part.
 * If A encodes a domain name and does not contain the wildcard `"*"`, B encodes a domain name, too, and A is equal to B.
@@ -204,7 +204,7 @@ We define an EI A to be *more general* than an EI B, if all of the following con
 In this regard, any domain is considered a subdomain of itself.
 * If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.
 
-Note that EIs encoding a domain name are incomparable to EIs encoding IP addresses, i.e., neither can be more general than the other.
+Note that AIs encoding a domain name are incomparable to AIs encoding IP addresses, i.e., neither can be more general than the other.
 
 ### Organization Identifiers
 
@@ -229,7 +229,7 @@ Any token MUST include the `cty` (content type) header parameter.
 
 ### Emblems {#emblems}
 
-An emblem is encoded either as JWS or as an unsecured JWT which signals protection of digital entities.
+An emblem is encoded either as JWS or as an unsecured JWT which signals protection of digital assets.
 It is distinguished by the `cty` header parameter value which MUST be `"adem-emb"`.
 Its payload includes the JWT claims defined in the table below, following {{!RFC7519}}, [Section 4.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1).
 All other registered JWT claims MUST NOT be included.
@@ -241,10 +241,10 @@ All other registered JWT claims MUST NOT be included.
 | `nbf` | REQUIRED | As per {{!RFC7519}} | |
 | `exp` | REQUIRED | As per {{!RFC7519}} | |
 | `iss` | RECOMMENDED | Organization signaling protection | OI |
-| `ent` | REQUIRED | EIs marked a protected | Array of EIs |
+| `ass` | REQUIRED | AIs marked a protected | Array of AIs |
 | `emb` | REQUIRED | Emblem details | JSON object (as follows) |
 
-Multiple EIs within `ent` may be desirable, e.g., to include both an entity's IPv4 and IPv6 address.
+Multiple AIs within `ass` may be desirable, e.g., to include both an asset's IPv4 and IPv6 address.
 The claim value of `emb` MUST be a JSON {{!RFC7159}} object with the following key-value mappings.
 
 | Claim | Status | Semantics | Encoding |
@@ -285,14 +285,14 @@ Payload:
   "nbf": 1672916137,
   "exp": 1675590932,
   "iss": "https://example.com",
-  "ent": ["[2001:0db8:582:ae33::29]"]
+  "ass": ["[2001:0db8:582:ae33::29]"]
 }
 ~~~~
 
 ### Endorsements
 
 Endorsements are encoded as JWSs.
-Endorsements attest two statements: that a public key is affiliated with an organization, pointed to by OIs, and that this organization is eligible to issue emblems for their entities.
+Endorsements attest two statements: that a public key is affiliated with an organization, pointed to by OIs, and that this organization is eligible to issue emblems for their assets.
 They are distinguished by the `cty` header parameter value which MUST be `"adem-end"`.
 An endorsement's payload includes the JWT claims defined in the table below.
 All otger registered JWT claims MUST NOT be included.
@@ -326,7 +326,7 @@ The semantics of these fields are defined in {{!RFC6962}} for `v1` and {{!RFC916
 | ----- | ------ | --------- | -------- |
 | `prp` | OPTIONAL | Purpose constraint | Array of `purpose` |
 | `dst` | OPTIONAL | Distribution method constraint | Array of `distribution-method` |
-| `ent` | OPTIONAL | Entity constraint | Array of EIs |
+| `ass` | OPTIONAL | Asset constraint | Array of AIs |
 | `wnd` | OPTIONAL | Maximum emblem lifetime | Integer |
 
 We say that an endorsement *endorses* a token if its `key` claim equals the token's verification key, and its `sub` claim equals the token's `iss` claim.
@@ -336,7 +336,7 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 
 * The endorsement's `emb.prp` claim is undefined or a superset of the emblem's `emb.prp` claim.
 * The endorsement's `emb.dst` claim is undefined or a superset of the emblem's `emb.dst` claim.
-* The endorsement's `emb.ent` claim is undefined or for each EI within the emblem's `emb.ent` claim, there exists an EI within the endorsement's `emb.ent` claim which is more general than the emblem's `emb.ent` claim.
+* The endorsement's `emb.ass` claim is undefined or for each AI within the emblem's `emb.ass` claim, there exists an AI within the endorsement's `emb.ass` claim which is more general than the emblem's `emb.ass` claim.
 * The endorsement's `emb.wnd` claim is undefined or the emblem's `emb.iat` claim value plus the endorsement's `emb.wnd` claim value lies in the future.
 
 # Public Key Commitment {#pk-distribution}
@@ -416,7 +416,7 @@ The set of OIs returned by the verification procedure encodes the OIs of endorsi
 We strongly RECOMMEND against accepting emblems resulting in `SIGNED-UNTRUSTED`.
 In such cases, verifiers should aim to authenticate the respective public keys via other, out-of-band methods.
 This effectively lifts the result to `SIGNED-TRUSTED`.
-Signed emblems are supported for cases of emergency where a PP is able to communicate one or more public key, but might not be able to set up a signing infrastructure linking their entities to a root key.
+Signed emblems are supported for cases of emergency where a PP is able to communicate one or more public key, but might not be able to set up a signing infrastructure linking their assets to a root key.
 
 There is no definite guideline on how to choose which keys to trust, i.e., which keys to pass as trusted public key to the verification procedure.
 Some verifiers may have pre-existing trust relationships with some authorities, e.g., military units of a nation state could use the public keys of their nation state or allies.
@@ -424,15 +424,15 @@ Other verifiers might be fine with fetching public keys authenticated only by th
 
 ## Protection
 
-Any entity whose address is resolved within context of a valid emblem must be considered to be marked as protected under IHL.
-In certain contexts, this might apply to a wide range of entities.
+Any asset whose address is resolved within context of a valid emblem must be considered to be marked as protected under IHL.
+In certain contexts, this might apply to a wide range of assets.
 For example, a router could distribute emblems for its entire address space using ICMP using an IP range.
 
-Entities MUST only mark as protected what is exposed to potential verifiers.
+Assets MUST only mark as protected what is exposed to potential verifiers.
 For example, consider a gateway-router also running an intranet where not every node is internet-connected.
 The router must only distribute emblems for internet-connected nodes to verifiers not within the intranet, but may distribute emblems for the non-internet connected nodes within the intranet.
 But at the same time, verifiers must proceed with caution when changing their vantage point.
-If malware were to infect that router, it must check if entities now exposed to it are protected, too.
+If malware were to infect that router, it must check if assets now exposed to it are protected, too.
 
 # Security Considerations
 
