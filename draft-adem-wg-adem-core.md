@@ -251,13 +251,10 @@ The claim value of `emb` MUST be a JSON {{!RFC7159}} object with the following k
 | ----- | ------ | --------- | -------- |
 | `prp` | OPTIONAL | Emblem purposes | Array of `purpose` (as follows) |
 | `dst` | OPTIONAL | Permitted distribution channels | Array of `distribution-method` (as follows) |
-| `ext` | OPTIONAL | External endorsements available | Boolean
 
       purpose = "protective" | "indicative"
 
       distribution-method = "dns" | "tls" | "udp"
-
-When `ext` is set to `true`, this indicates that the PP's central website identified by `iss` serves endorsements that will not be transmitted alongside this emblem.
 
 The distribution channels defined above correspond to the distribution methods as specified in {{ADEM-DNS}}, {{ADEM-TLS}}, and {{ADEM-UDP}} respectively.
 
@@ -282,7 +279,6 @@ Payload:
 {
   "emb": {
     "dst": ["icmp"],
-    "ext": false,
     "prp": ["protective"]
   },
   "iat": 1672916137,
@@ -414,11 +410,6 @@ Given an input public key and an emblem with a set of endorsements, a verificati
 Note that the endorsed emblem verification procedure resulting in `INVALID` is handled implicitly in step 8.
 As the procedure did not terminate in step 5, organizational verification must have been successful.
 Hence, `INVALID` cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.
-
-If the emblem includes the `ext` claim with the value `true`, verification procedures are RECOMMENDED to fetch external endorsements from the emblem's OI prior to verification.
-However, there may be cases in which verifiers do not deem it safe to perform extra queries to OIs.
-In such cases, implementations MAY skip the organizational emblem verification procedure.
-Additionally, endorsed emblem verification procedures MAY skip the checks of the authorities' OIs correct configuration.
 
 The set of OIs returned by the verification procedure encodes the OIs of endorsing parties where verification passed.
 
