@@ -339,33 +339,31 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 * The endorsement's `emb.ent` claim is undefined or for each EI within the emblem's `emb.ent` claim, there exists an EI within the endorsement's `emb.ent` claim which is more general than the emblem's `emb.ent` claim.
 * The endorsement's `emb.wnd` claim is undefined or the emblem's `emb.iat` claim value plus the endorsement's `emb.wnd` claim value lies in the future.
 
-# Public Key Distribution {#pk-distribution}
+# Public Key Commitment {#pk-distribution}
 
-Parties are expected to serve their root public keys via their OI.
+Parties must undeniably link their root public keys to their OI.
 In this section, we specify the configuration of a PP's OI.
-
 Root public keys are all public keys which are only endorsed by third parties and never endorsed by the organization itself.
 A party MAY have multiple root public keys.
 
 Any root public key MUST be encoded as JWK as per {{!RFC7517}} and {{!RFC7518}}.
 Root public keys MUST include the `alg` and `kid` parameters, and the `kid` parameter MUST be computed using the hashing algorithm as specified in {{jwk-hashing}}.
 
-A PP's OI MUST point to an HTTPS enabled website.
-The certificate authenticating that website MUST be valid w.r.t. to {{!RFC5280}}, MUST provide CRL distribution points as per {{!RFC5280}}, [Sec. 4.2.1.13](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13), and MUST be valid for the OI and all the following subdomains (`<OI>` is understood to be a placeholder for the party's OI):
+For a root public key to be configured correctly, there MUST be an X.509 certificate that:
 
-* `adem-configuration.<OI>`
-* For each root public key with kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
-Beyond these subdomains, `adem-configuration.<OI>` MUST NOT have further subdomains.
+* MUST be valid w.r.t. to {{!RFC5280}}
+* MUST provide CRL distribution points as per {{!RFC5280}}, [Sec. 4.2.1.13](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13)
+* MUST be logged in the Certificate Transparency logs {{!RFC6962}}, {{!RFC9162}}
+* MUST be valid for at least all the following domains (`<OI>` is understood to be a placeholder for the party's OI):
+  * `adem-configuration.<OI>`
+  * For root public key's kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
 
-All these subdomains MUST be served using HTTPS, and they MUST have a DNS A or AAAA record configured, however, the respective IP address MAY not route to a live server.
-Organizations can decide which root keys should be considered active by configuring A and AAAA records.
-All such subdomains SHOULD serve the party's endorsements and root public keys.
-Whenever such subdomains serve content, they MUST comply with the following.
-They MUST serve the content type `application/json` and MUST be served using HTTPS.
-The subdomain `adem-configuration.` MUST serve a JSON array of all root public keys and respective endorsements in JSON encoding.
-Each subdomain relating to a kid MUST serve the respectively identified key in JSON encoding.
-
+`adem-configuration.<OI>` and all its subdomains SHOULD serve the party's root public keys, but MAY not be live, e.g., there MAY be no A or AAAA records configured for the domains.
 Serving of public keys is optional to allow parties to cope with outages.
+If it is live, `adem-configuration.<OI>` MUST serve a JWK Set {{!RFC7517}}, [Section 5](https://www.rfc-editor.org/rfc/rfc7517#section-5), that includes all root public keys.
+Each subdomain relating to a kid MUST serve the respectively identified key in JSON encoding.
+If it is live, for any given root key with KID `<KID>`, `<KID>.adem-configuration.<OI>` MUST serve that root key in JWK Format {{!RFC7517}}, [Section 4](https://www.rfc-editor.org/rfc/rfc7517#section-4).
+All such domains MUST serve the content type `application/json` and MUST be served using HTTPS.
 
 # Signs of Protection
 
