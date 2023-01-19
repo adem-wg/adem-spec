@@ -46,14 +46,14 @@ informative:
 --- abstract
 
 This document describes a mechanism using the User Datagram Protocol (UDP) to distribute *Authenticated Digital EMblem* (ADEM) tokens [ADEM-CORE].
-ADEM tokens encode that an entity is protected under international humanitarian law.
+ADEM tokens encode that an asset is protected under international humanitarian law.
 
 --- middle
 
 # Introduction {#intro}
 
 The ADEM Core document {{ADEM-CORE}} specifies how a set of *tokens*, encoded as JSON Web Signatures (JWSs) {{?RFC7515}}, can constitute *signs of protection*.
-Such signs of protection indicate that a digital entity is protected under international humanitarian law (IHL).
+Such signs of protection indicate that a digital asset is protected under international humanitarian law (IHL).
 This document describes a UDP-based distribution method for ADEM tokens, termed ADEM-UDP.
 
 # Conventions and Definitions
@@ -66,10 +66,10 @@ when, and only when, they appear in all capitals, as shown here.
 
 # UDP Distribution
 
-Any digital, network-connected entity MAY distribute sets of ADEM tokens using the UDP protocol.
+Any digital, network-connected asset MAY distribute sets of ADEM tokens using the UDP protocol.
 Any token distributed over UDP MUST be encoded as CBOR Web Token (CWT) {{!RFC8392}}.
 
-Whenever an entity distributes tokens using UDP, it MUST set the source and destination ports to 60.
+Whenever an asset distributes tokens using UDP, it MUST set the source and destination ports to 60.
 The data field encodes four elements (in that order): a `uint8` *identifier* for the sets of tokens, a `uint8` stating the number of independent endorsements, a `uint8` identifying the token's *sequence number*, and the token itself.
 Any UDP packet containing an ADEM token, MUST contain exactly one token.
 
@@ -88,9 +88,9 @@ Note that therefore, any independent endorsement's sequence number must be zero.
 The encoding of the number of independent endorsements and sequence numbers was chosen to facilitate verification.
 Using these fields, verifiers can know if they received all endorsements associated to an emblem.
 
-ADEM-UDP enabled entities SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-adem-wg-adem-core.html
-#section-6.1)) whenever a client attempts to connect to the respectively protected entity.
-ADEM-UDP enabled entities SHOULD at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
+ADEM-UDP enabled assets SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-adem-wg-adem-core.html
+#section-6.1)) whenever a client attempts to connect to the respectively protected asset.
+ADEM-UDP enabled assets SHOULD at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
 
 # UDP Parsing
 
@@ -98,7 +98,7 @@ When listening on port 60, verifiers need to a means to distinguish different se
 They do so using the identifier byte.
 When receiving any token on port 60, verifiers MUST apply a timeout of 300 seconds.
 That means, they MAY discard tokens from which they were not able to assemble a verifiable sign of protection after 300 seconds.
-But at the same time, verifiers MUST wait for at least 300 seconds after having received some token from some protected entity until they may classify this entity as unprotected.
+But at the same time, verifiers MUST wait for at least 300 seconds after having received some token from some protected asset until they may classify this asset as unprotected.
 
 Verifiers are RECOMMENDED to start verification procedures as specified in {{ADEM-CORE}} as soon as they received all internal endorsements belonging to an emblem.
 Independent endorsements can be verified individually once they are received.
