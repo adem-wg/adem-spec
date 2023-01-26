@@ -462,7 +462,8 @@ Algorithm:
 1. Parse the JWK as JSON object.
 2. Drop the `kid` parameter from the JWK.
 3. Compute a canonical representation of the remaining JWK as per {{!RFC8785}}.
-4. Compute and return the SHA-256 hash of the canonical representation as a hexadecimal digest in all lower-case.
+4. Compute the SHA-256 hash of the canonical representation
+5. Return the hash in base32 encoding in all lower-case and with trailing `=` removed.
 
 ## Signed Emblem Verification Procedure {#signed-emblems}
 
