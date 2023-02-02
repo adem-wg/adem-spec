@@ -42,14 +42,14 @@ normative:
 --- abstract
 
 This document describes a mechanism using the Domain Name System (DNS) to distribute *Authenticated Digital EMblem* (ADEM) tokens [ADEM-CORE].
-ADEM tokens encode that an entity is protected under international humanitarian law.
+ADEM tokens encode that an asset is protected under international humanitarian law.
 
 --- middle
 
 # Introduction {#intro}
 
 The ADEM Core document {{ADEM-CORE}} specifies how a set of *tokens*, encoded as JSON Web Signatures (JWSs) {{?RFC7515}}, can constitute *signs of protection*.
-Such signs of protection indicate that a digital entity is protected under international humanitarian law (IHL).
+Such signs of protection indicate that a digital asset is protected under international humanitarian law (IHL).
 This document describes a DNS-based distribution method for ADEM tokens, termed ADEM-DNS.
 
 # Conventions and Definitions
