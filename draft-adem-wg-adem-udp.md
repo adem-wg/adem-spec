@@ -67,38 +67,23 @@ when, and only when, they appear in all capitals, as shown here.
 # UDP Distribution
 
 Any digital, network-connected asset MAY distribute sets of ADEM tokens using the UDP protocol.
-Any token distributed over UDP MUST be encoded as CBOR Web Token (CWT) {{!RFC8392}}.
-
-Whenever an asset distributes tokens using UDP, it MUST set the source and destination ports to 60.
-The data field encodes four elements (in that order): a `uint8` *identifier* for the sets of tokens, a `uint8` stating the number of independent endorsements, a `uint8` identifying the token's *sequence number*, and the token itself.
+Whenever an asset distributes tokens using UDP, it MUST set the destination port to 60.
+The data field encodes three elements (in that order): a `uint16` *sequence number*, a `uint16` stating the number of tokens in this sequence, and the token itself as a sequence of ASCII bytes representing the token's JWS compact serialization.
 Any UDP packet containing an ADEM token, MUST contain exactly one token.
-
-The identifier MUST be unique per emblem.
-Endorsements for a given emblem can be associated with it by giving them the same identifier.
-
-The number of independent endorsements, i.e., those whose "iss" claim differs from the emblem's "iss" claim, MUST only be encoded with the emblem.
-For any endorsement, the value MUST be set to zero.
-
-Sequence numbers state the order of endorsements.
-Any emblem's sequence number MUST be equal to the number of internal endorsements to be sent, i.e., the number of those endorsements that include the same "iss" claim as the emblem, plus one.
-Beyond that, the order of sequence numbers must coincide with the order of endorsements.
-More precisely, if an endorsement *A* endorses a token *B*, *A*'s sequence number MUST be strictly smaller than *B*'s sequence number.
-Note that therefore, any independent endorsement's sequence number must be zero.
-
-The encoding of the number of independent endorsements and sequence numbers was chosen to facilitate verification.
-Using these fields, verifiers can know if they received all endorsements associated to an emblem.
+The sequence number identifies sets of related tokens.
+Therefore, sequence numbers SHOULD NOT repeat per recipient IP and within 300 seconds.
 
 ADEM-UDP enabled assets SHOULD send a complete set of tokens allowing for the strongest verification possible (compare {{ADEM-CORE}}, [Section 6.1](./draft-adem-wg-adem-core.html
 #section-6.1)) whenever a client attempts to connect to the respectively protected asset.
-ADEM-UDP enabled assets SHOULD at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
+ADEM-UDP enabled assets MUST at the same apply rate-limiting mechanisms when sending out tokens to the same clients.
+Rate limitations SHOULD depend on the number of bytes sent per set of tokens, but assets MUST send a verifier a set of tokens at least every 300 seconds, should the verifier probe the protected asset repeatedly.
 
 # UDP Parsing
 
-When listening on port 60, verifiers need to a means to distinguish different sets of tokens.
-They do so using the identifier byte.
+When listening on port 60, verifiers can distinguish different sets of tokens using the sequence number.
 When receiving any token on port 60, verifiers MUST apply a timeout of 300 seconds.
 That means, they MAY discard tokens from which they were not able to assemble a verifiable sign of protection after 300 seconds.
-But at the same time, verifiers MUST wait for at least 300 seconds after having received some token from some protected asset until they may classify this asset as unprotected.
+But at the same time, verifiers MUST wait for at least 300 seconds after having probed a protected asset until they may classify this asset as unprotected.
 
 Verifiers are RECOMMENDED to start verification procedures as specified in {{ADEM-CORE}} as soon as they received all internal endorsements belonging to an emblem.
 Independent endorsements can be verified individually once they are received.
