@@ -337,7 +337,7 @@ We say that an emblem is *valid* with respect to an endorsement if all the follo
 * The endorsement's `emb.prp` claim is undefined or a superset of the emblem's `emb.prp` claim.
 * The endorsement's `emb.dst` claim is undefined or a superset of the emblem's `emb.dst` claim.
 * The endorsement's `emb.ass` claim is undefined or for each AI within the emblem's `emb.ass` claim, there exists an AI within the endorsement's `emb.ass` claim which is more general than the emblem's `emb.ass` claim.
-* The endorsement's `emb.wnd` claim is undefined or the emblem's `emb.iat` claim value plus the endorsement's `emb.wnd` claim value lies in the future.
+* The endorsement's `emb.wnd` claim is undefined or the sum of emblem's `nbf` and the endorsement's `emb.wnd` claims is greater than or equal to the emblem's `exp` claim.
 
 # Public Key Commitment {#pk-distribution}
 
