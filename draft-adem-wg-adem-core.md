@@ -218,8 +218,8 @@ More precisely, an OI has the syntax:
 organization-identifier = "https://" domain-name
 ~~~~
 
-Domain names must be formatted as usual, specified in {{!RFC1035}}.
-For example, `https://example.com` is a valid OI.
+Domain names must be formatted as usual, specified in {{!RFC1035}}, but always represented in all lower-case.
+For example, `https://example.com` is a valid OI, but `https://EXAMPLE.COM` is not.
 
 ## Token Encoding
 
