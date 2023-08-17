@@ -351,12 +351,18 @@ Root public keys MUST include the `alg` and `kid` parameters, and the `kid` para
 
 For a root public key to be configured correctly, there MUST be an X.509 certificate that:
 
-* MUST be valid w.r.t. to {{!RFC5280}}
-* MUST provide CRL distribution points as per {{!RFC5280}}, [Sec. 4.2.1.13](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13)
+* MUST NOT be revoked
 * MUST be logged in the Certificate Transparency logs {{!RFC6962}}, {{!RFC9162}}
+  * Note that log inclusion requires a valid certificate chain that leads to
+  one of the logs accepted root certificates. Clients are RECOMMENDED to verify
+  that this chain is valid and that none of the certificates along it have been
+  revoked.
 * MUST be valid for at least all the following domains (`<OI>` is understood to be a placeholder for the party's OI):
   * `adem-configuration.<OI>`
   * For root public key's kid `<KID>` (to be understood as a placeholder): `<KID>.adem-configuration.<OI>`
+
+We intentionally do not specify how clients should check a certificate's revocation status.
+It is RECOMMENDED that clients use offline revocation checks that are provided by major browser vendors, for example, [OneCRL or CRLite by Mozilla](https://wiki.mozilla.org/CA/Revocation_Checking_in_Firefox), or [CRLSet by Chrome](https://chromium.googlesource.com/playground/chromium-org-site/+/refs/heads/main/Home/chromium-security/crlsets.md).
 
 `adem-configuration.<OI>` and all its subdomains SHOULD serve the party's root public keys, but MAY not be live, e.g., there MAY be no A or AAAA records configured for the domains.
 Serving of public keys is optional to allow parties to cope with outages.
