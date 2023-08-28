@@ -5,10 +5,10 @@
 ADEM Working Group                                          F. E. Linker
 Internet-Draft                                                ETH Zürich
 Intended status: Standards Track                              D. Jackson
-Expires: 18 August 2023                                             None
+Expires: 29 February 2024                                           None
                                                                 D. Basin
                                                               ETH Zürich
-                                                        14 February 2023
+                                                          28 August 2023
 
 
             Serving an Authenticated Digital EMblem over UDP
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 August 2023.
+   This Internet-Draft will expire on 29 February 2024.
 
 Copyright Notice
 
@@ -152,11 +152,11 @@ Table of Contents
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 7.2.  Informative References
 
@@ -167,7 +167,7 @@ Table of Contents
 
    [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
               Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
-              2015, <https://www.rfc-editor.org/rfc/rfc7515>.
+              2015, <https://www.rfc-editor.org/info/rfc7515>.
 
 Acknowledgments
 

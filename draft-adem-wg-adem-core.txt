@@ -5,10 +5,10 @@
 ADEM Working Group                                          F. E. Linker
 Internet-Draft                                                ETH Zürich
 Intended status: Standards Track                              D. Jackson
-Expires: 18 August 2023                                             None
+Expires: 29 February 2024                                           None
                                                                 D. Basin
                                                               ETH Zürich
-                                                        14 February 2023
+                                                          28 August 2023
 
 
           An Authenticated Digital EMblem - Core Specification
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 August 2023.
+   This Internet-Draft will expire on 29 February 2024.
 
 Copyright Notice
 
@@ -516,13 +516,15 @@ Table of Contents
    For a root public key to be configured correctly, there MUST be an
    X.509 certificate that:
 
-   *  MUST be valid w.r.t. to [RFC5280]
-
-   *  MUST provide CRL distribution points as per [RFC5280], Sec.
-      4.2.1.13 (https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13)
+   *  MUST NOT be revoked
 
    *  MUST be logged in the Certificate Transparency logs [RFC6962],
       [RFC9162]
+
+      -  Note that log inclusion requires a valid certificate chain that
+         leads to one of the logs accepted root certificates.  Clients
+         are RECOMMENDED to verify that this chain is valid and that
+         none of the certificates along it have been revoked.
 
    *  MUST be valid for at least all the following domains (<OI> is
       understood to be a placeholder for the party's OI):
@@ -531,6 +533,15 @@ Table of Contents
 
       -  For root public key's kid <KID> (to be understood as a
          placeholder): <KID>.adem-configuration.<OI>
+
+   We intentionally do not specify how clients should check a
+   certificate's revocation status.  It is RECOMMENDED that clients use
+   offline revocation checks that are provided by major browser vendors,
+   for example, OneCRL or CRLite by Mozilla
+   (https://wiki.mozilla.org/CA/Revocation_Checking_in_Firefox), or
+   CRLSet by Chrome (https://chromium.googlesource.com/playground/
+   chromium-org-site/+/refs/heads/main/Home/chromium-security/
+   crlsets.md).
 
    adem-configuration.<OI> and all its subdomains SHOULD serve the
    party's root public keys, but MAY not be live, e.g., there MAY be no
@@ -861,68 +872,62 @@ Table of Contents
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
-              November 1987, <https://www.rfc-editor.org/rfc/rfc1035>.
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
-              <https://www.rfc-editor.org/rfc/rfc3986>.
+              <https://www.rfc-editor.org/info/rfc3986>.
 
    [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
               Architecture", RFC 4291, DOI 10.17487/RFC4291, February
-              2006, <https://www.rfc-editor.org/rfc/rfc4291>.
-
-   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
-              Housley, R., and W. Polk, "Internet X.509 Public Key
-              Infrastructure Certificate and Certificate Revocation List
-              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
-              <https://www.rfc-editor.org/rfc/rfc5280>.
+              2006, <https://www.rfc-editor.org/info/rfc4291>.
 
    [RFC6962]  Laurie, B., Langley, A., and E. Kasper, "Certificate
               Transparency", RFC 6962, DOI 10.17487/RFC6962, June 2013,
-              <https://www.rfc-editor.org/rfc/rfc6962>.
+              <https://www.rfc-editor.org/info/rfc6962>.
 
    [RFC7159]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
               Interchange Format", RFC 7159, DOI 10.17487/RFC7159, March
-              2014, <https://www.rfc-editor.org/rfc/rfc7159>.
+              2014, <https://www.rfc-editor.org/info/rfc7159>.
 
    [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
               Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
-              2015, <https://www.rfc-editor.org/rfc/rfc7515>.
+              2015, <https://www.rfc-editor.org/info/rfc7515>.
 
    [RFC7517]  Jones, M., "JSON Web Key (JWK)", RFC 7517,
               DOI 10.17487/RFC7517, May 2015,
-              <https://www.rfc-editor.org/rfc/rfc7517>.
+              <https://www.rfc-editor.org/info/rfc7517>.
 
    [RFC7518]  Jones, M., "JSON Web Algorithms (JWA)", RFC 7518,
               DOI 10.17487/RFC7518, May 2015,
-              <https://www.rfc-editor.org/rfc/rfc7518>.
+              <https://www.rfc-editor.org/info/rfc7518>.
 
    [RFC7519]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
               (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
-              <https://www.rfc-editor.org/rfc/rfc7519>.
+              <https://www.rfc-editor.org/info/rfc7519>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
    [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
-              May 2018, <https://www.rfc-editor.org/rfc/rfc8392>.
+              May 2018, <https://www.rfc-editor.org/info/rfc8392>.
 
    [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
               Canonicalization Scheme (JCS)", RFC 8785,
               DOI 10.17487/RFC8785, June 2020,
-              <https://www.rfc-editor.org/rfc/rfc8785>.
+              <https://www.rfc-editor.org/info/rfc8785>.
 
    [RFC9162]  Laurie, B., Messeri, E., and R. Stradling, "Certificate
               Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
-              December 2021, <https://www.rfc-editor.org/rfc/rfc9162>.
+              December 2021, <https://www.rfc-editor.org/info/rfc9162>.
 
 Acknowledgments
 
