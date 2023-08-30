@@ -1,0 +1,231 @@
+
+
+
+
+ADEM Working Group                                          F. E. Linker
+Internet-Draft                                                ETH Zürich
+Intended status: Standards Track                              D. Jackson
+Expires: 2 March 2024                                               None
+                                                                D. Basin
+                                                              ETH Zürich
+                                                          30 August 2023
+
+
+            Serving an Authenticated Digital EMblem over DNS
+                     draft-adem-wg-adem-dns-latest
+
+Abstract
+
+   This document describes a mechanism using the Domain Name System
+   (DNS) to distribute _Authenticated Digital EMblem_ (ADEM) tokens
+   [ADEM-CORE].  ADEM tokens encode that an asset is protected under
+   international humanitarian law.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-adem-wg-adem-dns/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/adem-wg/adem-spec.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 2 March 2024.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  DNS Distribution
+   4.  DNS Querying
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   The ADEM Core document [ADEM-CORE] specifies how a set of _tokens_,
+   encoded as JSON Web Signatures (JWSs) [RFC7515], can constitute
+   _signs of protection_. Such signs of protection indicate that a
+   digital asset is protected under international humanitarian law
+   (IHL).  This document describes a DNS-based distribution method for
+   ADEM tokens, termed ADEM-DNS.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  DNS Distribution
+
+   Given a set of tokens containing exactly one emblem and zero or more
+   endorsements, a _sender_ can distribute this set via DNS [RFC1035],
+   encoded as TXT records [RFC1464], as follows.
+
+   For each such set, the sender MAY choose a unique _identifier_
+   string.  If the sender distributes multiple sets of tokens for a
+   given domain, a sender SHOULD choose such a string.
+
+   Each token MUST be given a _sequence number_ (non-negative integer).
+   The emblem's sequence number MUST be 0.  Beyond that, the order of
+   sequence numbers must coincide with the order of endorsements.  More
+   precisely, if an endorsement _A_ endorses a token _B_, _A_'s sequence
+   number MUST be strictly greater than _B_'s sequence number.  There
+   MAY be jumps within the sequence numbers.
+
+   Tokens are encoded in TXT records following [RFC1464].  Consequently,
+   each record includes a key and a value.  The value encodes the token
+   in JWT compact serialization.  A token MAY be encoded as multiple TXT
+   records should space restrictions from the DNS provider require that.
+   If a token is encoded in multiple parts, each such part is given a
+   unique _part number_ (non-negative integer).  Part numbers must be
+   chosen order-preserving.  More precisely, if all parts of a token are
+   concatenated in the order indicated by the part number (starting with
+   the smallest part number), the resulting string MUST be equal to the
+   original token.
+
+   Each record's key MUST be formatted as:
+
+   key := type [ "-" identifier ] sequence-number [ part-number ]
+
+   type := "adem-emb" | "adem-end"
+
+   identifier := CHARACTER-NO-HYPEN+
+
+   sequence-number := "-s" DIGIT+
+
+   part-number := "-p" DIGIT+
+
+   CHARACTER-NO-HYPEN is any printable ASCII character as specified in
+   [RFC0020] except for "-".  DIGIT is the range of ASCII characters "0"
+   to "9". type MUST coincide with the token's "cty" claim.  If present,
+   identifier MUST coincide with the string identifying the token's set.
+   sequence-number MUST coincide with the token's sequence number. part-
+   number MUST coincide with the respective part number.  The
+   combination of identifier and the IDs -s... and -p... MUST be unique
+   per domain name.
+
+   Senders MUST ensure that only TXT records encoding an ADEM token
+   start with one of the values encoded in type.
+
+4.  DNS Querying
+
+   To effectively query a DNS record for emblems, verifiers need to
+   distinguish different sets of tokens.  In this section, we detail how
+   to extract all a domain name's associated sets of tokens.
+
+   First, a verifier MUST perform a general TXT record query for the
+   domain name of question.
+
+   Second, for each record, starting with one of the values of type, the
+   verifier parses the record according to [RFC1464] and the
+   specification of key.  Records for which parsing fails MUST be
+   ignored.
+
+   Third, for each emblem identified in the previous step, the verifier
+   assembles a set of tokens.  Any token which either bears the same
+   identifier as the emblem, or bears no identifier MUST be considered
+   as belonging to that emblem's set of tokens.
+
+   Finally, for each of these sets, the verifier can proceed to verify
+   them as specified in [ADEM-CORE].
+
+5.  Security Considerations
+
+6.  IANA Considerations
+
+   This document has no IANA actions.
+
+7.  References
+
+7.1.  Normative References
+
+   [ADEM-CORE]
+              Linker, F. E., Jackson, D., and D. Basin, "An
+              Authenticated Digital EMblem - Core Specification", n.d.,
+              <./draft-adem-wg-adem-core.html>.
+
+   [RFC0020]  Cerf, V., "ASCII format for network interchange", STD 80,
+              RFC 20, DOI 10.17487/RFC0020, October 1969,
+              <https://www.rfc-editor.org/info/rfc20>.
+
+   [RFC1464]  Rosenbaum, R., "Using the Domain Name System To Store
+              Arbitrary String Attributes", RFC 1464,
+              DOI 10.17487/RFC1464, May 1993,
+              <https://www.rfc-editor.org/info/rfc1464>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+7.2.  Informative References
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+   [RFC7515]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web
+              Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May
+              2015, <https://www.rfc-editor.org/info/rfc7515>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Authors' Addresses
+
+   Felix E. Linker
+   ETH Zürich
+   Email: flinker@inf.ethz.ch
+
+
+   Dennis Jackson
+   None
+   Email: ietf@dennis-jackson.uk
+
+
+   David Basin
+   ETH Zürich
+   Email: basin@inf.ethz.ch
