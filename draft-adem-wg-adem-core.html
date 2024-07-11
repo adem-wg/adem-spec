@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>An Authenticated Digital EMblem - Core Specification</title>
+<meta content="Felix E. Linker" name="author">
+<meta content="Dennis Jackson" name="author">
+<meta content="David Basin" name="author">
+<meta content="
+       Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
+They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
+This document specifies the scheme  An Authenticated Digital EMblem  (ADEM) to distribute digital emblems, which mark assets as protected under IHL in an analogy to the physical emblems. 
+    " name="description">
+<meta content="xml2rfc 3.18.0" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-adem-wg-adem-core-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.18.0
+    Python 3.11.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 3.10.0
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.31.0
+    setuptools 67.7.2
+    six 1.16.0
+    wcwidth 0.2.6
+-->
+<link href="draft-adem-wg-adem-core.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">ADEM Core</td>
+<td class="right">August 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Linker, et al.</td>
+<td class="center">Expires 29 February 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">ADEM Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-adem-wg-adem-core-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-08-28" class="published">28 August 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-02-29">29 February 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">F. E. Linker</div>
+<div class="org">ETH Zürich</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Jackson</div>
+<div class="org">None</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Basin</div>
+<div class="org">ETH Zürich</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">An Authenticated Digital EMblem - Core Specification</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Protected Parties (PPs) offer humanitarian services in regions of armed conflict and are granted special protection under international humanitarian law (IHL).
+They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
+This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADEM) to distribute digital emblems, which mark assets as protected under IHL in an analogy to the physical emblems.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-adem-wg-adem-core/">https://datatracker.ietf.org/doc/draft-adem-wg-adem-core/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/adem-wg/adem-spec">https://github.com/adem-wg/adem-spec</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 29 February 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-tokens" class="internal xref">Tokens</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-identifiers-and-their-seman" class="internal xref">Identifiers and their Semantics</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-asset-identifiers" class="internal xref">Asset Identifiers</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-organization-identifiers" class="internal xref">Organization Identifiers</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-token-encoding" class="internal xref">Token Encoding</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-emblems" class="internal xref">Emblems</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
+                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-endorsements" class="internal xref">Endorsements</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-public-key-commitment" class="internal xref">Public Key Commitment</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-signs-of-protection" class="internal xref">Signs of Protection</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-verification" class="internal xref">Verification</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-comments-on-trust-policies" class="internal xref">Comments on Trust Policies</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-protection" class="internal xref">Protection</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-no-endorsements-without-iss" class="internal xref">No Endorsements without <code>iss</code></a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-algorithms" class="internal xref">Algorithms</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-jwk-hashing" class="internal xref">JWK Hashing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-signed-emblem-verification-" class="internal xref">Signed Emblem Verification Procedure</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-organizational-emblem-verif" class="internal xref">Organizational Emblem Verification Procedure</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-endorsed-emblem-verificatio" class="internal xref">Endorsed Emblem Verification Procedure</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations-2" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-token-order" class="internal xref">Token Order</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">International humanitarian law (IHL) recognizes protected parties (PP) such as healthcare and aid organizations as deserving of special protection from attacks during armed conflicts.
+This has traditionally been accomplished by the marking of protected facilities and personnel with symbols such as the Red Cross, the Red Crescent and the Red Diamond.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Due to the increasing use of digital infrastructure by protected parties and attacks on digital infrastructure during armed conflicts, a digital analogue of the Red Cross symbol is under consideration.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADEM) to distribute <em>digital emblems</em>, which mark assets as protected under IHL in an analogy to the physical emblems.
+We specify how digital emblems can be created and verified.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Emblems can be accompanied by <em>endorsements</em> for authentication purposes, which are signed by <em>authorities</em>.
+We call both emblems and endorsements <em>tokens</em>.
+Emblems encode which asset is protected and resemble the statement:<a href="#section-1-4" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-1-5.1">
+          <p id="section-1-5.1.1">I, asset <em>X</em> and holder of public key <em>K</em>, am associated to PP <em>P</em> and protected under international humanitarian law.<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-6">Endorsements resemble the statement:<a href="#section-1-6" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-1-7.1">
+          <p id="section-1-7.1.1">I, organization <em>O</em> and the holder of public key <em>K1</em>, attest that the holder of public key <em>K2</em> is associated to PP <em>P</em>, and that <em>P</em> is entitled to issue emblems for their infrastructure.<a href="#section-1-7.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-8">Note that <em>O</em> in this statement need not be a PP but could be any party.
+In most settings, we expect nation states and supranational organizations to take the role of authorities.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">Emblems will be investigated by <em>verifiers</em>.
+We expect verifiers to be military units in the usual case, and hence, be associated to nation states.<a href="#section-1-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span>
+when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-3">
+      <h2 id="name-terminology">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-3-1"><strong>Token</strong> A token is either an emblem or an endorsement and encoded as a JWS.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2"><strong>Emblem</strong> An emblem is a sign of protection under IHL.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3"><strong>Endorsement</strong> An endorsement associates a public key with an identity, and hence, resembles the idea of a certificate.
+Beyond that, though, endorsements always encode the attestation of a party's right to issue emblems.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4"><strong>Root Key</strong> Organizations control root keys, which identify them cryptographically.
+Any key of an organization that is endorsed by other parties is a root key.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5"><strong>Asset</strong> An asset is a distinguishable computational unit, such as a computer, an OS, a process, etc.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6"><strong>Protected Party</strong> A protected party is an organization entitled to issue claims of protection for their digital infrastructure.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7"><strong>Authority</strong> An authority is an organization that is trusted by some to attest a party's status as protected.
+This trust may stem from law.
+For example, nation states or NGOs can take the role of authorities.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8"><strong>Organization</strong> A protected party or autority.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9"><strong>Verifier</strong> A verifier is an agent interested in observing and verifying digital emblems.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<p id="section-3-10">Beyond these terms, we use the terms "claim" and "header parameter" as references to the JWT specification <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>.<a href="#section-3-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="tokens">
+<section id="section-4">
+      <h2 id="name-tokens">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-tokens" class="section-name selfRef">Tokens</a>
+      </h2>
+<div id="identifiers-and-their-semantics">
+<section id="section-4.1">
+        <h3 id="name-identifiers-and-their-seman">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-identifiers-and-their-seman" class="section-name selfRef">Identifiers and their Semantics</a>
+        </h3>
+<p id="section-4.1-1">Emblems are issued for assets by protected parties and are backed by authorities.
+Both protected parties and authorities are <em>organizations</em>.
+This section specifies how assets and organizations are identified.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<div id="asset-identifiers">
+<section id="section-4.1.1">
+          <h4 id="name-asset-identifiers">
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-asset-identifiers" class="section-name selfRef">Asset Identifiers</a>
+          </h4>
+<p id="section-4.1.1-1">Assets that can be technically marked as protected are processes.
+In the following, we describe how such assets are identified.
+Assets are identified by <em>asset identifiers</em> (AIs).
+Asset identifiers closely resemble Uniform Resource Identifiers (URIs) as specified in <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span>.
+However, to limit their scope, we do not follow the specification of URIs and instead define our own syntax.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<div id="syntax">
+<section id="section-4.1.1.1">
+            <h5 id="name-syntax">
+<a href="#section-4.1.1.1" class="section-number selfRef">4.1.1.1. </a><a href="#name-syntax" class="section-name selfRef">Syntax</a>
+            </h5>
+<p id="section-4.1.1.1-1">Asset identifiers point to an address and optionally port combination.
+They follow the syntax (<code>domain-name</code>, <code>IPv6</code> defined below):<a href="#section-4.1.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1.1.1-2">
+<pre>
+asset-identifier = address [ ":" port ]
+
+address = domain-name | "[" IPv6 "]"
+
+port = DIGIT+
+</pre><a href="#section-4.1.1.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1.1.1-3">These are examples of AIs:<a href="#section-4.1.1.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.1.1-4.1">
+                <code>*.example.com:443</code><a href="#section-4.1.1.1-4.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.1-4.2">
+                <code>[2606:2800:220:1:248:1893:25c8:1946]:21</code><a href="#section-4.1.1.1-4.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.1-4.3">
+                <code>[::FFFF:93.184.216.34]:22</code><a href="#section-4.1.1.1-4.3" class="pilcrow">¶</a>
+</li>
+            </ul>
+<p id="section-4.1.1.1-5">AIs identify an address, and port combination.
+There are two types of addresses.
+Domain names and IPv6 addresses.
+Note that IPv6 addresses also support IPv4 addresses through "IPv4-Mapped IPv6 Addresses" (cf. <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>, <a href="https://www.rfc-editor.org/rfc/rfc4291.html#section-2.5.5.2">Section 2.5.5.2</a>).
+Domain names (<code>domain-name</code>) MUST be formatted as usual and specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span> with the exception that the leftmost label MAY be the single-character wildcard <code>"*"</code>.
+In particular, <code>"*"</code> itself is a valid domain name.<a href="#section-4.1.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.1-6">IPv6 addresses (<code>IPv6</code>) MUST be formatted following <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span>.
+IPv6 addresses MUST be global unicast or link-local unicast addresses.<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="semantics">
+<section id="section-4.1.1.2">
+            <h5 id="name-semantics">
+<a href="#section-4.1.1.2" class="section-number selfRef">4.1.1.2. </a><a href="#name-semantics" class="section-name selfRef">Semantics</a>
+            </h5>
+<p id="section-4.1.1.2-1">Several kinds of assets can be covered by asset identifiers:<a href="#section-4.1.1.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.1.2-2.1">Network facing processes, e.g., web servers<a href="#section-4.1.1.2-2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.2-2.2">Local computation, e.g., arbitrary processes<a href="#section-4.1.1.2-2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.2-2.3">Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop<a href="#section-4.1.1.2-2.3" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.2-2.4">Networks<a href="#section-4.1.1.2-2.4" class="pilcrow">¶</a>
+</li>
+            </ul>
+<p id="section-4.1.1.2-3">AIs can <em>cover</em> any of these assets, but they can only <em>point</em> to network-connected processes or static data.
+To decide which assets AIs point to, one must <em>resolve</em> an AI.
+One AI need not necessarily only point to a single asset.
+Depending on the concrete AI, e.g., its wildcards, it may point to multiple assets.
+For example: <code>example.com</code> (amongst other assets) points at network facing processes hosted under any IP that <code>example.com</code> resolves to, on any port.<a href="#section-4.1.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-4">To resolve an AI, it is first interpreted as an implicit or explicit set of addresses.
+If <code>address</code> is an IP address, the set contains this address only.
+If it is an IP address prefix, it contains all addresses matching that prefix.
+If it is a domain name, it contains any IP address this domain name can be resolved to.
+If it is a domain name starting with the wildcard prefix <code>"*"</code>, it contains any IP address this domain name or any of its subdomains can be resolved to.<a href="#section-4.1.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-5">Any process reachable under any of the addresses pointed towards by <code>address</code> and on the port specified (or any port, if unspecified) is pointed by the respective AI.<a href="#section-4.1.1.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="order">
+<section id="section-4.1.1.3">
+            <h5 id="name-order">
+<a href="#section-4.1.1.3" class="section-number selfRef">4.1.1.3. </a><a href="#name-order" class="section-name selfRef">Order</a>
+            </h5>
+<p id="section-4.1.1.3-1">AIs may not only be used for identification but also for constraint purposes.
+For example, an endorsement may constrain emblems to only signal protection for a specific IP range.
+In this section, we define an order on AIs so that one can verify if an identifying AI complies with a constraining AI.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.3-2">We define an AI A to be <em>more general</em> than an AI B, if all of the following conditions apply:<a href="#section-4.1.1.3-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.1.3-3.1">A's <code>port</code> part is undefined or equal to B's <code>port</code> part.<a href="#section-4.1.1.3-3.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.3-3.2">If A encodes a domain name and does not contain the wildcard <code>"*"</code>, B encodes a domain name, too, and A is equal to B.<a href="#section-4.1.1.3-3.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.3-3.3">If A encodes a domain name and contains the wildcard <code>"*"</code>, B encodes a domain name, too, and B is a subdomain of A excluding the wildcard <code>"*"</code>.
+In this regard, any domain is considered a subdomain of itself.<a href="#section-4.1.1.3-3.3" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.1.1.3-3.4">If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.<a href="#section-4.1.1.3-3.4" class="pilcrow">¶</a>
+</li>
+            </ul>
+<p id="section-4.1.1.3-4">Note that AIs encoding a domain name are incomparable to AIs encoding IP addresses, i.e., neither can be more general than the other.<a href="#section-4.1.1.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="organization-identifiers">
+<section id="section-4.1.2">
+          <h4 id="name-organization-identifiers">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-organization-identifiers" class="section-name selfRef">Organization Identifiers</a>
+          </h4>
+<p id="section-4.1.2-1">Emblems can be associated to an organization.
+Organizations are identified by URIs, bearing the scheme <code>"https"</code> and a domain name.
+We call URIs identifying organizations <em>organization identifiers</em> (OIs).<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-2">More precisely, an OI has the syntax:<a href="#section-4.1.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1.2-3">
+<pre>
+organization-identifier = "https://" domain-name
+</pre><a href="#section-4.1.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1.2-4">Domain names must be formatted as usual, specified in <span>[<a href="#RFC1035" class="cite xref">RFC1035</a>]</span>, but always represented in all lower-case.
+For example, <code>https://example.com</code> is a valid OI, but <code>https://EXAMPLE.COM</code> is not.<a href="#section-4.1.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="token-encoding">
+<section id="section-4.2">
+        <h3 id="name-token-encoding">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-token-encoding" class="section-name selfRef">Token Encoding</a>
+        </h3>
+<p id="section-4.2-1">Tokens MUST be encoded as a JWS <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> or as an unsecured JWT as defined in <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>, <a href="https://datatracker.ietf.org/doc/html/rfc7519#section-6">Section 6</a>, encoded either in compact serialization or as signed CBOR Web Token (CWT) <span>[<a href="#RFC8392" class="cite xref">RFC8392</a>]</span>.
+Tokens encoded as JWS MUST only use JWS protected headers and MUST include the <code>jwk</code> or the <code>kid</code> header parameter.
+Any token MUST include the <code>cty</code> (content type) header parameter.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<div id="emblems">
+<section id="section-4.2.1">
+          <h4 id="name-emblems">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-emblems" class="section-name selfRef">Emblems</a>
+          </h4>
+<p id="section-4.2.1-1">An emblem is encoded either as JWS or as an unsecured JWT which signals protection of digital assets.
+It is distinguished by the <code>cty</code> header parameter value which MUST be <code>"adem-emb"</code>.
+Its payload includes the JWT claims defined in the table below, following <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>, <a href="https://datatracker.ietf.org/doc/html/rfc7519#section-4.1">Section 4.1</a>.
+All other registered JWT claims MUST NOT be included.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+            <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Claim</th>
+                <th class="text-left" rowspan="1" colspan="1">Status</th>
+                <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+                <th class="text-left" rowspan="1" colspan="1">Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>ver</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Version string</td>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>"v1"</code>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>iat</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>nbf</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>exp</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>iss</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">RECOMMENDED</td>
+                <td class="text-left" rowspan="1" colspan="1">Organization signaling protection</td>
+                <td class="text-left" rowspan="1" colspan="1">OI</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>ass</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">AIs marked a protected</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of AIs</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>emb</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Emblem details</td>
+                <td class="text-left" rowspan="1" colspan="1">JSON object (as follows)</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-4.2.1-3">Multiple AIs within <code>ass</code> may be desirable, e.g., to include both an asset's IPv4 and IPv6 address.
+The claim value of <code>emb</code> MUST be a JSON <span>[<a href="#RFC7159" class="cite xref">RFC7159</a>]</span> object with the following key-value mappings.<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+            <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Claim</th>
+                <th class="text-left" rowspan="1" colspan="1">Status</th>
+                <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+                <th class="text-left" rowspan="1" colspan="1">Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>prp</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Emblem purposes</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of <code>purpose</code> (as follows)</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>dst</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Permitted distribution channels</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of <code>distribution-method</code> (as follows)</td>
+              </tr>
+            </tbody>
+          </table>
+<div class="alignLeft art-text artwork" id="section-4.2.1-5">
+<pre>
+  purpose = "protective" | "indicative"
+
+  distribution-method = "dns" | "tls" | "udp"
+</pre><a href="#section-4.2.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2.1-6">The distribution channels defined above correspond to the distribution methods as specified in <span>[<a href="#ADEM-DNS" class="cite xref">ADEM-DNS</a>]</span>, <span>[<a href="#ADEM-TLS" class="cite xref">ADEM-TLS</a>]</span>, and <span>[<a href="#ADEM-UDP" class="cite xref">ADEM-UDP</a>]</span> respectively.<a href="#section-4.2.1-6" class="pilcrow">¶</a></p>
+<div id="example">
+<section id="section-4.2.1.1">
+            <h5 id="name-example">
+<a href="#section-4.2.1.1" class="section-number selfRef">4.2.1.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
+            </h5>
+<p id="section-4.2.1.1-1">For example, an emblem might comprise the following header and payload.<a href="#section-4.2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-2">Header:<a href="#section-4.2.1.1-2" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.2.1.1-3">
+<pre>
+{
+  "alg": "ES512",
+  "kid": "4WICC9pZ5zh6m3sfNYwwLilHzNazbFoJU6Qe5ds_8pY",
+  "cty": "adem-emb"
+}
+</pre><a href="#section-4.2.1.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2.1.1-4">Payload:<a href="#section-4.2.1.1-4" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.2.1.1-5">
+<pre>
+{
+  "emb": {
+    "dst": ["icmp"],
+    "prp": ["protective"]
+  },
+  "iat": 1672916137,
+  "nbf": 1672916137,
+  "exp": 1675590932,
+  "iss": "https://example.com",
+  "ass": ["[2001:0db8:582:ae33::29]"]
+}
+</pre><a href="#section-4.2.1.1-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="endorsements">
+<section id="section-4.2.2">
+          <h4 id="name-endorsements">
+<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-endorsements" class="section-name selfRef">Endorsements</a>
+          </h4>
+<p id="section-4.2.2-1">Endorsements are encoded as JWSs.
+Endorsements attest two statements: that a public key is affiliated with an organization, pointed to by OIs, and that this organization is eligible to issue emblems for their assets.
+They are distinguished by the <code>cty</code> header parameter value which MUST be <code>"adem-end"</code>.
+An endorsement's payload includes the JWT claims defined in the table below.
+All otger registered JWT claims MUST NOT be included.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+            <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Claim</th>
+                <th class="text-left" rowspan="1" colspan="1">Status</th>
+                <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+                <th class="text-left" rowspan="1" colspan="1">Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>ver</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Version string</td>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>"v1"</code>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>iat</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>nbf</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>exp</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">As per <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>
+</td>
+                <td class="text-left" rowspan="1" colspan="1"> </td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>iss</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">RECOMMENDED</td>
+                <td class="text-left" rowspan="1" colspan="1">Endorsing organization</td>
+                <td class="text-left" rowspan="1" colspan="1">OI</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>sub</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">RECOMMENDED</td>
+                <td class="text-left" rowspan="1" colspan="1">Endorsed organization</td>
+                <td class="text-left" rowspan="1" colspan="1">OI</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>key</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Endorsed organization's key</td>
+                <td class="text-left" rowspan="1" colspan="1">JWK as per <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span> (must include <code>alg</code>)</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>log</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Root key CT logs</td>
+                <td class="text-left" rowspan="1" colspan="1">Array (as follows)</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>end</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Endorsed key can endorse further</td>
+                <td class="text-left" rowspan="1" colspan="1">Boolean</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>emb</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">Emblem constraints</td>
+                <td class="text-left" rowspan="1" colspan="1">JSON object (as follows)</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-4.2.2-3">If an endorsement was signed by a root key, it MUST include <code>log</code>.
+<code>log</code> maps to an array of JSON objects with the following claims.
+The semantics of these fields are defined in <span>[<a href="#RFC6962" class="cite xref">RFC6962</a>]</span> for <code>v1</code> and <span>[<a href="#RFC9162" class="cite xref">RFC9162</a>]</span> for <code>v2</code>.<a href="#section-4.2.2-3" class="pilcrow">¶</a></p>
+<table class="center" id="table-4">
+            <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Claim</th>
+                <th class="text-left" rowspan="1" colspan="1">Status</th>
+                <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+                <th class="text-left" rowspan="1" colspan="1">Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>ver</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">CT log version</td>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>"v1"</code> or <code>"v2"</code>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>id</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">The CT log's ID</td>
+                <td class="text-left" rowspan="1" colspan="1">Base64-encoded string</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>hash</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+                <td class="text-left" rowspan="1" colspan="1">The binding certificate's leaf hash in the log</td>
+                <td class="text-left" rowspan="1" colspan="1">Base64-encoded string</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-4.2.2-5"><code>emb</code> resembles the emblem's <code>emb</code> claim and includes the following claims.<a href="#section-4.2.2-5" class="pilcrow">¶</a></p>
+<table class="center" id="table-5">
+            <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Claim</th>
+                <th class="text-left" rowspan="1" colspan="1">Status</th>
+                <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+                <th class="text-left" rowspan="1" colspan="1">Encoding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>prp</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Purpose constraint</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of <code>purpose</code>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>dst</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Distribution method constraint</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of <code>distribution-method</code>
+</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>ass</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Asset constraint</td>
+                <td class="text-left" rowspan="1" colspan="1">Array of AIs</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>wnd</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">OPTIONAL</td>
+                <td class="text-left" rowspan="1" colspan="1">Maximum emblem lifetime</td>
+                <td class="text-left" rowspan="1" colspan="1">Integer</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-4.2.2-7">We say that an endorsement <em>endorses</em> a token if its <code>key</code> claim equals the token's verification key, and its <code>sub</code> claim equals the token's <code>iss</code> claim.
+We note that the latter includes the possibility of both <code>sub</code> and <code>iss</code> being undefined.<a href="#section-4.2.2-7" class="pilcrow">¶</a></p>
+<p id="section-4.2.2-8">We say that an emblem is <em>valid</em> with respect to an endorsement if all the following conditions apply:<a href="#section-4.2.2-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2.2-9.1">The endorsement's <code>emb.prp</code> claim is undefined or a superset of the emblem's <code>emb.prp</code> claim.<a href="#section-4.2.2-9.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.2.2-9.2">The endorsement's <code>emb.dst</code> claim is undefined or a superset of the emblem's <code>emb.dst</code> claim.<a href="#section-4.2.2-9.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.2.2-9.3">The endorsement's <code>emb.ass</code> claim is undefined or for each AI within the emblem's <code>emb.ass</code> claim, there exists an AI within the endorsement's <code>emb.ass</code> claim which is more general than the emblem's <code>emb.ass</code> claim.<a href="#section-4.2.2-9.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.2.2-9.4">The endorsement's <code>emb.wnd</code> claim is undefined or the sum of emblem's <code>nbf</code> and the endorsement's <code>emb.wnd</code> claims is greater than or equal to the emblem's <code>exp</code> claim.<a href="#section-4.2.2-9.4" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="pk-distribution">
+<section id="section-5">
+      <h2 id="name-public-key-commitment">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-public-key-commitment" class="section-name selfRef">Public Key Commitment</a>
+      </h2>
+<p id="section-5-1">Parties must undeniably link their root public keys to their OI.
+In this section, we specify the configuration of a PP's OI.
+Root public keys are all public keys which are only endorsed by third parties and never endorsed by the organization itself.
+A party MAY have multiple root public keys.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Any root public key MUST be encoded as JWK as per <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span> and <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.
+Root public keys MUST include the <code>alg</code> and <code>kid</code> parameters, and the <code>kid</code> parameter MUST be computed using the hashing algorithm as specified in <a href="#jwk-hashing" class="auto internal xref">Section 8.1</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">For a root public key to be configured correctly, there MUST be an X.509 certificate that:<a href="#section-5-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-4.1">MUST NOT be revoked<a href="#section-5-4.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-4.2">
+          <p id="section-5-4.2.1">MUST be logged in the Certificate Transparency logs <span>[<a href="#RFC6962" class="cite xref">RFC6962</a>]</span>, <span>[<a href="#RFC9162" class="cite xref">RFC9162</a>]</span><a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-4.2.2.1">Note that log inclusion requires a valid certificate chain that leads to
+one of the logs accepted root certificates. Clients are RECOMMENDED to verify
+that this chain is valid and that none of the certificates along it have been
+revoked.<a href="#section-5-4.2.2.1" class="pilcrow">¶</a>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-5-4.3">
+          <p id="section-5-4.3.1">MUST be valid for at least all the following domains (<code>&lt;OI&gt;</code> is understood to be a placeholder for the party's OI):<a href="#section-5-4.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-4.3.2.1">
+              <code>adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-5-4.3.2.2">For root public key's kid <code>&lt;KID&gt;</code> (to be understood as a placeholder): <code>&lt;KID&gt;.adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.2" class="pilcrow">¶</a>
+</li>
+          </ul>
+</li>
+      </ul>
+<p id="section-5-5">We intentionally do not specify how clients should check a certificate's revocation status.
+It is RECOMMENDED that clients use offline revocation checks that are provided by major browser vendors, for example, <a href="https://wiki.mozilla.org/CA/Revocation_Checking_in_Firefox">OneCRL or CRLite by Mozilla</a>, or <a href="https://chromium.googlesource.com/playground/chromium-org-site/+/refs/heads/main/Home/chromium-security/crlsets.md">CRLSet by Chrome</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6"><code>adem-configuration.&lt;OI&gt;</code> and all its subdomains SHOULD serve the party's root public keys, but MAY not be live, e.g., there MAY be no A or AAAA records configured for the domains.
+Serving of public keys is optional to allow parties to cope with outages.
+If it is live, <code>adem-configuration.&lt;OI&gt;</code> MUST serve a JWK Set <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span>, <a href="https://www.rfc-editor.org/rfc/rfc7517#section-5">Section 5</a>, that includes all root public keys.
+Each subdomain relating to a kid MUST serve the respectively identified key in JSON encoding.
+If it is live, for any given root key with KID <code>&lt;KID&gt;</code>, <code>&lt;KID&gt;.adem-configuration.&lt;OI&gt;</code> MUST serve that root key in JWK Format <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span>, <a href="https://www.rfc-editor.org/rfc/rfc7517#section-4">Section 4</a>.
+All such domains MUST serve the content type <code>application/json</code> and MUST be served using HTTPS.<a href="#section-5-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="signs-of-protection">
+<section id="section-6">
+      <h2 id="name-signs-of-protection">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-signs-of-protection" class="section-name selfRef">Signs of Protection</a>
+      </h2>
+<p id="section-6-1">A sign of protection is an emblem, accompanied by one or more endorsements.
+Whenever a token includes OIs (in <code>iss</code> or <code>sub</code> claims), these OIs must be configured accordingly.
+An OI serves to identify a PP or authority in the real world.
+Hence, parties MUST configure the website hosted under their OI to provide sufficient identifying information.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Furthermore, parties MUST serve their root keys encoded in HTTPS headers with their website.
+These root keys MAY be endorsed by other parties.
+If this is the case, such endorsements MUST be served alongside the root keys at the PP's OI.
+All of a PP's keys, endorsed by third parties MUST be served under their OI.
+PPs MAY use their root keys to sign further, internal endorsements, i.e., endorse keys of their own to either issue emblems or further endorsements.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<div id="verification">
+<section id="section-6.1">
+        <h3 id="name-verification">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-verification" class="section-name selfRef">Verification</a>
+        </h3>
+<p id="section-6.1-1">Whenever a verifier receives an emblem, they MAY check if it is valid.
+The validity of an emblem is defined with respect to a public key.
+A validity checking algorithm MUST returns the following values.
+The order of these values encodes the <em>strength</em> of the verification result.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.1-2">
+<li id="section-6.1-2.1">
+            <code>UNSIGNED</code><a href="#section-6.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.2">
+            <code>INVALID</code><a href="#section-6.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.3">
+            <code>SIGNED-UNTRUSTED</code><a href="#section-6.1-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.4">
+            <code>SIGNED-TRUSTED</code><a href="#section-6.1-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.5">
+            <code>ORGANIZATIONAL-UNTRUSTED</code><a href="#section-6.1-2.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.6">
+            <code>ORGANIZATIONAL-TRUSTED</code><a href="#section-6.1-2.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.7">
+            <code>ENDORSED-UNTRUSTED</code><a href="#section-6.1-2.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-2.8">
+            <code>ENDORSED-TRUSTED</code><a href="#section-6.1-2.8" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-6.1-3">Given an input public key and an emblem with a set of endorsements, a verification algorithm takes the following steps:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.1-4">
+<li id="section-6.1-4.1">If the emblem does not bear a signature, return <code>UNSIGNED</code>.<a href="#section-6.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.2">Run the <em>signed emblem verification procedure</em> (<a href="#signed-emblems" class="auto internal xref">Section 8.2</a>; results in one of <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>).<a href="#section-6.1-4.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.3">If previous procedure resulted in <code>INVALID</code> or the emblem does not include the <code>iss</code> claim, return the last verification procedure's result and the emtpy set of OIs.<a href="#section-6.1-4.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.4">Run the <em>organizational emblem verification procedure</em> (<a href="#org-emblems" class="auto internal xref">Section 8.3</a>; results in one of <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.5">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.6">If all tokens include the same <code>iss</code> claim, return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the empty set of OIs.<a href="#section-6.1-4.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.7">Run the <em>endorsed emblem verification procedure</em> (<a href="#endorsed-emblems" class="auto internal xref">Section 8.4</a>; results in a set of OIs and one of <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.7" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.8">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.8" class="pilcrow">¶</a>
+</li>
+          <li id="section-6.1-4.9">Return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the set of OIs returned by the endorsed emblem verification procedure.<a href="#section-6.1-4.9" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-6.1-5">Note that the endorsed emblem verification procedure resulting in <code>INVALID</code> is handled implicitly in step 8.
+As the procedure did not terminate in step 5, organizational verification must have been successful.
+Hence, <code>INVALID</code> cannot be the strongest return value, and an emblem not being accompanied by valid endorsements are downgraded to organizational emblems.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">The set of OIs returned by the verification procedure encodes the OIs of endorsing parties where verification passed.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<div id="comments-on-trust-policies">
+<section id="section-6.1.1">
+          <h4 id="name-comments-on-trust-policies">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-comments-on-trust-policies" class="section-name selfRef">Comments on Trust Policies</a>
+          </h4>
+<p id="section-6.1.1-1">We strongly RECOMMEND against accepting emblems resulting in <code>SIGNED-UNTRUSTED</code>.
+In such cases, verifiers should aim to authenticate the respective public keys via other, out-of-band methods.
+This effectively lifts the result to <code>SIGNED-TRUSTED</code>.
+Signed emblems are supported for cases of emergency where a PP is able to communicate one or more public key, but might not be able to set up a signing infrastructure linking their assets to a root key.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-2">There is no definite guideline on how to choose which keys to trust, i.e., which keys to pass as trusted public key to the verification procedure.
+Some verifiers may have pre-existing trust relationships with some authorities, e.g., military units of a nation state could use the public keys of their nation state or allies.
+Other verifiers might be fine with fetching public keys authenticated only by the web PKI.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="protection">
+<section id="section-6.2">
+        <h3 id="name-protection">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-protection" class="section-name selfRef">Protection</a>
+        </h3>
+<p id="section-6.2-1">Any asset whose address is resolved within context of a valid emblem must be considered to be marked as protected under IHL.
+In certain contexts, this might apply to a wide range of assets.
+For example, a router could distribute emblems for its entire address space using ICMP using an IP range.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Assets MUST only mark as protected what is exposed to potential verifiers.
+For example, consider a gateway-router also running an intranet where not every node is internet-connected.
+The router must only distribute emblems for internet-connected nodes to verifiers not within the intranet, but may distribute emblems for the non-internet connected nodes within the intranet.
+But at the same time, verifiers must proceed with caution when changing their vantage point.
+If malware were to infect that router, it must check if assets now exposed to it are protected, too.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<div id="no-endorsements-without-iss">
+<section id="section-7.1">
+        <h3 id="name-no-endorsements-without-iss">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-no-endorsements-without-iss" class="section-name selfRef">No Endorsements without <code>iss</code></a>
+        </h3>
+<p id="section-7.1-1">The procedures to verify organizational or endorsed emblems as specified in <a href="#org-emblems" class="auto internal xref">Section 8.3</a> and <a href="#endorsed-emblems" class="auto internal xref">Section 8.4</a> assume that the emblem's <code>iss</code> claim is defined.
+Practically speaking, this implies that parties can only go beyond pure public key authentication (where public keys need to be authenticated out-of-band) by stating an OI.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">The constraints on well-configured OIs offers two beneficial security properties:<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-3.1">Parties cannot equivocate their keys, i.e., they need to commit to a consistent set of keys.<a href="#section-7.1-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.1-3.2">Parties cannot deny having used certain root public keys.<a href="#section-7.1-3.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-7.1-4">These properties stem from parties needing to include a hash of their key in a TLS certificate, and consequently, in certificate transparency logs.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="algorithms">
+<section id="section-8">
+      <h2 id="name-algorithms">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-algorithms" class="section-name selfRef">Algorithms</a>
+      </h2>
+<div id="jwk-hashing">
+<section id="section-8.1">
+        <h3 id="name-jwk-hashing">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-jwk-hashing" class="section-name selfRef">JWK Hashing</a>
+        </h3>
+<p id="section-8.1-1">Context:<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.1-2.1">Input: A JWK as per <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span> in arbitrary encoding.<a href="#section-8.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.1-2.2">Output: A cryptographically secure hash of the JWK<a href="#section-8.1-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-8.1-3">Algorithm:<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.1-4">
+<li id="section-8.1-4.1">Parse the JWK as JSON object.<a href="#section-8.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.1-4.2">Drop the <code>kid</code> parameter from the JWK.<a href="#section-8.1-4.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.1-4.3">Compute a canonical representation of the remaining JWK as per <span>[<a href="#RFC8785" class="cite xref">RFC8785</a>]</span>.<a href="#section-8.1-4.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.1-4.4">Compute the SHA-256 hash of the canonical representation<a href="#section-8.1-4.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.1-4.5">Return the hash in base32 encoding in all lower-case and with trailing <code>=</code> removed.<a href="#section-8.1-4.5" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+<div id="signed-emblems">
+<section id="section-8.2">
+        <h3 id="name-signed-emblem-verification-">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-signed-emblem-verification-" class="section-name selfRef">Signed Emblem Verification Procedure</a>
+        </h3>
+<p id="section-8.2-1">Context:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.2-2.1">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.2-2.2">Output: <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.2-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-8.2-3">Algorithm:<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.2-4">
+<li id="section-8.2-4.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.
+A defined <code>iss</code> claim is understood to be different to an undefined <code>iss</code> claim.<a href="#section-8.2-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.2">Verify every signature.<a href="#section-8.2-4.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.3">Verify that all endorsements form a consecutive chain where there is a unique root endorsement and the public key which verifies the emblem is transitively endorsed by that root endorsement.<a href="#section-8.2-4.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.4">Verify that no endorsement expired.<a href="#section-8.2-4.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.5">Verify that all endorsements bear the claim <code>end=true</code> except for the emblem signing key's endorsement.<a href="#section-8.2-4.5" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.6">Verify that the emblem is valid with regard to every endorsement.<a href="#section-8.2-4.6" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.2-4.7">If any of the aforementioned verification steps fail, return <code>INVALID</code>.
+If there is a token signed by the trusted input public key, return <code>SIGNED-TRUSTED</code>.
+Otherwise, return <code>SIGNED-UNTRUSTED</code>.<a href="#section-8.2-4.7" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-8.2-5">Distribution methods MAY indicate an order of tokens to guide clients assembling the chain of endorsements in step 3.
+Whenever such an order is specified, clients MAY immediately reject a set of tokens as invalid if the indicated order does not yield a valid chain of endorsements.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="org-emblems">
+<section id="section-8.3">
+        <h3 id="name-organizational-emblem-verif">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-organizational-emblem-verif" class="section-name selfRef">Organizational Emblem Verification Procedure</a>
+        </h3>
+<p id="section-8.3-1">Context:<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.3-2.1">Assumptions: Signed emblem verification has been performed and did not return <code>INVALID</code>.
+Every token as part of the input includes the <code>iss</code> claim.<a href="#section-8.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.3-2.2">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.3-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.3-2.3">Output: <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.3-2.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-8.3-3">Algorithm:<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.3-4">
+<li id="section-8.3-4.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.3-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.3-4.2">Verify that the top-most endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.3-4.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.3-4.3">If the aforementioned verification step fails, return <code>INVALID</code>.
+If the top-most endorsing key is equal to the trusted input public key, return <code>ORGANIZATIONAL-TRUSTED</code>. Otherwise, return <code>ORGANIZATIONAL-UNTRUSTED</code>.<a href="#section-8.3-4.3" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+<div id="endorsed-emblems">
+<section id="section-8.4">
+        <h3 id="name-endorsed-emblem-verificatio">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-endorsed-emblem-verificatio" class="section-name selfRef">Endorsed Emblem Verification Procedure</a>
+        </h3>
+<p id="section-8.4-1">Context:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.4-2.1">Assumptions: Organizational emblem verification has been performed and did not return <code>INVALID</code>.
+There are emblems as part of the input including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.4-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.4-2.2">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.4-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-8.4-2.3">Output: <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, or <code>INVALID</code>, and a set of OIs.<a href="#section-8.4-2.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-8.4-3">Algorithm:<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.4-4">
+<li id="section-8.4-4.1">Ignore all endorsements including an <code>iss</code> claim equal to the emblem's <code>iss</code> claim.<a href="#section-8.4-4.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-8.4-4.2">
+            <p id="section-8.4-4.2.1">For every endorsement:<a href="#section-8.4-4.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.4-4.2.2">
+<li id="section-8.4-4.2.2.1">Verify its signature.<a href="#section-8.4-4.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.2">Verify that it endorses the top-most endorsing key with the same <code>iss</code> claim as the emblem.<a href="#section-8.4-4.2.2.2" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.3">Verify that it did not expire.<a href="#section-8.4-4.2.2.3" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.4">Verify that it bears the claim <code>end=true</code>.<a href="#section-8.4-4.2.2.4" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.5">Verify that the emblem is valid with regard to this endorsement.<a href="#section-8.4-4.2.2.5" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.6">Implementations SHOULD verify that the endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.4-4.2.2.6" class="pilcrow">¶</a>
+</li>
+              <li id="section-8.4-4.2.2.7">Should any of the aforementioned verification steps fail, ignore this endorsement.<a href="#section-8.4-4.2.2.7" class="pilcrow">¶</a>
+</li>
+            </ol>
+</li>
+          <li id="section-8.4-4.3">If there are no endorsements remaining after the last step, return <code>INVALID</code> and the empty set of OIs.
+If in the set of remaining endorsements, there is an endorsement with a verification key equal to the trusted input public key, return <code>ENDORSED-TRUSTED</code>.
+Otherwise, return <code>ENDORSED-UNTRUSTED</code>.
+In both the latter cases, also return the set of all <code>iss</code> claims of the remaining endorsements.<a href="#section-8.4-4.3" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations-1">
+<section id="section-9">
+      <h2 id="name-security-considerations-2">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations-2" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<div id="token-order">
+<section id="section-9.1">
+        <h3 id="name-token-order">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-token-order" class="section-name selfRef">Token Order</a>
+        </h3>
+<p id="section-9.1-1">As specified in <a href="#signed-emblems" class="auto internal xref">Section 8.2</a>, clients MAY reject sets of tokens as invalid if the order of tokens as indicated by the sending client does not yield a valid chain of endorsements.
+This allows an adversary to force rejection of a set of tokens by altering, e.g., sequence numbers on non-integrity protected channels such as UDP.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">However, this does not constitute a new attack.
+Such adversaries could flip a bit in the emblem's signature, rendering the set of tokens invalid, too.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-10">
+      <h2 id="name-iana-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-10-1">This document has no IANA actions.<a href="#section-10-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-normative-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="ADEM-DNS">[ADEM-DNS]</dt>
+      <dd>
+<span class="refAuthor">Linker, F. E.</span>, <span class="refAuthor">Jackson, D.</span>, and <span class="refAuthor">D. Basin</span>, <span class="refTitle">"Serving an Authenticated Digital EMblem over DNS"</span>, <span>n.d.</span>, <span>&lt;<a href="./draft-adem-wg-adem-dns.html">./draft-adem-wg-adem-dns.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ADEM-TLS">[ADEM-TLS]</dt>
+      <dd>
+<span class="refAuthor">Linker, F. E.</span>, <span class="refAuthor">Jackson, D.</span>, and <span class="refAuthor">D. Basin</span>, <span class="refTitle">"Serving an Authenticated Digital EMblem over TLS"</span>, <span>n.d.</span>, <span>&lt;<a href="./draft-adem-wg-adem-tls.html">./draft-adem-wg-adem-tls.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ADEM-UDP">[ADEM-UDP]</dt>
+      <dd>
+<span class="refAuthor">Linker, F. E.</span>, <span class="refAuthor">Jackson, D.</span>, and <span class="refAuthor">D. Basin</span>, <span class="refTitle">"Serving an Authenticated Digital EMblem over UDP"</span>, <span>n.d.</span>, <span>&lt;<a href="./draft-adem-wg-adem-udp.html">./draft-adem-wg-adem-udp.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC1035">[RFC1035]</dt>
+      <dd>
+<span class="refAuthor">Mockapetris, P.</span>, <span class="refTitle">"Domain names - implementation and specification"</span>, <span class="seriesInfo">STD 13</span>, <span class="seriesInfo">RFC 1035</span>, <span class="seriesInfo">DOI 10.17487/RFC1035</span>, <time datetime="1987-11" class="refDate">November 1987</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1035">https://www.rfc-editor.org/info/rfc1035</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3986">[RFC3986]</dt>
+      <dd>
+<span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Fielding, R.</span>, and <span class="refAuthor">L. Masinter</span>, <span class="refTitle">"Uniform Resource Identifier (URI): Generic Syntax"</span>, <span class="seriesInfo">STD 66</span>, <span class="seriesInfo">RFC 3986</span>, <span class="seriesInfo">DOI 10.17487/RFC3986</span>, <time datetime="2005-01" class="refDate">January 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3986">https://www.rfc-editor.org/info/rfc3986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4291">[RFC4291]</dt>
+      <dd>
+<span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">S. Deering</span>, <span class="refTitle">"IP Version 6 Addressing Architecture"</span>, <span class="seriesInfo">RFC 4291</span>, <span class="seriesInfo">DOI 10.17487/RFC4291</span>, <time datetime="2006-02" class="refDate">February 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4291">https://www.rfc-editor.org/info/rfc4291</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6962">[RFC6962]</dt>
+      <dd>
+<span class="refAuthor">Laurie, B.</span>, <span class="refAuthor">Langley, A.</span>, and <span class="refAuthor">E. Kasper</span>, <span class="refTitle">"Certificate Transparency"</span>, <span class="seriesInfo">RFC 6962</span>, <span class="seriesInfo">DOI 10.17487/RFC6962</span>, <time datetime="2013-06" class="refDate">June 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6962">https://www.rfc-editor.org/info/rfc6962</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7159">[RFC7159]</dt>
+      <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">RFC 7159</span>, <span class="seriesInfo">DOI 10.17487/RFC7159</span>, <time datetime="2014-03" class="refDate">March 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7159">https://www.rfc-editor.org/info/rfc7159</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7515">[RFC7515]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Signature (JWS)"</span>, <span class="seriesInfo">RFC 7515</span>, <span class="seriesInfo">DOI 10.17487/RFC7515</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7515">https://www.rfc-editor.org/info/rfc7515</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7517">[RFC7517]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refTitle">"JSON Web Key (JWK)"</span>, <span class="seriesInfo">RFC 7517</span>, <span class="seriesInfo">DOI 10.17487/RFC7517</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7517">https://www.rfc-editor.org/info/rfc7517</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7518">[RFC7518]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refTitle">"JSON Web Algorithms (JWA)"</span>, <span class="seriesInfo">RFC 7518</span>, <span class="seriesInfo">DOI 10.17487/RFC7518</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7518">https://www.rfc-editor.org/info/rfc7518</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7519">[RFC7519]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7519">https://www.rfc-editor.org/info/rfc7519</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8392">[RFC8392]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8392">https://www.rfc-editor.org/info/rfc8392</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8785">[RFC8785]</dt>
+      <dd>
+<span class="refAuthor">Rundgren, A.</span>, <span class="refAuthor">Jordan, B.</span>, and <span class="refAuthor">S. Erdtman</span>, <span class="refTitle">"JSON Canonicalization Scheme (JCS)"</span>, <span class="seriesInfo">RFC 8785</span>, <span class="seriesInfo">DOI 10.17487/RFC8785</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8785">https://www.rfc-editor.org/info/rfc8785</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9162">[RFC9162]</dt>
+    <dd>
+<span class="refAuthor">Laurie, B.</span>, <span class="refAuthor">Messeri, E.</span>, and <span class="refAuthor">R. Stradling</span>, <span class="refTitle">"Certificate Transparency Version 2.0"</span>, <span class="seriesInfo">RFC 9162</span>, <span class="seriesInfo">DOI 10.17487/RFC9162</span>, <time datetime="2021-12" class="refDate">December 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9162">https://www.rfc-editor.org/info/rfc9162</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Felix E. Linker</span></div>
+<div dir="auto" class="left"><span class="org">ETH Zürich</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:flinker@inf.ethz.ch" class="email">flinker@inf.ethz.ch</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Dennis Jackson</span></div>
+<div dir="auto" class="left"><span class="org">None</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ietf@dennis-jackson.uk" class="email">ietf@dennis-jackson.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">David Basin</span></div>
+<div dir="auto" class="left"><span class="org">ETH Zürich</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:basin@inf.ethz.ch" class="email">basin@inf.ethz.ch</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

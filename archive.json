@@ -1,0 +1,166 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-07-11T01:19:10.033772+00:00",
+  "repo": "adem-wg/adem-spec",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOHDTFk8414GBt",
+      "title": "Comments on 08.04.22",
+      "url": "https://github.com/adem-wg/adem-spec/pull/1",
+      "state": "CLOSED",
+      "author": "galadran",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Opening as a PR so we can discuss with further comments. \r\n\r\nKey questions: \r\n - Should we narrow the scope to make the initial version simpler and easier to understand? \r\n - Should HTTP distribution be its own method? \r\n - Should Cert Transparency / special subdomains be in the TLS method? \r\n - Should we separate domain and IP addresses entirely?  ",
+      "createdAt": "2022-04-08T14:13:59Z",
+      "updatedAt": "2023-08-30T14:15:16Z",
+      "baseRepository": "adem-wg/adem-spec",
+      "baseRefName": "main",
+      "baseRefOid": "7176939bcab244081723425bdcace04587a0b327",
+      "headRepository": "adem-wg/adem-spec",
+      "headRefName": "april-08",
+      "headRefOid": "37ccea58bf7eaf837d8056ad416645f75cd08109",
+      "closedAt": "2023-08-30T14:15:15Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "felixlinker",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Should Cert Transparency / special subdomains be in the TLS method?\r\n\r\nI didn't see you mentioning this in the comments. Why should it be specific to TLS distribution only? (If this is what you mean - I am not sure!) Distributing root keys is essential and orthogonal to distributing emblems.",
+          "createdAt": "2022-04-13T14:57:49Z",
+          "updatedAt": "2022-04-13T14:57:49Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOHDTFk844GA0b",
+          "commit": {
+            "abbreviatedOid": "4300565"
+          },
+          "author": "felixlinker",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-13T14:43:49Z",
+          "updatedAt": "2022-04-13T14:55:51Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "Using wildcards is not in spec. You cannot use `*` in URIs afaik.",
+              "createdAt": "2022-04-13T14:43:50Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 76,
+              "body": "Legacy. It's now processes only.",
+              "createdAt": "2022-04-13T14:44:41Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 92,
+              "body": "This may be a bit confusingly put. What I tried to define is: what does an emblem including an IP address actually protect? We focus solely on networks by identifying everything via a network address, but the question remains: what does a network address actually identify? Is it just the process listening on that port? Or all such processes if there is no port specified? Or is it actually all such processes and the data on the computer controlling that IP address?",
+              "createdAt": "2022-04-13T14:48:41Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 102,
+              "body": "I start to get the feeling more and more that we maybe shouldn't protected domain names at all.",
+              "createdAt": "2022-04-13T14:49:14Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 113,
+              "body": "Exactly, for the CT benefit. It's surely debatable if it needs to correspond to a website. I thought, delivering the root keys over these related subdomains yields a cleaner design. At the end of the day, `/.well-known/` is just a suffix, isn't it?",
+              "createdAt": "2022-04-13T14:51:14Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 131,
+              "body": "I forgot to remove this. Prior to including serving the keys via a subdomain, they were served within HTTPS headers.",
+              "createdAt": "2022-04-13T14:52:52Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            },
+            {
+              "originalPosition": 140,
+              "body": "Is this comment on *list* of all acceptable public keys? I think, this is considerably easier to specify for one public key. People can make the checks for lists if they want.",
+              "createdAt": "2022-04-13T14:54:06Z",
+              "updatedAt": "2022-04-13T14:55:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOHDTFk844ww9B",
+          "commit": {
+            "abbreviatedOid": "4300565"
+          },
+          "author": "galadran",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-25T18:48:04Z",
+          "updatedAt": "2022-04-25T18:48:05Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "I guess there's a standard for x509 certificate validation that allows it though? E.g. wildcard domains. ",
+              "createdAt": "2022-04-25T18:48:04Z",
+              "updatedAt": "2022-04-25T18:48:05Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
