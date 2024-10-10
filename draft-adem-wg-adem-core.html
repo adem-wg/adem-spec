@@ -13,24 +13,23 @@
 They may advertise their protected status by the well-known emblems of the red cross, red crescent, and the red crystal.
 This document specifies the scheme  An Authenticated Digital EMblem  (ADEM) to distribute digital emblems, which mark assets as protected under IHL in an analogy to the physical emblems. 
     " name="description">
-<meta content="xml2rfc 3.18.0" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-adem-wg-adem-core-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.0
-    Python 3.11.4
-    ConfigArgParse 1.5.3
-    google-i18n-address 3.1.0
+  xml2rfc 3.23.2
+    Python 3.12.7
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.2
-    lxml 4.9.3
-    platformdirs 3.10.0
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.3.6
     pycountry 22.3.5
-    PyYAML 6.0
-    requests 2.31.0
-    setuptools 67.7.2
-    six 1.16.0
-    wcwidth 0.2.6
+    PyYAML 6.0.1
+    requests 2.32.3
+    setuptools 70.3.0
+    wcwidth 0.2.13
 -->
 <link href="draft-adem-wg-adem-core.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -653,7 +652,7 @@ sub, sup {
 }
 #toc nav li {
   line-height: 1.3em;
-  margin: 0.75em 0;
+  margin: 2px 0;
   padding-left: 1.2em;
   text-indent: -1.2em;
 }
@@ -746,7 +745,7 @@ hr.addr {
     z-index: 2;
     top: 0;
     right: 0;
-    padding: 0;
+    padding: 1px 0 0 0;
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
@@ -870,16 +869,13 @@ hr.addr {
     border-top: none;
     padding-top: 0;
   }
-  figure, pre {
+  figure, pre, .vcard {
     page-break-inside: avoid;
-  }
-  figure {
-    overflow: scroll;
   }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
-  h2+*, h3+*, h4+*, h5+*, h6+* {
+  :is(h2, h3, h4, h5, h6)+*, dd {
     page-break-before: avoid;
   }
   pre {
@@ -892,6 +888,9 @@ hr.addr {
   }
   td {
     border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
   }
 }
 
@@ -993,28 +992,6 @@ address div.right {
   text-align: right;
 }
 
-/* Give the table caption label the same styling as the figcaption */
-
-@media print {
-  .toplink {
-    display: none;
-  }
-
-  /* avoid overwriting the top border line with the ToC header */
-  #toc {
-    padding-top: 1px;
-  }
-
-  /* Avoid page breaks inside dl and author address entries */
-  dd {
-    page-break-before: avoid;
-  }
-  .vcard {
-    page-break-inside: avoid;
-  }
-
-}
-
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
 :root {
@@ -1051,11 +1028,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ADEM Core</td>
-<td class="right">August 2023</td>
+<td class="right">October 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Linker, et al.</td>
-<td class="center">Expires 29 February 2024</td>
+<td class="center">Expires 13 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-adem-wg-adem-core-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-08-28" class="published">28 August 2023</time>
+<time datetime="2024-10-10" class="published">10 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-02-29">29 February 2024</time></dd>
+<dd class="expires"><time datetime="2025-04-13">13 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1104,7 @@ This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADE
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 February 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1136,7 +1113,7 @@ This document specifies the scheme <em>An Authenticated Digital EMblem</em> (ADE
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1364,13 +1341,13 @@ port = DIGIT+
 <p id="section-4.1.1.1-3">These are examples of AIs:<a href="#section-4.1.1.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.1.1-4.1">
-                <code>*.example.com:443</code><a href="#section-4.1.1.1-4.1" class="pilcrow">¶</a>
+                <p id="section-4.1.1.1-4.1.1"><code>*.example.com:443</code><a href="#section-4.1.1.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1.1.1-4.2">
-                <code>[2606:2800:220:1:248:1893:25c8:1946]:21</code><a href="#section-4.1.1.1-4.2" class="pilcrow">¶</a>
+                <p id="section-4.1.1.1-4.2.1"><code>[2606:2800:220:1:248:1893:25c8:1946]:21</code><a href="#section-4.1.1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1.1.1-4.3">
-                <code>[::FFFF:93.184.216.34]:22</code><a href="#section-4.1.1.1-4.3" class="pilcrow">¶</a>
+                <p id="section-4.1.1.1-4.3.1"><code>[::FFFF:93.184.216.34]:22</code><a href="#section-4.1.1.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-4.1.1.1-5">AIs identify an address, and port combination.
@@ -1390,13 +1367,17 @@ IPv6 addresses MUST be global unicast or link-local unicast addresses.<a href="#
             </h5>
 <p id="section-4.1.1.2-1">Several kinds of assets can be covered by asset identifiers:<a href="#section-4.1.1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.2-2.1">Network facing processes, e.g., web servers<a href="#section-4.1.1.2-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.1.1.2-2.1">
+                <p id="section-4.1.1.2-2.1.1">Network facing processes, e.g., web servers<a href="#section-4.1.1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.2-2.2">Local computation, e.g., arbitrary processes<a href="#section-4.1.1.2-2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.2-2.2">
+                <p id="section-4.1.1.2-2.2.1">Local computation, e.g., arbitrary processes<a href="#section-4.1.1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.2-2.3">Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop<a href="#section-4.1.1.2-2.3" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.2-2.3">
+                <p id="section-4.1.1.2-2.3.1">Computational devices both in the virtual sense, e.g., a virtual machine, and in the physical sense, e.g., a laptop<a href="#section-4.1.1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.2-2.4">Networks<a href="#section-4.1.1.2-2.4" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.2-2.4">
+                <p id="section-4.1.1.2-2.4.1">Networks<a href="#section-4.1.1.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-4.1.1.2-3">AIs can <em>cover</em> any of these assets, but they can only <em>point</em> to network-connected processes or static data.
@@ -1422,14 +1403,18 @@ For example, an endorsement may constrain emblems to only signal protection for 
 In this section, we define an order on AIs so that one can verify if an identifying AI complies with a constraining AI.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.3-2">We define an AI A to be <em>more general</em> than an AI B, if all of the following conditions apply:<a href="#section-4.1.1.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.3-3.1">A's <code>port</code> part is undefined or equal to B's <code>port</code> part.<a href="#section-4.1.1.3-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.1.1.3-3.1">
+                <p id="section-4.1.1.3-3.1.1">A's <code>port</code> part is undefined or equal to B's <code>port</code> part.<a href="#section-4.1.1.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.2">If A encodes a domain name and does not contain the wildcard <code>"*"</code>, B encodes a domain name, too, and A is equal to B.<a href="#section-4.1.1.3-3.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.2">
+                <p id="section-4.1.1.3-3.2.1">If A encodes a domain name and does not contain the wildcard <code>"*"</code>, B encodes a domain name, too, and A is equal to B.<a href="#section-4.1.1.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.3">If A encodes a domain name and contains the wildcard <code>"*"</code>, B encodes a domain name, too, and B is a subdomain of A excluding the wildcard <code>"*"</code>.
-In this regard, any domain is considered a subdomain of itself.<a href="#section-4.1.1.3-3.3" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.3">
+                <p id="section-4.1.1.3-3.3.1">If A encodes a domain name and contains the wildcard <code>"*"</code>, B encodes a domain name, too, and B is a subdomain of A excluding the wildcard <code>"*"</code>.
+In this regard, any domain is considered a subdomain of itself.<a href="#section-4.1.1.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.3-3.4">If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.<a href="#section-4.1.1.3-3.4" class="pilcrow">¶</a>
+              <li class="normal" id="section-4.1.1.3-3.4">
+                <p id="section-4.1.1.3-3.4.1">If A encodes an IP address, B encodes an IP address, too, and A is a prefix of B.<a href="#section-4.1.1.3-3.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-4.1.1.3-4">Note that AIs encoding a domain name are incomparable to AIs encoding IP addresses, i.e., neither can be more general than the other.<a href="#section-4.1.1.3-4" class="pilcrow">¶</a></p>
@@ -1825,13 +1810,17 @@ The semantics of these fields are defined in <span>[<a href="#RFC6962" class="ci
 We note that the latter includes the possibility of both <code>sub</code> and <code>iss</code> being undefined.<a href="#section-4.2.2-7" class="pilcrow">¶</a></p>
 <p id="section-4.2.2-8">We say that an emblem is <em>valid</em> with respect to an endorsement if all the following conditions apply:<a href="#section-4.2.2-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2-9.1">The endorsement's <code>emb.prp</code> claim is undefined or a superset of the emblem's <code>emb.prp</code> claim.<a href="#section-4.2.2-9.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.2.2-9.1">
+              <p id="section-4.2.2-9.1.1">The endorsement's <code>emb.prp</code> claim is undefined or a superset of the emblem's <code>emb.prp</code> claim.<a href="#section-4.2.2-9.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.2-9.2">The endorsement's <code>emb.dst</code> claim is undefined or a superset of the emblem's <code>emb.dst</code> claim.<a href="#section-4.2.2-9.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-4.2.2-9.2">
+              <p id="section-4.2.2-9.2.1">The endorsement's <code>emb.dst</code> claim is undefined or a superset of the emblem's <code>emb.dst</code> claim.<a href="#section-4.2.2-9.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.2-9.3">The endorsement's <code>emb.ass</code> claim is undefined or for each AI within the emblem's <code>emb.ass</code> claim, there exists an AI within the endorsement's <code>emb.ass</code> claim which is more general than the emblem's <code>emb.ass</code> claim.<a href="#section-4.2.2-9.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-4.2.2-9.3">
+              <p id="section-4.2.2-9.3.1">The endorsement's <code>emb.ass</code> claim is undefined or for each AI within the emblem's <code>emb.ass</code> claim, there exists an AI within the endorsement's <code>emb.ass</code> claim which is more general than the emblem's <code>emb.ass</code> claim.<a href="#section-4.2.2-9.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-4.2.2-9.4">The endorsement's <code>emb.wnd</code> claim is undefined or the sum of emblem's <code>nbf</code> and the endorsement's <code>emb.wnd</code> claims is greater than or equal to the emblem's <code>exp</code> claim.<a href="#section-4.2.2-9.4" class="pilcrow">¶</a>
+            <li class="normal" id="section-4.2.2-9.4">
+              <p id="section-4.2.2-9.4.1">The endorsement's <code>emb.wnd</code> claim is undefined or the sum of emblem's <code>nbf</code> and the endorsement's <code>emb.wnd</code> claims is greater than or equal to the emblem's <code>exp</code> claim.<a href="#section-4.2.2-9.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1853,15 +1842,17 @@ A party MAY have multiple root public keys.<a href="#section-5-1" class="pilcrow
 Root public keys MUST include the <code>alg</code> and <code>kid</code> parameters, and the <code>kid</code> parameter MUST be computed using the hashing algorithm as specified in <a href="#jwk-hashing" class="auto internal xref">Section 8.1</a>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">For a root public key to be configured correctly, there MUST be an X.509 certificate that:<a href="#section-5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-4.1">MUST NOT be revoked<a href="#section-5-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5-4.1">
+          <p id="section-5-4.1.1">MUST NOT be revoked<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-4.2">
           <p id="section-5-4.2.1">MUST be logged in the Certificate Transparency logs <span>[<a href="#RFC6962" class="cite xref">RFC6962</a>]</span>, <span>[<a href="#RFC9162" class="cite xref">RFC9162</a>]</span><a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-4.2.2.1">Note that log inclusion requires a valid certificate chain that leads to
+<li class="normal" id="section-5-4.2.2.1">
+              <p id="section-5-4.2.2.1.1">Note that log inclusion requires a valid certificate chain that leads to
 one of the logs accepted root certificates. Clients are RECOMMENDED to verify
 that this chain is valid and that none of the certificates along it have been
-revoked.<a href="#section-5-4.2.2.1" class="pilcrow">¶</a>
+revoked.<a href="#section-5-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
@@ -1869,9 +1860,10 @@ revoked.<a href="#section-5-4.2.2.1" class="pilcrow">¶</a>
           <p id="section-5-4.3.1">MUST be valid for at least all the following domains (<code>&lt;OI&gt;</code> is understood to be a placeholder for the party's OI):<a href="#section-5-4.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-4.3.2.1">
-              <code>adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.1" class="pilcrow">¶</a>
+              <p id="section-5-4.3.2.1.1"><code>adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5-4.3.2.2">For root public key's kid <code>&lt;KID&gt;</code> (to be understood as a placeholder): <code>&lt;KID&gt;.adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5-4.3.2.2">
+              <p id="section-5-4.3.2.2.1">For root public key's kid <code>&lt;KID&gt;</code> (to be understood as a placeholder): <code>&lt;KID&gt;.adem-configuration.&lt;OI&gt;</code><a href="#section-5-4.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
@@ -1911,49 +1903,58 @@ A validity checking algorithm MUST returns the following values.
 The order of these values encodes the <em>strength</em> of the verification result.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.1-2">
 <li id="section-6.1-2.1">
-            <code>UNSIGNED</code><a href="#section-6.1-2.1" class="pilcrow">¶</a>
+            <p id="section-6.1-2.1.1"><code>UNSIGNED</code><a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.2">
-            <code>INVALID</code><a href="#section-6.1-2.2" class="pilcrow">¶</a>
+            <p id="section-6.1-2.2.1"><code>INVALID</code><a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.3">
-            <code>SIGNED-UNTRUSTED</code><a href="#section-6.1-2.3" class="pilcrow">¶</a>
+            <p id="section-6.1-2.3.1"><code>SIGNED-UNTRUSTED</code><a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.4">
-            <code>SIGNED-TRUSTED</code><a href="#section-6.1-2.4" class="pilcrow">¶</a>
+            <p id="section-6.1-2.4.1"><code>SIGNED-TRUSTED</code><a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.5">
-            <code>ORGANIZATIONAL-UNTRUSTED</code><a href="#section-6.1-2.5" class="pilcrow">¶</a>
+            <p id="section-6.1-2.5.1"><code>ORGANIZATIONAL-UNTRUSTED</code><a href="#section-6.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.6">
-            <code>ORGANIZATIONAL-TRUSTED</code><a href="#section-6.1-2.6" class="pilcrow">¶</a>
+            <p id="section-6.1-2.6.1"><code>ORGANIZATIONAL-TRUSTED</code><a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.7">
-            <code>ENDORSED-UNTRUSTED</code><a href="#section-6.1-2.7" class="pilcrow">¶</a>
+            <p id="section-6.1-2.7.1"><code>ENDORSED-UNTRUSTED</code><a href="#section-6.1-2.7.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.8">
-            <code>ENDORSED-TRUSTED</code><a href="#section-6.1-2.8" class="pilcrow">¶</a>
+            <p id="section-6.1-2.8.1"><code>ENDORSED-TRUSTED</code><a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-6.1-3">Given an input public key and an emblem with a set of endorsements, a verification algorithm takes the following steps:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.1-4">
-<li id="section-6.1-4.1">If the emblem does not bear a signature, return <code>UNSIGNED</code>.<a href="#section-6.1-4.1" class="pilcrow">¶</a>
+<li id="section-6.1-4.1">
+            <p id="section-6.1-4.1.1">If the emblem does not bear a signature, return <code>UNSIGNED</code>.<a href="#section-6.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.2">Run the <em>signed emblem verification procedure</em> (<a href="#signed-emblems" class="auto internal xref">Section 8.2</a>; results in one of <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>).<a href="#section-6.1-4.2" class="pilcrow">¶</a>
+          <li id="section-6.1-4.2">
+            <p id="section-6.1-4.2.1">Run the <em>signed emblem verification procedure</em> (<a href="#signed-emblems" class="auto internal xref">Section 8.2</a>; results in one of <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>).<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.3">If previous procedure resulted in <code>INVALID</code> or the emblem does not include the <code>iss</code> claim, return the last verification procedure's result and the emtpy set of OIs.<a href="#section-6.1-4.3" class="pilcrow">¶</a>
+          <li id="section-6.1-4.3">
+            <p id="section-6.1-4.3.1">If previous procedure resulted in <code>INVALID</code> or the emblem does not include the <code>iss</code> claim, return the last verification procedure's result and the emtpy set of OIs.<a href="#section-6.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.4">Run the <em>organizational emblem verification procedure</em> (<a href="#org-emblems" class="auto internal xref">Section 8.3</a>; results in one of <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.4" class="pilcrow">¶</a>
+          <li id="section-6.1-4.4">
+            <p id="section-6.1-4.4.1">Run the <em>organizational emblem verification procedure</em> (<a href="#org-emblems" class="auto internal xref">Section 8.3</a>; results in one of <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.5">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.5" class="pilcrow">¶</a>
+          <li id="section-6.1-4.5">
+            <p id="section-6.1-4.5.1">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.6">If all tokens include the same <code>iss</code> claim, return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the empty set of OIs.<a href="#section-6.1-4.6" class="pilcrow">¶</a>
+          <li id="section-6.1-4.6">
+            <p id="section-6.1-4.6.1">If all tokens include the same <code>iss</code> claim, return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the empty set of OIs.<a href="#section-6.1-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.7">Run the <em>endorsed emblem verification procedure</em> (<a href="#endorsed-emblems" class="auto internal xref">Section 8.4</a>; results in a set of OIs and one of <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.7" class="pilcrow">¶</a>
+          <li id="section-6.1-4.7">
+            <p id="section-6.1-4.7.1">Run the <em>endorsed emblem verification procedure</em> (<a href="#endorsed-emblems" class="auto internal xref">Section 8.4</a>; results in a set of OIs and one of <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, <code>INVALID</code>).<a href="#section-6.1-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.8">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.8" class="pilcrow">¶</a>
+          <li id="section-6.1-4.8">
+            <p id="section-6.1-4.8.1">If the previous procedure resulted in <code>INVALID</code> return <code>INVALID</code> and the empty set of OIs.<a href="#section-6.1-4.8.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-6.1-4.9">Return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the set of OIs returned by the endorsed emblem verification procedure.<a href="#section-6.1-4.9" class="pilcrow">¶</a>
+          <li id="section-6.1-4.9">
+            <p id="section-6.1-4.9.1">Return the strongest return value matching <code>*-TRUSTED</code>, the strongest return value matching <code>*-UNTRUSTED</code> provided that it is strictly stronger than the strongest return value matching <code>*-TRUSTED</code>, and the set of OIs returned by the endorsed emblem verification procedure.<a href="#section-6.1-4.9.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-6.1-5">Note that the endorsed emblem verification procedure resulting in <code>INVALID</code> is handled implicitly in step 8.
@@ -2007,9 +2008,11 @@ If malware were to infect that router, it must check if assets now exposed to it
 Practically speaking, this implies that parties can only go beyond pure public key authentication (where public keys need to be authenticated out-of-band) by stating an OI.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">The constraints on well-configured OIs offers two beneficial security properties:<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.1-3.1">Parties cannot equivocate their keys, i.e., they need to commit to a consistent set of keys.<a href="#section-7.1-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-7.1-3.1">
+            <p id="section-7.1-3.1.1">Parties cannot equivocate their keys, i.e., they need to commit to a consistent set of keys.<a href="#section-7.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.1-3.2">Parties cannot deny having used certain root public keys.<a href="#section-7.1-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-7.1-3.2">
+            <p id="section-7.1-3.2.1">Parties cannot deny having used certain root public keys.<a href="#section-7.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-7.1-4">These properties stem from parties needing to include a hash of their key in a TLS certificate, and consequently, in certificate transparency logs.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
@@ -2029,22 +2032,29 @@ Practically speaking, this implies that parties can only go beyond pure public k
         </h3>
 <p id="section-8.1-1">Context:<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1-2.1">Input: A JWK as per <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span> in arbitrary encoding.<a href="#section-8.1-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.1-2.1">
+            <p id="section-8.1-2.1.1">Input: A JWK as per <span>[<a href="#RFC7517" class="cite xref">RFC7517</a>]</span> in arbitrary encoding.<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.1-2.2">Output: A cryptographically secure hash of the JWK<a href="#section-8.1-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.1-2.2">
+            <p id="section-8.1-2.2.1">Output: A cryptographically secure hash of the JWK<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.1-3">Algorithm:<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.1-4">
-<li id="section-8.1-4.1">Parse the JWK as JSON object.<a href="#section-8.1-4.1" class="pilcrow">¶</a>
+<li id="section-8.1-4.1">
+            <p id="section-8.1-4.1.1">Parse the JWK as JSON object.<a href="#section-8.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.1-4.2">Drop the <code>kid</code> parameter from the JWK.<a href="#section-8.1-4.2" class="pilcrow">¶</a>
+          <li id="section-8.1-4.2">
+            <p id="section-8.1-4.2.1">Drop the <code>kid</code> parameter from the JWK.<a href="#section-8.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.1-4.3">Compute a canonical representation of the remaining JWK as per <span>[<a href="#RFC8785" class="cite xref">RFC8785</a>]</span>.<a href="#section-8.1-4.3" class="pilcrow">¶</a>
+          <li id="section-8.1-4.3">
+            <p id="section-8.1-4.3.1">Compute a canonical representation of the remaining JWK as per <span>[<a href="#RFC8785" class="cite xref">RFC8785</a>]</span>.<a href="#section-8.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.1-4.4">Compute the SHA-256 hash of the canonical representation<a href="#section-8.1-4.4" class="pilcrow">¶</a>
+          <li id="section-8.1-4.4">
+            <p id="section-8.1-4.4.1">Compute the SHA-256 hash of the canonical representation<a href="#section-8.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.1-4.5">Return the hash in base32 encoding in all lower-case and with trailing <code>=</code> removed.<a href="#section-8.1-4.5" class="pilcrow">¶</a>
+          <li id="section-8.1-4.5">
+            <p id="section-8.1-4.5.1">Return the hash in base32 encoding in all lower-case and with trailing <code>=</code> removed.<a href="#section-8.1-4.5.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2056,29 +2066,38 @@ Practically speaking, this implies that parties can only go beyond pure public k
         </h3>
 <p id="section-8.2-1">Context:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.2-2.1">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.2-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.2-2.1">
+            <p id="section-8.2-2.1.1">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-2.2">Output: <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.2-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.2-2.2">
+            <p id="section-8.2-2.2.1">Output: <code>SIGNED-TRUSTED</code>, <code>SIGNED-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.2-3">Algorithm:<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.2-4">
-<li id="section-8.2-4.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.
-A defined <code>iss</code> claim is understood to be different to an undefined <code>iss</code> claim.<a href="#section-8.2-4.1" class="pilcrow">¶</a>
+<li id="section-8.2-4.1">
+            <p id="section-8.2-4.1.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.
+A defined <code>iss</code> claim is understood to be different to an undefined <code>iss</code> claim.<a href="#section-8.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.2">Verify every signature.<a href="#section-8.2-4.2" class="pilcrow">¶</a>
+          <li id="section-8.2-4.2">
+            <p id="section-8.2-4.2.1">Verify every signature.<a href="#section-8.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.3">Verify that all endorsements form a consecutive chain where there is a unique root endorsement and the public key which verifies the emblem is transitively endorsed by that root endorsement.<a href="#section-8.2-4.3" class="pilcrow">¶</a>
+          <li id="section-8.2-4.3">
+            <p id="section-8.2-4.3.1">Verify that all endorsements form a consecutive chain where there is a unique root endorsement and the public key which verifies the emblem is transitively endorsed by that root endorsement.<a href="#section-8.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.4">Verify that no endorsement expired.<a href="#section-8.2-4.4" class="pilcrow">¶</a>
+          <li id="section-8.2-4.4">
+            <p id="section-8.2-4.4.1">Verify that no endorsement expired.<a href="#section-8.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.5">Verify that all endorsements bear the claim <code>end=true</code> except for the emblem signing key's endorsement.<a href="#section-8.2-4.5" class="pilcrow">¶</a>
+          <li id="section-8.2-4.5">
+            <p id="section-8.2-4.5.1">Verify that all endorsements bear the claim <code>end=true</code> except for the emblem signing key's endorsement.<a href="#section-8.2-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.6">Verify that the emblem is valid with regard to every endorsement.<a href="#section-8.2-4.6" class="pilcrow">¶</a>
+          <li id="section-8.2-4.6">
+            <p id="section-8.2-4.6.1">Verify that the emblem is valid with regard to every endorsement.<a href="#section-8.2-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.2-4.7">If any of the aforementioned verification steps fail, return <code>INVALID</code>.
+          <li id="section-8.2-4.7">
+            <p id="section-8.2-4.7.1">If any of the aforementioned verification steps fail, return <code>INVALID</code>.
 If there is a token signed by the trusted input public key, return <code>SIGNED-TRUSTED</code>.
-Otherwise, return <code>SIGNED-UNTRUSTED</code>.<a href="#section-8.2-4.7" class="pilcrow">¶</a>
+Otherwise, return <code>SIGNED-UNTRUSTED</code>.<a href="#section-8.2-4.7.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-8.2-5">Distribution methods MAY indicate an order of tokens to guide clients assembling the chain of endorsements in step 3.
@@ -2092,22 +2111,28 @@ Whenever such an order is specified, clients MAY immediately reject a set of tok
         </h3>
 <p id="section-8.3-1">Context:<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.3-2.1">Assumptions: Signed emblem verification has been performed and did not return <code>INVALID</code>.
-Every token as part of the input includes the <code>iss</code> claim.<a href="#section-8.3-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.3-2.1">
+            <p id="section-8.3-2.1.1">Assumptions: Signed emblem verification has been performed and did not return <code>INVALID</code>.
+Every token as part of the input includes the <code>iss</code> claim.<a href="#section-8.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.3-2.2">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.3-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.3-2.2">
+            <p id="section-8.3-2.2.1">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.3-2.3">Output: <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.3-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.3-2.3">
+            <p id="section-8.3-2.3.1">Output: <code>ORGANIZATIONAL-TRUSTED</code>, <code>ORGANIZATIONAL-UNTRUSTED</code>, or <code>INVALID</code>.<a href="#section-8.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.3-3">Algorithm:<a href="#section-8.3-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.3-4">
-<li id="section-8.3-4.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.3-4.1" class="pilcrow">¶</a>
+<li id="section-8.3-4.1">
+            <p id="section-8.3-4.1.1">Ignore all endorsements including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.3-4.2">Verify that the top-most endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.3-4.2" class="pilcrow">¶</a>
+          <li id="section-8.3-4.2">
+            <p id="section-8.3-4.2.1">Verify that the top-most endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-8.3-4.3">If the aforementioned verification step fails, return <code>INVALID</code>.
-If the top-most endorsing key is equal to the trusted input public key, return <code>ORGANIZATIONAL-TRUSTED</code>. Otherwise, return <code>ORGANIZATIONAL-UNTRUSTED</code>.<a href="#section-8.3-4.3" class="pilcrow">¶</a>
+          <li id="section-8.3-4.3">
+            <p id="section-8.3-4.3.1">If the aforementioned verification step fails, return <code>INVALID</code>.
+If the top-most endorsing key is equal to the trusted input public key, return <code>ORGANIZATIONAL-TRUSTED</code>. Otherwise, return <code>ORGANIZATIONAL-UNTRUSTED</code>.<a href="#section-8.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2119,41 +2144,53 @@ If the top-most endorsing key is equal to the trusted input public key, return <
         </h3>
 <p id="section-8.4-1">Context:<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.4-2.1">Assumptions: Organizational emblem verification has been performed and did not return <code>INVALID</code>.
-There are emblems as part of the input including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.4-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.4-2.1">
+            <p id="section-8.4-2.1.1">Assumptions: Organizational emblem verification has been performed and did not return <code>INVALID</code>.
+There are emblems as part of the input including an <code>iss</code> claim different to the emblem's <code>iss</code> claim.<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.4-2.2">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.4-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.4-2.2">
+            <p id="section-8.4-2.2.1">Input: An emblem, a set of endorsements, and a trusted public key.<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.4-2.3">Output: <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, or <code>INVALID</code>, and a set of OIs.<a href="#section-8.4-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.4-2.3">
+            <p id="section-8.4-2.3.1">Output: <code>ENDORSED-TRUSTED</code>, <code>ENDORSED-UNTRUSTED</code>, or <code>INVALID</code>, and a set of OIs.<a href="#section-8.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-8.4-3">Algorithm:<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4-4">
-<li id="section-8.4-4.1">Ignore all endorsements including an <code>iss</code> claim equal to the emblem's <code>iss</code> claim.<a href="#section-8.4-4.1" class="pilcrow">¶</a>
+<li id="section-8.4-4.1">
+            <p id="section-8.4-4.1.1">Ignore all endorsements including an <code>iss</code> claim equal to the emblem's <code>iss</code> claim.<a href="#section-8.4-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-8.4-4.2">
             <p id="section-8.4-4.2.1">For every endorsement:<a href="#section-8.4-4.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.4-4.2.2">
-<li id="section-8.4-4.2.2.1">Verify its signature.<a href="#section-8.4-4.2.2.1" class="pilcrow">¶</a>
+<li id="section-8.4-4.2.2.1">
+                <p id="section-8.4-4.2.2.1.1">Verify its signature.<a href="#section-8.4-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.2">Verify that it endorses the top-most endorsing key with the same <code>iss</code> claim as the emblem.<a href="#section-8.4-4.2.2.2" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.2">
+                <p id="section-8.4-4.2.2.2.1">Verify that it endorses the top-most endorsing key with the same <code>iss</code> claim as the emblem.<a href="#section-8.4-4.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.3">Verify that it did not expire.<a href="#section-8.4-4.2.2.3" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.3">
+                <p id="section-8.4-4.2.2.3.1">Verify that it did not expire.<a href="#section-8.4-4.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.4">Verify that it bears the claim <code>end=true</code>.<a href="#section-8.4-4.2.2.4" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.4">
+                <p id="section-8.4-4.2.2.4.1">Verify that it bears the claim <code>end=true</code>.<a href="#section-8.4-4.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.5">Verify that the emblem is valid with regard to this endorsement.<a href="#section-8.4-4.2.2.5" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.5">
+                <p id="section-8.4-4.2.2.5.1">Verify that the emblem is valid with regard to this endorsement.<a href="#section-8.4-4.2.2.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.6">Implementations SHOULD verify that the endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.4-4.2.2.6" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.6">
+                <p id="section-8.4-4.2.2.6.1">Implementations SHOULD verify that the endorsement's <code>iss</code> claim value (its OI) is configured correctly as specified in <a href="#pk-distribution" class="auto internal xref">Section 5</a>.<a href="#section-8.4-4.2.2.6.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.4-4.2.2.7">Should any of the aforementioned verification steps fail, ignore this endorsement.<a href="#section-8.4-4.2.2.7" class="pilcrow">¶</a>
+              <li id="section-8.4-4.2.2.7">
+                <p id="section-8.4-4.2.2.7.1">Should any of the aforementioned verification steps fail, ignore this endorsement.<a href="#section-8.4-4.2.2.7.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
-          <li id="section-8.4-4.3">If there are no endorsements remaining after the last step, return <code>INVALID</code> and the empty set of OIs.
+          <li id="section-8.4-4.3">
+            <p id="section-8.4-4.3.1">If there are no endorsements remaining after the last step, return <code>INVALID</code> and the empty set of OIs.
 If in the set of remaining endorsements, there is an endorsement with a verification key equal to the trusted input public key, return <code>ENDORSED-TRUSTED</code>.
 Otherwise, return <code>ENDORSED-UNTRUSTED</code>.
-In both the latter cases, also return the set of all <code>iss</code> claims of the remaining endorsements.<a href="#section-8.4-4.3" class="pilcrow">¶</a>
+In both the latter cases, also return the set of all <code>iss</code> claims of the remaining endorsements.<a href="#section-8.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2186,6 +2223,7 @@ Such adversaries could flip a bit in the emblem's signature, rendering the set o
 <p id="section-10-1">This document has no IANA actions.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="sec-normative-references">
 <section id="section-11">
       <h2 id="name-normative-references">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
@@ -2261,6 +2299,7 @@ Such adversaries could flip a bit in the emblem's signature, rendering the set o
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
 <div id="acknowledgments">
 <section id="appendix-A">
       <h2 id="name-acknowledgments">
