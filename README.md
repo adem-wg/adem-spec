@@ -1,17 +1,9 @@
 # An Authenticated Digital EMblem - Core Specification
 
-This is the working area for the individual Internet-Draft, "An Authenticated Digital EMblem - Core Specification".
+This repository contains the original specifications of ADEM, an Authentic Digital Emblem, as referenced in the scientific publication: https://dl.acm.org/doi/10.1145/3576915.3616578
 
-## Command Line Usage
-
-Formatted text and HTML versions of the draft can be built using `make`.
-
-```sh
-$ make
-```
-
-Command line usage requires that you have the necessary software installed.  See
-[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
+By now, development has advanced and these specifications are outdated.
+We maintain this repository for historical purposes only.
 
 ## Acknowledgements
 
