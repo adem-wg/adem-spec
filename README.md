@@ -1,5 +1,3 @@
-# An Authenticated Digital EMblem - Core Specification
-
 This repository contains the original specifications of ADEM, an Authentic Digital Emblem, as referenced in the scientific publication: https://dl.acm.org/doi/10.1145/3576915.3616578
 
 By now, development has advanced and these specifications are outdated.
